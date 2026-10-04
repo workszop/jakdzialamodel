@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Z czego składa się model AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+/* ─── Tokens (edulab Editorial Color) ─── */
+:root {
+  --font-display: 'Outfit', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-sans:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --paper:   #FFFFFF;
+  --paper-2: #FBF7E6;
+  --paper-3: #F5EDCB;
+  --surface: #FFFFFF;
+
+  --ink:    #1C1917;
+  --ink-2:  #57534E;
+  --ink-3:  #948C82;
+  --line:   #EDE7D2;
+  --line-2: #DDD4B6;
+
+  --yellow: #FFD500; --yellow-600: #F0C800; --yellow-soft: #FFD500; --yellow-ink: #1C1917;
+  --blue:   #1E8FC2; --blue-600:   #177AA8; --blue-soft:   #1E8FC2; --blue-ink:   #FFFFFF;
+  --green:  #00A651; --green-600:  #009444; --green-soft:  #00A651; --green-ink:  #FFFFFF;
+  --red:    #E5322D; --red-600:    #C92823; --red-soft:    #E5322D; --red-ink:    #FFFFFF;
+
+  --on-primary: #1C1917;
+  --header-bg: rgba(255, 255, 255, 0.88);
+  --track: rgba(33, 30, 26, .12);
+  --panel-line: rgba(255, 255, 255, .14);
+  --panel-label: rgba(255, 255, 255, .55);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--yellow) 45%, transparent);
+
+  --r-xs: 6px; --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(33,30,26,.06), 0 1px 1px rgba(33,30,26,.04);
+  --shadow-md: 0 4px 16px rgba(33,30,26,.08), 0 1px 3px rgba(33,30,26,.05);
+  --shadow-lg: 0 16px 40px rgba(33,30,26,.12), 0 3px 8px rgba(33,30,26,.06);
+  --shadow-primary: 0 8px 22px color-mix(in srgb, var(--yellow) 30%, transparent);
+
+  --h2: 33px; --h3: 25px; --h4: 19px;
+  --body-lg: 18px; --body: 16px; --body-sm: 14px; --caption: 13px; --overline: 12px;
+  --shell: 1100px;
+}
+
+/* ─── Base ─── */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body.edu { background: var(--paper); color: var(--ink); font-family: var(--font-sans); font-size: var(--body); line-height: 1.6; }
+h1, h2, h3, h4, p { margin: 0; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: var(--h2); line-height: 1.12; letter-spacing: -.015em; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--h3); line-height: 1.2; letter-spacing: -.01em; }
+p { color: var(--ink-2); }
+button { font: inherit; }
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.edu-block, .edu-block h2, .edu-block h3, .edu-block p, .edu-block li { color: inherit; }
+kbd { font-family: var(--font-mono); font-size: 11px; background: var(--paper-2); border: 1px solid var(--line-2); border-radius: var(--r-xs); padding: 1px 6px; color: var(--ink); }
+.group-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ─── Header ─── */
+.edu-header { position: sticky; top: 0; z-index: 50; width: 100%; background: var(--header-bg);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.edu-header-inner { max-width: var(--shell); margin: 0 auto; padding: 8px 30px; display: flex; align-items: center; gap: 12px; }
+.edu-logo { width: 64px; height: 64px; display: block; margin-right: -6px; }
+.edu-wordmark { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -.02em; color: var(--ink); }
+.spacer { flex: 1; }
+.sec-nav { display: flex; gap: 2px; }
+.sec-nav button { border: none; background: transparent; padding: 8px 12px; border-radius: var(--r-pill); color: var(--ink-2); font-weight: 500; font-size: 14px;
+  cursor: pointer; display: inline-flex; gap: 6px; align-items: center; transition: background-color .2s; }
+.sec-nav button:hover { background: var(--paper-2); }
+.sec-nav button.active { background: var(--yellow); color: var(--yellow-ink); font-weight: 600; }
+.sec-nav .num { font-family: var(--font-mono); font-size: 11px; }
+.progress { height: 4px; background: var(--paper-2); }
+.progress-fill { height: 100%; width: 0; background: var(--yellow); }
+
+/* ─── Segmented toggle ─── */
+.edu-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: var(--paper-2); border-radius: var(--r-pill); justify-self: start; }
+.edu-seg button { border: none; background: transparent; padding: 7px 14px; border-radius: var(--r-pill); font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.edu-seg button.active { background: var(--yellow); color: var(--yellow-ink); }
+
+/* ─── Layout ─── */
+main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
+.page-head { text-align: center; display: grid; gap: 14px; margin-bottom: 40px; }
+.app-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 4.5vw, 2.85rem); letter-spacing: -.025em; line-height: 1.05; color: var(--ink); }
+.edu-lead { font-size: 1.0625rem; color: var(--ink-2); }
+
+.section { display: grid; gap: 22px; padding: 40px 0; border-top: 1px solid var(--line); scroll-margin-top: 96px; }
+.section:first-of-type { border-top: none; padding-top: 0; }
+.sec-head { display: grid; gap: 8px; }
+.sec-head h2 { display: flex; align-items: center; gap: 14px; }
+.sec-num { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink);
+  display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+
+.grid-2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 22px; align-items: stretch; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl); box-shadow: var(--shadow-sm); padding: 24px; display: grid; gap: 16px; align-content: start; scroll-margin-top: 96px; }
+.card-title { font-family: var(--font-display); font-weight: 600; font-size: var(--h4); color: var(--ink); }
+.card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* ─── Callouts ─── */
+.callout { border-radius: var(--r-xl); padding: 28px 32px; display: grid; gap: 10px; align-content: center; }
+.callout h3 { font-size: 24px; }
+.callout p { font-size: var(--body-lg); line-height: 1.55; }
+.callout.blue { background: var(--blue-soft); color: var(--blue-ink); }
+.callout.green { background: var(--green-soft); color: var(--green-ink); }
+.callout.yellow { background: var(--yellow-soft); color: var(--yellow-ink); }
+.callout.ink { background: var(--ink); color: var(--paper); }
+.callout ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: var(--body-lg); line-height: 1.5; }
+.callout.ink b { color: var(--yellow); font-weight: 600; }
+
+/* ─── Chips & buttons ─── */
+.chip { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; padding: 4px 10px; border-radius: var(--r-pill); white-space: nowrap; }
+.chip.blue { background: var(--blue-soft); color: var(--blue-ink); }
+.chip.green { background: var(--green-soft); color: var(--green-ink); }
+.chip.sand { background: var(--paper-3); color: var(--ink); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn-row[hidden] { display: none; }
+.edu-btn { font-family: var(--font-display); font-weight: 600; border: none; cursor: pointer; background: var(--yellow); color: var(--on-primary);
+  border-radius: var(--r-pill); padding: 12px 22px; box-shadow: var(--shadow-primary); transition: background-color .15s, transform .12s cubic-bezier(.32,.72,.32,1);
+  display: inline-flex; gap: 8px; align-items: center; }
+.edu-btn:hover { background: var(--yellow-600); }
+.edu-btn:active { transform: scale(.96); }
+.btn-ghost { font-family: var(--font-display); font-weight: 600; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); cursor: pointer;
+  border-radius: var(--r-pill); padding: 11px 20px; transition: background-color .15s; display: inline-flex; gap: 8px; align-items: center; }
+.btn-ghost:hover { background: var(--paper-2); }
+
+/* ─── Folder ─── */
+.folder { display: grid; gap: 6px; }
+.folder-path { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); padding: 0 4px 6px; }
+.file-row { display: grid; grid-template-columns: 40px 1fr auto auto; gap: 14px; align-items: center; padding: 10px 14px; border-radius: var(--r-md);
+  background: var(--paper-2); border: none; cursor: pointer; text-align: left; transition: background-color .15s; width: 100%; }
+.file-row:hover { background: var(--paper-3); }
+.file-icon { width: 40px; height: 40px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; font-weight: 500; }
+.file-icon.blue { background: var(--blue); color: var(--blue-ink); }
+.file-icon.green { background: var(--green); color: var(--green-ink); }
+.file-icon.sand { background: var(--paper-3); color: var(--ink); }
+.file-name { font-family: var(--font-mono); font-size: 14px; color: var(--ink); word-break: break-all; }
+.file-desc { font-size: 13px; color: var(--ink-2); display: block; font-family: var(--font-sans); word-break: normal; }
+.file-size { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.folder-note { font-size: 13px; color: var(--ink-3); }
+
+/* ─── SVG diagram ─── */
+.diagram { width: 100%; height: auto; display: block; }
+.edge { stroke-linecap: round; transition: opacity .35s; }
+.edge.pos { stroke: var(--blue); }
+.edge.neg { stroke: var(--red); }
+.dimmed .edge { opacity: .14; }
+.dimmed .edge.hot { opacity: 1; }
+.node { fill: var(--surface); stroke: var(--ink); stroke-width: 2; transition: fill .35s; cursor: pointer; }
+.node.in { fill: var(--paper-3); }
+.node.lit { fill: var(--yellow); }
+.node.sel { fill: var(--yellow); stroke-width: 4; }
+.node:focus-visible { outline: none; stroke-width: 5; }
+.node-val { font-family: var(--font-mono); font-size: 10.5px; fill: var(--ink); pointer-events: none; }
+.svg-label { font-family: var(--font-mono); font-size: 13px; fill: var(--ink-2); }
+.svg-label.strong { fill: var(--ink); font-weight: 500; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--body-sm); color: var(--ink-2); }
+.legend i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.legend .pos { background: var(--blue); }
+.legend .neg { background: var(--red); }
+
+/* ─── Controls ─── */
+.stepper { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 14px; background: var(--paper-2); border-radius: var(--r-pill); }
+.stepper span { font-size: var(--body-sm); color: var(--ink); }
+.stepper .ctl { display: flex; align-items: center; gap: 6px; }
+.stepper button { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 700; box-shadow: var(--shadow-sm); }
+.stepper button:hover { background: var(--paper-3); }
+.stepper button[disabled] { opacity: .35; cursor: default; }
+.stepper output { font-family: var(--font-mono); min-width: 24px; text-align: center; color: var(--ink); }
+.param-count { background: var(--ink); color: var(--paper); border-radius: var(--r-lg); padding: 18px 20px; display: grid; gap: 6px; }
+.param-count .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--panel-label); }
+.param-count .value { font-family: var(--font-display); font-weight: 700; font-size: 38px; color: var(--yellow); line-height: 1; }
+.param-count ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-family: var(--font-mono); font-size: 12px; color: var(--panel-label); }
+.slider { display: grid; gap: 4px; }
+.slider .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.slider label { font-size: var(--body-sm); color: var(--ink); }
+.slider .val { font-family: var(--font-mono); font-size: var(--body-sm); color: var(--ink); }
+.inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; background: var(--paper-2); border-radius: var(--r-lg); padding: 14px 16px; }
+.inputs-row .hint { grid-column: 1 / -1; font-size: 13px; color: var(--ink-2); }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: var(--track); border-radius: var(--r-pill); outline: none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink); box-shadow: var(--shadow-sm); cursor: pointer; }
+input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink); cursor: pointer; }
+input[type=range]:focus-visible { box-shadow: var(--focus-ring); }
+
+/* ─── Neuron explainer ─── */
+.explain { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.explain > p { grid-column: 1 / -1; }
+.explain-step { display: grid; grid-template-rows: auto 1fr; gap: 8px; align-content: start; padding: 14px 16px; background: var(--paper-2); border-radius: var(--r-md); }
+.explain-step .n { width: 28px; height: 28px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+.explain-step p { color: var(--ink); font-size: 14.5px; line-height: 1.45; }
+.explain-step .calc { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); display: grid; gap: 2px; margin-top: 6px; }
+.explain-step p.explain-note { font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
+.explain-result { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); }
+.num-pos { color: var(--blue); }
+.num-neg { color: var(--red); }
+
+/* ─── Math ─── */
+details.card > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after { content: '+'; font-family: var(--font-display); font-weight: 700; font-size: 22px; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--paper-2); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+details.card[open] > summary::after { content: '−'; }
+.math-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 22px; align-items: start; }
+.math { display: grid; gap: 10px; font-family: var(--font-sans); font-size: 18px; color: var(--ink); }
+.math i { font-style: italic; }
+.math .fn { font-weight: 600; }
+.eq-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; padding: 10px 16px; background: var(--paper-2); border-radius: var(--r-md); }
+.eq-row .shape { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-2); }
+.eq-defs { display: grid; gap: 4px; font-size: 16px; padding: 4px 16px; }
+.eq-defs span { color: var(--ink-2); font-size: var(--body-sm); }
+.eq-note { font-size: 14px; color: var(--ink-2); }
+.mat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.matrix { display: inline-grid; gap: 4px 14px; padding: 6px 10px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-radius: var(--r-xs);
+  font-family: var(--font-mono); font-size: 14px; text-align: right; }
+.matrix .pos { color: var(--blue); }
+.matrix .neg { color: var(--red); }
+
+/* ─── Weights list ─── */
+.tensor-group { display: grid; gap: 8px; }
+.tensor-head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
+.tensor-head code { font-family: var(--font-mono); font-size: 13px; color: var(--ink); background: var(--paper-3); padding: 2px 8px; border-radius: var(--r-xs); }
+.tensor-head span { font-size: 13.5px; color: var(--ink-2); }
+.w-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.w-chip { font-family: var(--font-mono); font-size: 12px; padding: 3px 8px; border-radius: var(--r-xs); background: var(--surface); border: 1px solid var(--line-2); }
+.w-chip.pos { color: var(--blue); }
+.w-chip.neg { color: var(--red); }
+
+/* ─── Size table ─── */
+.size-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.size-table th { text-align: left; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; padding: 6px 8px; }
+.size-table th.r { text-align: right; }
+.size-table td { padding: 10px 8px; border-top: 1px solid var(--line); color: var(--ink); }
+.size-table td.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+.size-table td.big { font-family: var(--font-display); font-weight: 700; font-size: 18px; text-align: right; white-space: nowrap; }
+.prec-demo { background: var(--paper-2); border-radius: var(--r-md); padding: 14px 16px; font-size: 14.5px; color: var(--ink); display: grid; gap: 4px; }
+.prec-demo code { font-family: var(--font-mono); font-size: 13.5px; }
+.prec-demo span { font-size: 13px; color: var(--ink-3); }
+
+/* ─── Annotated JSON & code ─── */
+.anno { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); border-radius: var(--r-lg); overflow: hidden; }
+.anno-code { background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: 13px; padding: 5px 18px; white-space: pre; overflow-x: auto; display: flex; align-items: center; }
+.anno-note { background: var(--paper-2); color: var(--ink-2); font-size: 13.5px; line-height: 1.4; padding: 5px 16px; display: flex; align-items: center; }
+.anno-code.first, .anno-note.first { padding-top: 14px; }
+.anno-code.last, .anno-note.last { padding-bottom: 14px; }
+.anno .k { color: var(--blue); }
+.anno .v { color: var(--yellow); }
+.code-panel { position: relative; margin: 0; background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6;
+  border-radius: var(--r-lg); padding: 18px 20px; max-height: 360px; overflow: auto; white-space: pre; }
+.code-panel.tall { max-height: none; }
+.hx-off, .c-com { color: var(--panel-label); }
+.hx-len, .c-str { color: var(--yellow); }
+.hx-hdr, .c-kw { color: var(--blue); }
+.hx-data, .c-num { color: var(--green); }
+.hx-mark { background: var(--yellow); color: var(--yellow-ink); border-radius: 3px; }
+.file-bar { display: flex; height: 44px; border-radius: var(--r-md); overflow: hidden; font-family: var(--font-mono); font-size: 11.5px; }
+.file-bar > div { display: flex; align-items: center; justify-content: center; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.fb-len { background: var(--yellow); color: var(--yellow-ink); flex: 0 0 auto; }
+.fb-hdr { background: var(--blue); color: var(--blue-ink); }
+.fb-data { background: var(--green); color: var(--green-ink); }
+
+/* ─── Formats ─── */
+.fmt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.fmt-card { background: var(--paper-2); border-radius: var(--r-lg); padding: 18px 20px; display: grid; gap: 10px; align-content: start; }
+.fmt-card .ext { font-family: var(--font-mono); font-weight: 500; font-size: 17px; color: var(--ink); }
+.fmt-card .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fmt-card p { font-size: 14px; line-height: 1.5; }
+.fmt-card .where { font-size: 13px; color: var(--ink-3); }
+
+/* ─── Load steps ─── */
+.load-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.load-step { border-radius: var(--r-lg); padding: 18px; display: grid; gap: 8px; align-content: start; background: var(--paper-2); }
+.load-step .n { width: 30px; height: 30px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; }
+.load-step strong { font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--ink); }
+.load-step span { font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+
+.kbd-hints { font-size: 13px; color: var(--ink-3); display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; padding-top: 24px; border-top: 1px solid var(--line); }
+
+/* ─── Responsive ─── */
+@media (max-width: 1000px) {
+  .sec-nav .txt { display: none; }
+  .sec-nav button.active .txt { display: inline; }
+  .explain { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .edu-header-inner { padding: 6px 16px; gap: 8px; }
+  .edu-logo { width: 44px; height: 44px; }
+  .edu-wordmark { display: none; }
+  .sec-nav button { padding: 7px 9px; }
+  .sec-nav button.active .txt { display: none; }
+  main { padding: 24px 16px 50px; }
+  .grid-2, .math-grid, .load-steps, .anno, .inputs-row, .explain { grid-template-columns: 1fr; }
+  .anno-note { padding-bottom: 10px; }
+  .anno-note:empty { display: none; }
+  .math { font-size: 16px; }
+  .file-row { grid-template-columns: 36px 1fr; }
+  .file-row .chip, .file-row .file-size { grid-column: 2; justify-self: start; }
+  .kbd-hints { display: none; }
+  .callout { padding: 22px; }
+  h2 { font-size: 26px; }
+}
+</style>
+</head>
+<body class="edu">
+
+<header class="edu-header">
+  <div class="edu-header-inner">
+    <img class="edu-logo" alt="edulab" src="data:image/png;base64,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">
+    <span class="edu-wordmark">edulab</span>
+    <span class="spacer"></span>
+    <nav class="sec-nav" id="secNav" aria-label="Sekcje"></nav>
+    <span class="spacer"></span>
+    <div class="edu-seg" role="group" aria-label="Język / Language">
+      <button type="button" data-lang-btn="pl">PL</button>
+      <button type="button" data-lang-btn="en">EN</button>
+    </div>
+  </div>
+  <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<main id="app" data-section="s-files" data-lang="pl">
+  <section class="page-head">
+    <h1 class="app-title" data-i18n="title"></h1>
+    <p class="edu-lead" data-i18n="lead"></p>
+  </section>
+  <div id="liveRegion" class="sr-only" aria-live="polite"></div>
+
+  <!-- ─── 1. Folder ─── -->
+  <section class="section" id="s-files" aria-labelledby="hFiles">
+    <div class="sec-head">
+      <h2 id="hFiles"><span class="sec-num">1</span><span data-i18n="filesH"></span></h2>
+      <p data-i18n="filesP"></p>
+    </div>
+    <div class="grid-2">
+      <div class="card" id="folderCard">
+        <div class="card-head">
+          <span class="card-title" data-i18n="folderH"></span>
+          <div class="edu-seg" role="group">
+            <button type="button" data-folder="mini" data-i18n="folderMini"></button>
+            <button type="button" data-folder="llama" data-i18n="folderLlama"></button>
+          </div>
+        </div>
+        <div class="folder" id="folderList"></div>
+        <p class="folder-note" id="folderNote"></p>
+      </div>
+      <div class="callout yellow edu-block">
+        <h3 data-i18n="knobsH"></h3>
+        <p id="knobsP"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 2. Architecture ─── -->
+  <section class="section" id="s-arch" aria-labelledby="hArch">
+    <div class="sec-head">
+      <h2 id="hArch"><span class="sec-num">2</span><span data-i18n="archH"></span></h2>
+      <p data-i18n="archP"></p>
+    </div>
+    <div class="callout blue edu-block">
+      <h3 data-i18n="archDefH"></h3>
+      <p data-i18n="archDef"></p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <svg id="archSvg" class="diagram" viewBox="0 0 600 470" role="img" aria-labelledby="hArch"></svg>
+        <div class="legend">
+          <span><i class="pos"></i><span data-i18n="legendPos"></span></span>
+          <span><i class="neg"></i><span data-i18n="legendNeg"></span></span>
+          <span data-i18n="legendWidth"></span>
+          <span data-i18n="legendClick"></span>
+        </div>
+        <div class="inputs-row">
+          <div class="slider"><div class="row"><label for="x1" data-i18n="x1Label"></label><span class="val" id="x1Val"></span></div><input type="range" id="x1" min="0" max="1" step="0.01"></div>
+          <div class="slider"><div class="row"><label for="x2" data-i18n="x2Label"></label><span class="val" id="x2Val"></span></div><input type="range" id="x2" min="0" max="1" step="0.01"></div>
+          <span class="hint" data-i18n="inputsHint"></span>
+        </div>
+      </div>
+      <div class="card" id="archControls">
+        <span class="card-title" data-i18n="archBuild"></span>
+        <div class="stepper">
+          <span data-i18n="hiddenLayers"></span>
+          <div class="ctl">
+            <button type="button" id="layerMinus" aria-label="−">−</button>
+            <output id="layerCount">2</output>
+            <button type="button" id="layerPlus" aria-label="+">+</button>
+          </div>
+        </div>
+        <div id="layerSteppers" style="display:grid;gap:8px"></div>
+        <div class="param-count edu-block" aria-live="polite">
+          <span class="label" data-i18n="paramLabel"></span>
+          <span class="value" id="paramValue">0</span>
+          <ul id="paramList"></ul>
+        </div>
+        <div class="btn-row">
+          <button class="edu-btn" type="button" id="flowBtn"><span data-i18n="flowBtn"></span> <kbd>F</kbd></button>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="neuronPanel" aria-live="polite">
+      <span class="card-title" id="neuronTitle"></span>
+      <div class="explain" id="neuronExplain"></div>
+    </div>
+    <details class="card" id="mathCard">
+      <summary><span class="card-title" data-i18n="mathH"></span></summary>
+      <p data-i18n="mathP"></p>
+      <div class="math-grid">
+        <div class="math" id="mathEq"></div>
+        <div class="math" id="mathExample"></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ─── 3. Weights ─── -->
+  <section class="section" id="s-weights" aria-labelledby="hWeights">
+    <div class="sec-head">
+      <h2 id="hWeights"><span class="sec-num">3</span><span data-i18n="weightsH"></span></h2>
+      <p data-i18n="weightsP"></p>
+    </div>
+    <div class="callout green edu-block">
+      <h3 data-i18n="wDefH"></h3>
+      <p data-i18n="wDef"></p>
+    </div>
+    <div class="card" id="weightsCard">
+      <div class="card-head">
+        <span class="card-title" id="allWeightsTitle"></span>
+        <button class="btn-ghost" type="button" id="shuffleBtn"><span data-i18n="shuffleBtn"></span> <kbd>R</kbd></button>
+      </div>
+      <p data-i18n="allWeightsP"></p>
+      <div id="weightsList" style="display:grid;gap:16px"></div>
+    </div>
+    <div class="card" id="sizeCard">
+      <div class="card-head">
+        <span class="card-title" data-i18n="sizeH"></span>
+        <div class="edu-seg" role="group" id="precSeg"></div>
+      </div>
+      <p data-i18n="sizeP"></p>
+      <table class="size-table">
+        <thead><tr><th data-i18n="thModel"></th><th class="r" data-i18n="thParams"></th><th class="r" data-i18n="thSize"></th></tr></thead>
+        <tbody id="sizeBody"></tbody>
+      </table>
+      <div class="prec-demo" id="precDemo"></div>
+    </div>
+  </section>
+
+  <!-- ─── 4. Disk ─── -->
+  <section class="section" id="s-disk" aria-labelledby="hDisk">
+    <div class="sec-head">
+      <h2 id="hDisk"><span class="sec-num">4</span><span data-i18n="diskH"></span></h2>
+      <p data-i18n="diskP"></p>
+    </div>
+    <div class="card" id="configCard">
+      <div class="card-head">
+        <span class="card-title" data-i18n="configH"></span>
+        <div class="edu-seg" role="group">
+          <button type="button" data-config="mini" data-i18n="folderMini"></button>
+          <button type="button" data-config="llama" data-i18n="folderLlama"></button>
+        </div>
+      </div>
+      <p id="configP"></p>
+      <div class="anno" id="configView"></div>
+      <div class="btn-row" id="configActions">
+        <button class="edu-btn" type="button" id="dlConfigBtn"><span data-i18n="dlConfig"></span></button>
+        <span class="file-size" id="configSize"></span>
+      </div>
+    </div>
+    <div class="card" id="fileCard">
+      <span class="card-title" data-i18n="fileH"></span>
+      <p data-i18n="fileP"></p>
+      <div class="file-bar" id="fileBar" aria-hidden="true">
+        <div class="fb-len" id="fbLen"></div><div class="fb-hdr" id="fbHdr"></div><div class="fb-data" id="fbData"></div>
+      </div>
+      <div class="edu-seg" role="group" aria-label="safetensors">
+        <button type="button" data-file-tab="json" data-i18n="tabJson"></button>
+        <button type="button" data-file-tab="hex" data-i18n="tabHex"></button>
+        <button type="button" data-file-tab="py" data-i18n="tabPy"></button>
+      </div>
+      <pre class="code-panel" id="fileView" tabindex="0"></pre>
+      <p id="fileCaption" style="font-size:14px"></p>
+      <div class="btn-row">
+        <button class="edu-btn" type="button" id="dlWeightsBtn"><span data-i18n="dlWeights"></span></button>
+        <span class="file-size" id="fileSize"></span>
+      </div>
+    </div>
+    <div class="card">
+      <span class="card-title" data-i18n="formatsH"></span>
+      <p data-i18n="formatsP"></p>
+      <div class="fmt-grid" id="fmtGrid"></div>
+    </div>
+  </section>
+
+  <!-- ─── 5. Loading ─── -->
+  <section class="section" id="s-load" aria-labelledby="hLoad">
+    <div class="sec-head">
+      <h2 id="hLoad"><span class="sec-num">5</span><span data-i18n="loadH"></span></h2>
+      <p data-i18n="loadP"></p>
+    </div>
+    <div class="load-steps">
+      <div class="load-step"><span class="n">1</span><strong data-i18n="ls1H"></strong><span data-i18n="ls1"></span></div>
+      <div class="load-step"><span class="n">2</span><strong data-i18n="ls2H"></strong><span data-i18n="ls2"></span></div>
+      <div class="load-step"><span class="n">3</span><strong data-i18n="ls3H"></strong><span data-i18n="ls3"></span></div>
+      <div class="load-step"><span class="n">4</span><strong data-i18n="ls4H"></strong><span data-i18n="ls4"></span></div>
+    </div>
+    <pre class="code-panel tall" id="loadCode" tabindex="0"></pre>
+    <p data-i18n="loadHf" style="font-size:15px"></p>
+    <div class="callout ink edu-block">
+      <h3 data-i18n="sumH"></h3>
+      <ul>
+        <li id="sum1"></li>
+        <li id="sum2"></li>
+        <li id="sum3"></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="kbd-hints">
+    <span><kbd>1</kbd>–<kbd>5</kbd> <span data-i18n="hintSections"></span></span>
+    <span><kbd>F</kbd> <span data-i18n="hintFlow"></span></span>
+    <span><kbd>R</kbd> <span data-i18n="hintShuffle"></span></span>
+  </div>
+</main>
+
+<script>
+// ─── Constants ───
+const SECTIONS = ['s-files', 's-arch', 's-weights', 's-disk', 's-load'];
+const N_INPUTS = 2;
+const N_OUTPUTS = 1;
+const MAX_HIDDEN_LAYERS = 3;
+const MAX_NEURONS = 6;
+const LLAMA_PARAMS = 6.74e9;
+const BIG_PARAMS = 70e9;
+const PRECISIONS = [
+  { id: 'f32', label: 'float32', bytes: 4 },
+  { id: 'f16', label: 'float16', bytes: 2 },
+  { id: 'i8', label: 'int8', bytes: 1 },
+  { id: 'q4', label: '4-bit', bytes: 0.5 },
+];
+const LLAMA_FILES = [
+  { name: 'config.json', size: '≈ 0,6 KB', kind: 'arch' },
+  { name: 'generation_config.json', size: '≈ 0,2 KB', kind: 'other', desc: 'descGen' },
+  { name: 'model-00001-of-00002.safetensors', size: '≈ 10 GB', kind: 'weights', desc: 'descShard1' },
+  { name: 'model-00002-of-00002.safetensors', size: '≈ 3,5 GB', kind: 'weights', desc: 'descShard2' },
+  { name: 'model.safetensors.index.json', size: '≈ 27 KB', kind: 'weights', desc: 'descIndex' },
+  { name: 'tokenizer.json', size: '≈ 1,8 MB', kind: 'other', desc: 'descTok' },
+  { name: 'tokenizer.model', size: '≈ 0,5 MB', kind: 'other', desc: 'descTok' },
+];
+const LLAMA_CONFIG = [
+  ['architectures', '["LlamaForCausalLM"]'],
+  ['model_type', '"llama"'],
+  ['hidden_size', '4096'],
+  ['intermediate_size', '11008'],
+  ['num_hidden_layers', '32'],
+  ['num_attention_heads', '32'],
+  ['vocab_size', '32000'],
+  ['max_position_embeddings', '4096'],
+  ['hidden_act', '"silu"'],
+  ['torch_dtype', '"float16"'],
+];
+const FORMATS = [
+  { ext: '.safetensors', arch: false, weights: true, key: 'fmtSafe' },
+  { ext: '.gguf', arch: true, weights: true, key: 'fmtGguf' },
+  { ext: '.pt / .bin', arch: false, weights: true, key: 'fmtPt' },
+  { ext: '.onnx', arch: true, weights: true, key: 'fmtOnnx' },
+  { ext: '.keras / .h5', arch: true, weights: true, key: 'fmtKeras' },
+];
+
+// ─── Translations ───
+const T = {
+  pl: {
+    title: 'Z czego składa się model AI?',
+    lead: 'Model AI to matematyczno-algorytmiczna struktura, która została wytrenowana na danych, aby wykonywać określone zadania. Technicznie to dwie rzeczy: architektura (plan obliczeń) i wagi (liczby wyuczone na danych). Na dysku zwykle widać to jako dwa rodzaje plików: mały plik tekstowy config.json z architekturą i duże pliki binarne z wagami.',
+    navFiles: 'Folder', navArch: 'Architektura', navWeights: 'Wagi', navDisk: 'Zapis', navLoad: 'Wczytanie',
+    filesH: 'Model to folder z plikami',
+    filesP: 'Gdy pobierasz model z internetu (np. z Hugging Face), dostajesz po prostu folder. Nie ma w nim „inteligencji” w żadnej tajemniczej postaci – jest opis budowy sieci i bardzo dużo liczb. Kliknij plik, żeby przejść do jego opisu.',
+    folderH: 'Zawartość folderu', folderMini: 'Nasz mini-model', folderLlama: 'Llama 2 7B',
+    kindArch: 'architektura', kindWeights: 'wagi', kindOther: 'inne',
+    descConfig: 'plan sieci: warstwy, rozmiary, funkcje', descSafe: 'wszystkie liczby (wagi) modelu',
+    descGen: 'domyślne ustawienia generowania tekstu', descIndex: 'spis: która waga leży w którym pliku',
+    descTok: 'tokenizer: jak zamienić tekst na liczby',
+    descShard1: 'wagi, część 1 z 2', descShard2: 'wagi, część 2 z 2',
+    folderNoteMini: 'Rozmiary są prawdziwe – pliki są generowane na żywo z sieci, którą budujesz niżej.',
+    folderNoteLlama: 'Wybrane pliki z repozytorium meta-llama/Llama-2-7b-hf, rozmiary przybliżone. Wagi są tak duże, że dzieli się je na kilka plików.',
+    knobsH: 'Analogia: maszyna z pokrętłami',
+    knobsP: 'Wyobraź sobie maszynę z mnóstwem pokręteł. Architektura to projekt maszyny: ile jest pokręteł i jak są połączone. Wagi to położenie każdego pokrętła. Trening to cierpliwe przekręcanie ich, aż maszyna zacznie dawać dobre odpowiedzi. Nasz mini-model ma {n} pokręteł, Llama 2 7B – około 7 miliardów.',
+    archH: 'Architektura – plan obliczeń',
+    archP: 'Sieć neuronowa to warstwy „neuronów”. Neuron to bardzo prosty kalkulator: bierze kilka liczb, mnoży je przez wagi, dodaje i przepuszcza przez prostą funkcję. Architektura mówi, ile jest warstw, ile neuronów w każdej i jak są połączone. Zmieniaj ją poniżej.',
+    archDefH: 'Architektura',
+    archDef: 'Architektura to szkielet modelu, czyli sposób, w jaki zorganizowane są jego elementy obliczeniowe. Określa, jak dane wejściowe są przetwarzane, aby uzyskać dane wyjściowe.',
+    legendPos: 'waga dodatnia', legendNeg: 'waga ujemna', legendWidth: 'grubość = siła wagi', legendClick: 'kliknij neuron, żeby zobaczyć, co liczy',
+    x1Label: 'Wejście x₁', x2Label: 'Wejście x₂',
+    inputsHint: 'Dane wejściowe to zawsze liczby – w prawdziwym modelu to np. piksele zdjęcia albo słowa zamienione na liczby. Liczby w kółkach to wyniki poszczególnych neuronów.',
+    archBuild: 'Zbuduj architekturę', hiddenLayers: 'Warstwy ukryte', layerN: 'Neurony w warstwie {n}',
+    paramLabel: 'Liczba wag (parametrów)',
+    paramRow: '{a}×{b} połączeń + {b} biasów = {s}',
+    flowBtn: 'Przepuść dane',
+    lblInput: 'Wejście', lblHidden: 'Ukryta {n}', lblOutput: 'Wyjście',
+    archLive: 'Architektura: {layers}. Wag: {p}.',
+    flowLive: 'Dane przepłynęły przez wszystkie warstwy. Wynik: {v}.',
+    neuronTitleHidden: 'Co liczy wybrany neuron: warstwa ukryta {l}, neuron {i}',
+    neuronTitleOut: 'Co liczy wybrany neuron: wyjście modelu',
+    neuronTitleIn: 'Wybrane wejście x{i}',
+    nInInfo: 'Neurony wejściowe niczego nie liczą – po prostu podają dalej liczbę z suwaka ({v}). Kliknij neuron w warstwie ukrytej albo wyjściowej.',
+    nStep1: 'Bierze liczby z poprzedniej warstwy:',
+    nStep2: 'Mnoży każdą przez wagę swojego połączenia (to właśnie wagi!):',
+    nStep3: 'Dodaje wyniki i swój bias (stałą poprawkę):',
+    nStep4Relu: 'Funkcja ReLU: wynik ujemny zamienia na 0, dodatni zostawia bez zmian.',
+    nStep4Sig: 'Funkcja σ (sigmoida): „ściska” wynik do przedziału od 0 do 1.',
+    nNext: 'Ten wynik trafia do neuronów następnej warstwy.',
+    nFinal: 'To jest odpowiedź modelu.',
+    nSum: 'suma',
+    mathH: 'Dla ciekawskich: cały model jako wzór matematyczny',
+    mathP: 'To samo, co pokazuje diagram, można zapisać wzorem. Architektura to kształt wzoru (ile mnożeń macierzy, jakie funkcje), a wagi to liczby, które wypełniają macierze W i wektory b. Wzór zmienia się razem z diagramem.',
+    mathInput: 'x – wejście (2 liczby), ŷ – wynik modelu',
+    reluNote: 'zeruje wartości ujemne', sigmaNote: 'zamienia wynik na liczbę od 0 do 1',
+    mathExampleH: 'Wagi pierwszej warstwy – bieżące liczby',
+    mathNeuron: 'Pierwszy neuron warstwy ukrytej 1 liczy więc:',
+    weightsH: 'Wagi – wyuczone liczby',
+    weightsP: 'Architektura to tylko plan. To wagi decydują, co model faktycznie robi. Ta sama architektura z innymi wagami może rozpoznawać koty albo prognozować ceny – albo nie umieć nic.',
+    wDefH: 'Wagi (parametry)',
+    wDef: 'Wagi to wartości liczbowe, które model „uczy się” podczas treningu. Wagi dostosowują się tak, aby zminimalizować błąd modelu w określonym zadaniu.',
+    allWeightsTitle: 'Wszystkie {n} liczb naszego modelu',
+    allWeightsP: 'Tak naprawdę wygląda „wiedza” modelu: lista liczb pogrupowana w tabele (tensory). Nasz mini-model nie był trenowany, więc jego wagi są losowe i jego odpowiedzi nic nie znaczą – ale plik z wagami wytrenowanego modelu wygląda dokładnie tak samo, tylko liczb jest więcej.',
+    shuffleBtn: 'Losuj nowe wagi',
+    groupW: 'połączenia: {from} → {to} ({n} liczb)',
+    groupB: 'biasy neuronów: {to} ({n} liczb)',
+    gIn: 'wejście', gHidden: 'warstwa ukryta {n}', gOut: 'wyjście',
+    shuffleLive: 'Nowe wagi, ta sama architektura. Wynik modelu: {v}.',
+    sizeH: 'Ile miejsca zajmują wagi?',
+    sizeP: 'Każdą wagę trzeba zapisać z określoną precyzją. Standardowo to float32 – 4 bajty na liczbę. Żeby zmniejszyć pliki, wagi zapisuje się mniej dokładnie: float16 (2 bajty), int8 (1 bajt) albo nawet 4 bity. To tzw. kwantyzacja – model jest mniejszy i szybszy, kosztem drobnych zaokrągleń. Przełącz precyzję:',
+    thModel: 'Model', thParams: 'Liczba wag', thSize: 'Rozmiar wag',
+    rowMini: 'Nasz mini-model', rowLlama: 'Llama 2 7B', rowBig: 'Model z 70 mld wag',
+    approxB: 'ok. {n} mld',
+    precDemoH: 'Przykładowa waga naszego modelu ({w}) w precyzji {p}:',
+    precExact: 'zapisana dokładnie: {v}',
+    precRound: 'zaokrąglona: {o} → {v} (błąd {e})',
+    precQuant: 'zapisana jako liczba całkowita {q} × skala {s} = {v} (błąd {e})',
+    precNote: 'W rzeczywistych formatach dochodzą jeszcze skale i metadane, więc rozmiary są przybliżone.',
+    diskH: 'Jak model jest zapisany na dysku',
+    diskP: 'Na dysku model to zwykle dwie części: architektura opisana tekstem (plik config.json) i wagi zapisane binarnie (np. model.safetensors). Tekst można otworzyć w Notatniku. Plik binarny to surowe bajty – czytelne tylko dla programu, który wie, jak ułożyć je z powrotem w tabele liczb.',
+    configH: 'Architektura: config.json',
+    configPMini: 'Kilka linijek tekstu w formacie JSON wystarczy, żeby opisać całą architekturę. Ten plik jest generowany na żywo z sieci zbudowanej wyżej – zmień liczbę warstw i patrz, jak się zmienia.',
+    configPLlama: 'Fragment prawdziwego config.json modelu Llama 2 7B. Zasada ta sama, tylko architektura dużo większa – i nadal mieści się w kilkuset bajtach. Cała „wiedza” jest w ponad 13 GB wag.',
+    cfg_architectures: 'nazwa programu (klasy), który zbuduje sieć',
+    cfg_model_type: 'rodzaj modelu: mlp = prosta sieć warstwowa',
+    cfg_input_size: 'ile liczb wchodzi do modelu',
+    cfg_hidden_sizes: 'warstwy ukryte: ile neuronów w każdej',
+    cfg_output_size: 'ile liczb wychodzi z modelu',
+    cfg_hidden_activation: 'funkcja w neuronach ukrytych (ReLU)',
+    cfg_output_activation: 'funkcja na wyjściu (σ – wynik od 0 do 1)',
+    cfg_torch_dtype: 'precyzja, w jakiej zapisano wagi',
+    llm_architectures: 'klasa w bibliotece transformers, która zbuduje model',
+    llm_model_type: 'rodzina modeli',
+    llm_hidden_size: 'każdy token (kawałek tekstu) to wektor 4096 liczb',
+    llm_intermediate_size: 'szerokość warstwy „przetwarzającej” w każdym bloku',
+    llm_num_hidden_layers: '32 bloki (warstwy) ułożone jeden po drugim',
+    llm_num_attention_heads: '32 „głowice uwagi” – każda patrzy na inne zależności w tekście',
+    llm_vocab_size: 'słownik: 32 000 tokenów',
+    llm_max_position_embeddings: 'maks. długość tekstu (kontekstu) w tokenach',
+    llm_hidden_act: 'funkcja aktywacji (odpowiednik naszego ReLU)',
+    llm_torch_dtype: 'wagi zapisane z precyzją 16-bitową',
+    dlConfig: 'Pobierz config.json',
+    fileH: 'Wagi: model.safetensors',
+    fileP: 'Safetensors to dziś najpopularniejszy format wag. Budowa jest prosta: 8 bajtów z długością nagłówka, krótki nagłówek JSON (nazwa, typ i kształt każdej tabeli liczb), a potem surowe liczby – każda waga to 4 bajty. Poniżej prawdziwy plik zbudowany z wag Twojej sieci.',
+    segLen: '8 B', segHdr: '{n} B · nagłówek JSON', segData: '{n} B · wagi (float32)',
+    tabJson: 'Nagłówek', tabHex: 'Surowe bajty (hex)', tabPy: 'Odczyt w Pythonie',
+    capJson: 'Nagłówek sformatowany dla czytelności. fc1.weight to tabela wag połączeń wejście → warstwa ukryta 1, fc1.bias to biasy tej warstwy; data_offsets mówi, w których bajtach leżą liczby danej tabeli.',
+    capHex: 'Tak plik wygląda „od środka”. Żółte bajty to długość nagłówka, niebieskie to nagłówek JSON (z prawej widać go jako tekst), zielone to wagi – dla człowieka nieczytelne. Wyróżnione bajty {bytes} to pierwsza waga fc1.weight[0][0] = {v}.',
+    capPy: 'Program odczytuje bajty z powrotem jako tabele liczb (tensory). To dokładnie te liczby, które widać w sekcji „Wagi”.',
+    dlWeights: 'Pobierz model.safetensors',
+    sizeLine: 'rozmiar: {n}',
+    sizeLineSafe: 'rozmiar: {n} B = 8 + {h} + {d}',
+    formatsH: 'Inne formaty, które możesz spotkać',
+    formatsP: 'Safetensors przechowuje same wagi, a architekturę trzyma się obok w config.json. Niektóre formaty pakują wszystko do jednego pliku.',
+    fmtSafe: 'Same wagi + krótki nagłówek. Bezpieczny (nie zawiera kodu) i szybki w odczycie.',
+    fmtSafeWhere: 'Hugging Face, większość nowych modeli',
+    fmtGguf: 'Wszystko w jednym pliku: architektura, wagi i tokenizer. Wagi zwykle skwantyzowane (np. 4-bit), żeby model zmieścił się na zwykłym komputerze.',
+    fmtGgufWhere: 'llama.cpp, Ollama, LM Studio',
+    fmtPt: 'Wagi zapisane narzędziem pickle z Pythona. Starszy standard – wczytanie może uruchomić ukryty kod, więc pliki z niezaufanych źródeł są ryzykowne.',
+    fmtPtWhere: 'PyTorch, starsze modele na Hugging Face',
+    fmtOnnx: 'Architektura zapisana jako graf obliczeń razem z wagami. Uniwersalny format do uruchamiania modelu w różnych programach i na różnych urządzeniach.',
+    fmtOnnxWhere: 'ONNX Runtime, aplikacje mobilne i przeglądarkowe',
+    fmtKeras: 'Architektura i wagi w jednym pliku, w formacie biblioteki Keras.',
+    fmtKerasWhere: 'TensorFlow / Keras',
+    loadH: 'Wczytanie: plan + liczby = działający model',
+    loadP: 'Żeby użyć modelu, program składa obie części z powrotem.',
+    ls1H: 'Czyta plan', ls1: 'Otwiera config.json i dowiaduje się, ile warstw i neuronów zbudować.',
+    ls2H: 'Buduje pustą sieć', ls2: 'Tworzy sieć według planu. Wagi są na razie losowe – model jeszcze nic nie umie.',
+    ls3H: 'Wlewa wagi', ls3: 'Wczytuje liczby z model.safetensors i wpisuje je w odpowiednie miejsca sieci.',
+    ls4H: 'Gotowe', ls4: 'Model przyjmuje dane wejściowe i liczy odpowiedź – dokładnie tak, jak diagram w sekcji 2.',
+    loadHf: 'Biblioteki takie jak Hugging Face transformers robią te kroki za Ciebie jednym poleceniem: AutoModel.from_pretrained("folder-modelu").',
+    sumH: 'W skrócie',
+    sum1: '<b>Architektura</b> = plan obliczeń: ile warstw, ile neuronów, jakie funkcje. Zapisana jako tekst w config.json – kilkaset bajtów.',
+    sum2: '<b>Wagi</b> = liczby wyuczone na danych. Zapisane binarnie (.safetensors, .gguf, .pt, .onnx) – od bajtów do setek gigabajtów.',
+    sum3: '<b>Działający model</b> = program buduje sieć według planu i wpisuje w nią wagi.',
+    hintSections: 'sekcje', hintFlow: 'przepuść dane', hintShuffle: 'losuj wagi',
+    secLive: 'Sekcja: {name}',
+    pyComments: ['1. plan', '2. pusta sieć (losowe wagi)', '3. wlewamy nauczone wagi', '4. gotowe – liczymy odpowiedź'],
+  },
+  en: {
+    title: 'What is an AI model made of?',
+    lead: 'An AI model is a mathematical and algorithmic structure that has been trained on data to perform specific tasks. Technically it is two things: the architecture (a plan of computation) and the weights (numbers learned from data). On disk this usually shows up as two kinds of files: a small text file, config.json, with the architecture, and large binary files with the weights.',
+    navFiles: 'Folder', navArch: 'Architecture', navWeights: 'Weights', navDisk: 'Saving', navLoad: 'Loading',
+    filesH: 'A model is a folder of files',
+    filesP: 'When you download a model from the internet (e.g. from Hugging Face), you simply get a folder. There is no mysterious “intelligence” inside – just a description of how the network is built and a great many numbers. Click a file to jump to its explanation.',
+    folderH: 'Folder contents', folderMini: 'Our mini model', folderLlama: 'Llama 2 7B',
+    kindArch: 'architecture', kindWeights: 'weights', kindOther: 'other',
+    descConfig: 'network plan: layers, sizes, functions', descSafe: 'all the model’s numbers (weights)',
+    descGen: 'default text-generation settings', descIndex: 'index: which weight lives in which file',
+    descTok: 'tokenizer: how to turn text into numbers',
+    descShard1: 'weights, part 1 of 2', descShard2: 'weights, part 2 of 2',
+    folderNoteMini: 'The sizes are real – the files are generated live from the network you build below.',
+    folderNoteLlama: 'Selected files from the meta-llama/Llama-2-7b-hf repository, sizes approximate. The weights are so large they are split across several files.',
+    knobsH: 'Analogy: a machine with knobs',
+    knobsP: 'Picture a machine covered in knobs. The architecture is the machine’s design: how many knobs there are and how they are wired. The weights are the position of every knob. Training is patiently turning them until the machine gives good answers. Our mini model has {n} knobs; Llama 2 7B has about 7 billion.',
+    archH: 'Architecture – the plan of computation',
+    archP: 'A neural network is layers of “neurons”. A neuron is a very simple calculator: it takes a few numbers, multiplies them by weights, adds them up and passes the result through a simple function. The architecture says how many layers there are, how many neurons each has and how they connect. Change it below.',
+    archDefH: 'Architecture',
+    archDef: 'The architecture is the skeleton of the model, i.e. the way its computational elements are organised. It defines how input data is processed to produce output data.',
+    legendPos: 'positive weight', legendNeg: 'negative weight', legendWidth: 'width = weight strength', legendClick: 'click a neuron to see what it computes',
+    x1Label: 'Input x₁', x2Label: 'Input x₂',
+    inputsHint: 'Input data is always numbers – in a real model, e.g. image pixels or words turned into numbers. The numbers in the circles are each neuron’s result.',
+    archBuild: 'Build the architecture', hiddenLayers: 'Hidden layers', layerN: 'Neurons in layer {n}',
+    paramLabel: 'Number of weights (parameters)',
+    paramRow: '{a}×{b} connections + {b} biases = {s}',
+    flowBtn: 'Pass data through',
+    lblInput: 'Input', lblHidden: 'Hidden {n}', lblOutput: 'Output',
+    archLive: 'Architecture: {layers}. Weights: {p}.',
+    flowLive: 'Data flowed through all layers. Output: {v}.',
+    neuronTitleHidden: 'What the selected neuron computes: hidden layer {l}, neuron {i}',
+    neuronTitleOut: 'What the selected neuron computes: model output',
+    neuronTitleIn: 'Selected input x{i}',
+    nInInfo: 'Input neurons compute nothing – they just pass on the slider’s number ({v}). Click a neuron in a hidden or output layer.',
+    nStep1: 'Takes the numbers from the previous layer:',
+    nStep2: 'Multiplies each by the weight of its connection (these are the weights!):',
+    nStep3: 'Adds the results and its bias (a fixed offset):',
+    nStep4Relu: 'ReLU function: turns a negative result into 0, leaves a positive one unchanged.',
+    nStep4Sig: 'σ function (sigmoid): “squashes” the result into the range 0 to 1.',
+    nNext: 'This result goes on to the neurons of the next layer.',
+    nFinal: 'This is the model’s answer.',
+    nSum: 'sum',
+    mathH: 'For the curious: the whole model as a formula',
+    mathP: 'What the diagram shows can be written as a formula. The architecture is the shape of the formula (how many matrix multiplications, which functions); the weights are the numbers that fill the W matrices and b vectors. The formula changes together with the diagram.',
+    mathInput: 'x – input (2 numbers), ŷ – model output',
+    reluNote: 'zeroes out negative values', sigmaNote: 'squashes the result into a number between 0 and 1',
+    mathExampleH: 'First-layer weights – current numbers',
+    mathNeuron: 'So the first neuron of hidden layer 1 computes:',
+    weightsH: 'Weights – the learned numbers',
+    weightsP: 'The architecture is only a plan. The weights decide what the model actually does. The same architecture with different weights could recognise cats or predict prices – or do nothing useful at all.',
+    wDefH: 'Weights (parameters)',
+    wDef: 'Weights are numerical values the model “learns” during training. The weights adjust so as to minimise the model’s error on a given task.',
+    allWeightsTitle: 'All {n} numbers of our model',
+    allWeightsP: 'This is what a model’s “knowledge” really looks like: a list of numbers grouped into tables (tensors). Our mini model was never trained, so its weights are random and its answers mean nothing – but a trained model’s weight file looks exactly the same, just with more numbers.',
+    shuffleBtn: 'Draw new weights',
+    groupW: 'connections: {from} → {to} ({n} numbers)',
+    groupB: 'neuron biases: {to} ({n} numbers)',
+    gIn: 'input', gHidden: 'hidden layer {n}', gOut: 'output',
+    shuffleLive: 'New weights, same architecture. Model output: {v}.',
+    sizeH: 'How much space do the weights take?',
+    sizeP: 'Each weight has to be stored at some precision. The standard is float32 – 4 bytes per number. To shrink files, weights are stored less precisely: float16 (2 bytes), int8 (1 byte) or even 4 bits. This is called quantisation – the model gets smaller and faster at the cost of small rounding errors. Switch the precision:',
+    thModel: 'Model', thParams: 'Weights', thSize: 'Weight size',
+    rowMini: 'Our mini model', rowLlama: 'Llama 2 7B', rowBig: 'A 70-billion-weight model',
+    approxB: '≈ {n} bn',
+    precDemoH: 'A sample weight of our model ({w}) at {p} precision:',
+    precExact: 'stored exactly: {v}',
+    precRound: 'rounded: {o} → {v} (error {e})',
+    precQuant: 'stored as the integer {q} × scale {s} = {v} (error {e})',
+    precNote: 'Real formats also store scales and metadata, so the sizes are approximate.',
+    diskH: 'How a model is saved on disk',
+    diskP: 'On disk a model usually has two parts: the architecture described as text (config.json) and the weights stored in binary (e.g. model.safetensors). You can open the text in Notepad. The binary file is raw bytes – readable only by a program that knows how to arrange them back into tables of numbers.',
+    configH: 'Architecture: config.json',
+    configPMini: 'A few lines of JSON text are enough to describe the whole architecture. This file is generated from the network you built above – change the number of layers and watch it update.',
+    configPLlama: 'An excerpt from the real config.json of Llama 2 7B. Same principle, much larger architecture – and it still fits in a few hundred bytes. All the “knowledge” is in over 13 GB of weights.',
+    cfg_architectures: 'name of the program (class) that builds the network',
+    cfg_model_type: 'model type: mlp = a simple layered network',
+    cfg_input_size: 'how many numbers go into the model',
+    cfg_hidden_sizes: 'hidden layers: how many neurons in each',
+    cfg_output_size: 'how many numbers come out',
+    cfg_hidden_activation: 'function in the hidden neurons (ReLU)',
+    cfg_output_activation: 'function at the output (σ – result 0 to 1)',
+    cfg_torch_dtype: 'precision the weights are stored in',
+    llm_architectures: 'class in the transformers library that builds the model',
+    llm_model_type: 'model family',
+    llm_hidden_size: 'each token (piece of text) is a vector of 4096 numbers',
+    llm_intermediate_size: 'width of the “processing” layer in each block',
+    llm_num_hidden_layers: '32 blocks (layers) stacked one after another',
+    llm_num_attention_heads: '32 “attention heads” – each looks at different relations in the text',
+    llm_vocab_size: 'vocabulary: 32,000 tokens',
+    llm_max_position_embeddings: 'max text (context) length in tokens',
+    llm_hidden_act: 'activation function (like our ReLU)',
+    llm_torch_dtype: 'weights stored at 16-bit precision',
+    dlConfig: 'Download config.json',
+    fileH: 'Weights: model.safetensors',
+    fileP: 'Safetensors is today’s most popular weight format. Its layout is simple: 8 bytes with the header length, a short JSON header (name, type and shape of each table of numbers), then the raw numbers – each weight is 4 bytes. Below is a real file built from your network’s weights.',
+    segLen: '8 B', segHdr: '{n} B · JSON header', segData: '{n} B · weights (float32)',
+    tabJson: 'Header', tabHex: 'Raw bytes (hex)', tabPy: 'Reading in Python',
+    capJson: 'Header pretty-printed for readability. fc1.weight is the table of connection weights input → hidden layer 1, fc1.bias the biases of that layer; data_offsets says which bytes hold each table’s numbers.',
+    capHex: 'This is what the file looks like “inside”. Yellow bytes are the header length, blue is the JSON header (readable as text on the right), green are the weights – unreadable to humans. The highlighted bytes {bytes} are the first weight fc1.weight[0][0] = {v}.',
+    capPy: 'A program reads the bytes back as tables of numbers (tensors). These are exactly the numbers shown in the “Weights” section.',
+    dlWeights: 'Download model.safetensors',
+    sizeLine: 'size: {n}',
+    sizeLineSafe: 'size: {n} B = 8 + {h} + {d}',
+    formatsH: 'Other formats you may come across',
+    formatsP: 'Safetensors holds only the weights, with the architecture kept next to it in config.json. Some formats pack everything into a single file.',
+    fmtSafe: 'Weights only + a short header. Safe (contains no code) and fast to load.',
+    fmtSafeWhere: 'Hugging Face, most new models',
+    fmtGguf: 'Everything in one file: architecture, weights and tokenizer. Weights are usually quantised (e.g. 4-bit) so the model fits on an ordinary computer.',
+    fmtGgufWhere: 'llama.cpp, Ollama, LM Studio',
+    fmtPt: 'Weights saved with Python’s pickle tool. An older standard – loading can run hidden code, so files from untrusted sources are risky.',
+    fmtPtWhere: 'PyTorch, older models on Hugging Face',
+    fmtOnnx: 'Architecture stored as a computation graph together with the weights. A universal format for running a model in different programs and on different devices.',
+    fmtOnnxWhere: 'ONNX Runtime, mobile and browser apps',
+    fmtKeras: 'Architecture and weights in one file, in the Keras library’s format.',
+    fmtKerasWhere: 'TensorFlow / Keras',
+    loadH: 'Loading: plan + numbers = a working model',
+    loadP: 'To use a model, a program puts both parts back together.',
+    ls1H: 'Reads the plan', ls1: 'Opens config.json and learns how many layers and neurons to build.',
+    ls2H: 'Builds an empty network', ls2: 'Creates the network according to the plan. Its weights are random for now – the model knows nothing yet.',
+    ls3H: 'Pours in the weights', ls3: 'Loads the numbers from model.safetensors and writes them into the right places in the network.',
+    ls4H: 'Done', ls4: 'The model takes input data and computes an answer – exactly like the diagram in section 2.',
+    loadHf: 'Libraries such as Hugging Face transformers do these steps for you in one call: AutoModel.from_pretrained("model-folder").',
+    sumH: 'In short',
+    sum1: '<b>Architecture</b> = the plan of computation: how many layers, how many neurons, which functions. Stored as text in config.json – a few hundred bytes.',
+    sum2: '<b>Weights</b> = numbers learned from data. Stored in binary (.safetensors, .gguf, .pt, .onnx) – from bytes to hundreds of gigabytes.',
+    sum3: '<b>A working model</b> = a program builds the network from the plan and writes the weights into it.',
+    hintSections: 'sections', hintFlow: 'pass data through', hintShuffle: 'draw weights',
+    secLive: 'Section: {name}',
+    pyComments: ['1. the plan', '2. empty network (random weights)', '3. pour in the learned weights', '4. done – compute an answer'],
+  },
+};
+const NAV_KEYS = ['navFiles', 'navArch', 'navWeights', 'navDisk', 'navLoad'];
+
+// ─── State ───
+const state = {
+  lang: readLang(),
+  section: 's-files',
+  folderView: 'mini',
+  configView: 'mini',
+  fileTab: 'json',
+  precision: 'f32',
+  arch: { hidden: [4, 3], weights: [], biases: [], acts: [], sums: [], inputs: [0.8, 0.3], selected: { layer: 1, index: 0 }, flowing: false },
+};
+
+// ─── DOM refs ───
+const $ = (id) => document.getElementById(id);
+const app = $('app');
+const progressFill = $('progressFill');
+const progressBar = $('progressBar');
+const secNav = $('secNav');
+const liveRegion = $('liveRegion');
+const archSvg = $('archSvg');
+
+// ─── Helpers ───
+function readLang() {
+  try { return localStorage.getItem('lang') === 'en' ? 'en' : 'pl'; } catch { return 'pl'; }
+}
+function t(key, vars = {}) {
+  let s = T[state.lang][key] ?? key;
+  if (typeof s !== 'string') return s;
+  for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(v);
+  return s;
+}
+function locale() { return state.lang === 'pl' ? 'pl-PL' : 'en-US'; }
+function fmt(n, d = 2) {
+  if (Math.abs(n) < 0.5 * 10 ** -d) n = 0;
+  return new Intl.NumberFormat(locale(), { minimumFractionDigits: d, maximumFractionDigits: d }).format(n).replace('-', '−');
+}
+function fmtInt(n) { return new Intl.NumberFormat(locale()).format(n); }
+function fmtBytes(n) {
+  const units = [[1e9, 'GB'], [1e6, 'MB'], [1e3, 'KB']];
+  for (const [u, name] of units) if (n >= u) return `${new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(n / u)} ${name}`;
+  return `${fmtInt(n)} B`;
+}
+function announce(msg) { liveRegion.textContent = ''; requestAnimationFrame(() => { liveRegion.textContent = msg; }); }
+function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
+function relu(z) { return Math.max(0, z); }
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let r = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    r = r + Math.imul(r ^ r >>> 7, 61 | r) ^ r;
+    return ((r ^ r >>> 14) >>> 0) / 4294967296;
+  };
+}
+const rand = mulberry32(42);
+function svgEl(tag, attrs = {}, text) {
+  const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function layers() { return [N_INPUTS, ...state.arch.hidden, N_OUTPUTS]; }
+function countParams(ls) {
+  let total = 0;
+  for (let i = 0; i < ls.length - 1; i++) total += ls[i] * ls[i + 1] + ls[i + 1];
+  return total;
+}
+function layerName(l, ls) { return l === 0 ? t('gIn') : l === ls.length - 1 ? t('gOut') : t('gHidden', { n: l }); }
+function randomizeArchWeights() {
+  const ls = layers();
+  // Math.fround: keep values exactly representable as float32, as they are stored in the file
+  state.arch.weights = ls.slice(0, -1).map((n, i) =>
+    Array.from({ length: n }, () => Array.from({ length: ls[i + 1] }, () => Math.fround(rand() * 2 - 1))));
+  state.arch.biases = ls.slice(1).map((n) => Array.from({ length: n }, () => Math.fround(rand() * 0.4 - 0.2)));
+}
+function forward() {
+  const ls = layers(), L = ls.length - 1;
+  const acts = [state.arch.inputs.slice()];
+  const sums = [null];
+  for (let l = 0; l < L; l++) {
+    const z = Array.from({ length: ls[l + 1] }, (_, o) =>
+      acts[l].reduce((s, a, i) => s + a * state.arch.weights[l][i][o], state.arch.biases[l][o]));
+    sums.push(z);
+    acts.push(z.map((v) => (l === L - 1 ? sigmoid(v) : relu(v))));
+  }
+  state.arch.acts = acts;
+  state.arch.sums = sums;
+}
+function clampSelection() {
+  const ls = layers(), s = state.arch.selected;
+  s.layer = Math.min(s.layer, ls.length - 1);
+  s.index = Math.min(s.index, ls[s.layer] - 1);
+}
+function modelOutput() { const a = state.arch.acts; return a[a.length - 1][0]; }
+
+// ─── File builders ───
+function buildConfig() {
+  return {
+    architectures: ['SimpleMLP'],
+    model_type: 'mlp',
+    input_size: N_INPUTS,
+    hidden_sizes: state.arch.hidden.slice(),
+    output_size: N_OUTPUTS,
+    hidden_activation: 'relu',
+    output_activation: 'sigmoid',
+    torch_dtype: 'float32',
+  };
+}
+function jsonValue(v) { return JSON.stringify(v).replace(/,/g, ', '); }
+function configText() {
+  const lines = Object.entries(buildConfig()).map(([k, v]) => `  "${k}": ${jsonValue(v)}`);
+  return `{\n${lines.join(',\n')}\n}\n`;
+}
+// safetensors layout: u64 LE header length N · N bytes of JSON header (space-padded to 8) · raw little-endian tensor data.
+function buildSafetensors() {
+  const ls = layers();
+  const tensors = [];
+  for (let l = 0; l < ls.length - 1; l++) {
+    const nIn = ls[l], nOut = ls[l + 1];
+    const w = new Float32Array(nOut * nIn);
+    for (let o = 0; o < nOut; o++) for (let i = 0; i < nIn; i++) w[o * nIn + i] = state.arch.weights[l][i][o];
+    tensors.push({ name: `fc${l + 1}.weight`, shape: [nOut, nIn], values: w, layer: l, kind: 'w' });
+    tensors.push({ name: `fc${l + 1}.bias`, shape: [nOut], values: Float32Array.from(state.arch.biases[l]), layer: l, kind: 'b' });
+  }
+  const header = { __metadata__: { format: 'pt' } };
+  let offset = 0;
+  for (const tn of tensors) {
+    tn.offsets = [offset, offset + tn.values.length * 4];
+    header[tn.name] = { dtype: 'F32', shape: tn.shape, data_offsets: tn.offsets };
+    offset = tn.offsets[1];
+  }
+  let json = JSON.stringify(header);
+  while (json.length % 8) json += ' ';
+  const hdrBytes = new TextEncoder().encode(json);
+  const bytes = new Uint8Array(8 + hdrBytes.length + offset);
+  const dv = new DataView(bytes.buffer);
+  dv.setBigUint64(0, BigInt(hdrBytes.length), true);
+  bytes.set(hdrBytes, 8);
+  const base = 8 + hdrBytes.length;
+  for (const tn of tensors) tn.values.forEach((v, k) => dv.setFloat32(base + tn.offsets[0] + k * 4, v, true));
+  return { bytes, headerLen: hdrBytes.length, dataLen: offset, dataStart: base, tensors };
+}
+function download(name, data, type) {
+  const url = URL.createObjectURL(new Blob([data], { type }));
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function hex2(b) { return b.toString(16).padStart(2, '0'); }
+function fmtPy(v) { return (v < 0 ? '-' : ' ') + Math.abs(v).toFixed(4); }
+function pyTensor(tn) {
+  const v = Array.from(tn.values);
+  if (tn.shape.length === 1) return `tensor([${v.map(fmtPy).join(', ')}])`;
+  const [rows, cols] = tn.shape;
+  const lines = Array.from({ length: rows }, (_, r) => `[${v.slice(r * cols, r * cols + cols).map(fmtPy).join(', ')}]`);
+  return `tensor([${lines.join(',\n        ')}])`;
+}
+
+// ─── Precision helpers ───
+function roundF16(v) {
+  if (v === 0) return 0;
+  const e = Math.max(Math.floor(Math.log2(Math.abs(v))), -14);
+  const step = Math.pow(2, e - 10);
+  return Math.round(v / step) * step;
+}
+function quantize(v, maxAbs, levels) {
+  const scale = maxAbs / levels;
+  const q = Math.round(v / scale);
+  return { q, scale, v: q * scale };
+}
+
+// ─── Render ───
+function applyI18n() {
+  document.documentElement.lang = state.lang;
+  app.dataset.lang = state.lang;
+  document.querySelectorAll('[data-i18n]').forEach((n) => { n.textContent = t(n.dataset.i18n); });
+  setSeg('[data-lang-btn]', 'langBtn', state.lang);
+  ['sum1', 'sum2', 'sum3'].forEach((k) => { $(k).innerHTML = t(k); });
+  document.title = t('title');
+}
+
+function setSeg(selector, attr, value) {
+  document.querySelectorAll(selector).forEach((b) => {
+    const on = b.dataset[attr] === value;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on);
+  });
+}
+
+function renderNav() {
+  secNav.replaceChildren(...SECTIONS.map((id, i) => {
+    const b = el('button');
+    b.type = 'button';
+    b.dataset.section = id;
+    const on = id === state.section;
+    b.classList.toggle('active', on);
+    if (on) b.setAttribute('aria-current', 'true');
+    b.append(el('span', 'num', String(i + 1)), el('span', 'txt', t(NAV_KEYS[i])));
+    return b;
+  }));
+  app.dataset.section = state.section;
+}
+
+function renderFolder() {
+  setSeg('[data-folder]', 'folder', state.folderView);
+  const kinds = { arch: ['blue', '{ }', 'kindArch'], weights: ['green', '01', 'kindWeights'], other: ['sand', 'abc', 'kindOther'] };
+  let files;
+  if (state.folderView === 'mini') {
+    files = [
+      { name: 'config.json', size: fmtBytes(new TextEncoder().encode(configText()).length), kind: 'arch', desc: 'descConfig' },
+      { name: 'model.safetensors', size: fmtBytes(buildSafetensors().bytes.length), kind: 'weights', desc: 'descSafe' },
+    ];
+  } else {
+    files = LLAMA_FILES.map((f) => ({ ...f, desc: f.desc ?? (f.kind === 'arch' ? 'descConfig' : 'descSafe') }));
+  }
+  const path = el('div', 'folder-path', state.folderView === 'mini' ? 'mini-model/' : 'Llama-2-7b-hf/');
+  $('folderList').replaceChildren(path, ...files.map((f) => {
+    const [color, icon, label] = kinds[f.kind];
+    const row = el('button', 'file-row');
+    row.type = 'button';
+    row.dataset.target = f.kind === 'arch' ? 'configCard' : f.kind === 'weights' ? 'fileCard' : 's-disk';
+    const name = el('span', 'file-name', f.name);
+    name.append(el('span', 'file-desc', t(f.desc)));
+    row.append(el('span', `file-icon ${color}`, icon), name, el('span', `chip ${color}`, t(label)), el('span', 'file-size', f.size));
+    return row;
+  }));
+  $('folderNote').textContent = state.folderView === 'mini' ? t('folderNoteMini') : t('folderNoteLlama');
+  $('folderCard').dataset.view = state.folderView;
+  $('knobsP').textContent = t('knobsP', { n: fmtInt(countParams(layers())) });
+}
+
+function renderArch() {
+  forward();
+  clampSelection();
+  const ls = layers();
+  const sel = state.arch.selected;
+  const W = 600, padX = 48, top = 24, bottom = 400;
+  const xs = ls.map((_, i) => padX + (i * (W - 2 * padX)) / (ls.length - 1));
+  const pos = ls.map((n, i) => {
+    const gap = Math.min(64, (bottom - top) / n);
+    const y0 = (top + bottom) / 2 - (gap * (n - 1)) / 2;
+    return Array.from({ length: n }, (_, j) => ({ x: xs[i], y: y0 + j * gap }));
+  });
+  archSvg.replaceChildren();
+  archSvg.classList.toggle('dimmed', state.arch.flowing || sel.layer > 0);
+  const edgeG = svgEl('g'), nodeG = svgEl('g'), labelG = svgEl('g');
+  pos.slice(0, -1).forEach((col, i) => col.forEach((a, j) => pos[i + 1].forEach((bp, k) => {
+    const w = state.arch.weights[i][j][k];
+    const hot = !state.arch.flowing && i + 1 === sel.layer && k === sel.index;
+    edgeG.append(svgEl('line', {
+      x1: a.x, y1: a.y, x2: bp.x, y2: bp.y,
+      class: `edge ${w >= 0 ? 'pos' : 'neg'}${hot ? ' hot' : ''}`, 'stroke-width': (0.6 + Math.abs(w) * 3).toFixed(2), 'data-layer': i,
+    }));
+  })));
+  pos.forEach((col, i) => {
+    col.forEach((p, j) => {
+      const isSel = !state.arch.flowing && i === sel.layer && j === sel.index;
+      const v = state.arch.acts[i][j];
+      nodeG.append(svgEl('circle', {
+        cx: p.x, cy: p.y, r: 19, class: `node${i === 0 ? ' in' : ''}${isSel ? ' sel' : ''}`,
+        'data-layer': i, 'data-index': j, 'data-value': v.toFixed(6), tabindex: 0, role: 'button',
+        'aria-label': `${layerName(i, ls)} ${j + 1}: ${fmt(v)}`,
+      }), svgEl('text', { x: p.x, y: p.y + 4, 'text-anchor': 'middle', class: 'node-val' }, fmt(v)));
+    });
+    const name = i === 0 ? t('lblInput') : i === ls.length - 1 ? t('lblOutput') : t('lblHidden', { n: i });
+    labelG.append(svgEl('text', { x: xs[i], y: 438, 'text-anchor': 'middle', class: 'svg-label strong' }, name));
+    labelG.append(svgEl('text', { x: xs[i], y: 458, 'text-anchor': 'middle', class: 'svg-label' }, `(${ls[i]})`));
+  });
+  archSvg.append(edgeG, nodeG, labelG);
+
+  state.arch.inputs.forEach((v, i) => { $(`x${i + 1}`).value = v; $(`x${i + 1}Val`).textContent = fmt(v); });
+  $('layerCount').textContent = state.arch.hidden.length;
+  $('layerMinus').disabled = state.arch.hidden.length <= 1;
+  $('layerPlus').disabled = state.arch.hidden.length >= MAX_HIDDEN_LAYERS;
+  $('layerSteppers').replaceChildren(...state.arch.hidden.map((n, i) => {
+    const row = el('div', 'stepper');
+    const lbl = el('span', '', t('layerN', { n: i + 1 }));
+    const ctl = el('div', 'ctl');
+    const minus = el('button', '', '−'); minus.type = 'button';
+    minus.dataset.neuron = `${i}:-1`; minus.disabled = n <= 1; minus.setAttribute('aria-label', `${lbl.textContent} −1`);
+    const plus = el('button', '', '+'); plus.type = 'button';
+    plus.dataset.neuron = `${i}:1`; plus.disabled = n >= MAX_NEURONS; plus.setAttribute('aria-label', `${lbl.textContent} +1`);
+    ctl.append(minus, el('output', '', String(n)), plus); row.append(lbl, ctl);
+    return row;
+  }));
+  const total = countParams(ls);
+  $('paramValue').textContent = fmtInt(total);
+  $('paramList').replaceChildren(...ls.slice(0, -1).map((a, i) =>
+    el('li', '', t('paramRow', { a, b: ls[i + 1], s: a * ls[i + 1] + ls[i + 1] }))));
+  const ctrl = $('archControls');
+  ctrl.dataset.layers = ls.join('-');
+  ctrl.dataset.params = total;
+  ctrl.dataset.output = modelOutput().toFixed(6);
+  renderNeuronPanel();
+  renderMath();
+}
+
+function renderNeuronPanel() {
+  const ls = layers(), L = ls.length - 1;
+  const { layer, index } = state.arch.selected;
+  const panel = $('neuronPanel'), box = $('neuronExplain');
+  panel.dataset.layer = layer;
+  panel.dataset.index = index;
+  panel.dataset.value = state.arch.acts[layer][index].toFixed(6);
+  if (layer === 0) {
+    $('neuronTitle').textContent = t('neuronTitleIn', { i: index + 1 });
+    box.replaceChildren(el('p', '', t('nInInfo', { v: fmt(state.arch.inputs[index]) })));
+    return;
+  }
+  $('neuronTitle').textContent = layer === L ? t('neuronTitleOut') : t('neuronTitleHidden', { l: layer, i: index + 1 });
+  const prev = state.arch.acts[layer - 1];
+  const ws = prev.map((_, i) => state.arch.weights[layer - 1][i][index]);
+  const b = state.arch.biases[layer - 1][index];
+  const z = state.arch.sums[layer][index];
+  const out = state.arch.acts[layer][index];
+  const numSpan = (v) => el('span', v >= 0 ? 'num-pos' : 'num-neg', fmt(v));
+  const line = (...parts) => { const d = el('div'); d.append(...parts); return d; };
+  const step = (n, text, calcLines, note) => {
+    const s = el('div', 'explain-step');
+    const body = el('div');
+    body.append(el('p', '', text));
+    const c = el('div', 'calc');
+    c.append(...calcLines);
+    body.append(c);
+    if (note) body.append(el('p', 'explain-note', note));
+    s.append(el('span', 'n', String(n)), body);
+    return s;
+  };
+  const products = prev.map((a, i) => a * ws[i]);
+  box.replaceChildren(
+    step(1, t('nStep1'), prev.map((a) => line(fmt(a)))),
+    step(2, t('nStep2'), prev.map((a, i) => line(`${fmt(a)} × `, numSpan(ws[i]), ` = ${fmt(products[i])}`))),
+    step(3, t('nStep3'), [
+      ...products.map((p) => line(fmt(p))),
+      line('bias: ', numSpan(b)),
+      line(`${t('nSum')} = ${fmt(z)}`),
+    ]),
+    step(4, layer === L ? t('nStep4Sig') : t('nStep4Relu'), [
+      el('div', 'explain-result', `${layer === L ? 'σ' : 'ReLU'}(${fmt(z)}) = ${fmt(out)}`),
+    ], layer === L ? t('nFinal') : t('nNext')),
+  );
+}
+
+function renderMath() {
+  const ls = layers(), L = ls.length - 1;
+  const sup = (l) => `<sup>(${l})</sup>`;
+  const rows = [];
+  for (let l = 1; l <= L; l++) {
+    const prev = l === 1 ? '<i>x</i>' : `<i>h</i>${sup(l - 1)}`;
+    const lhs = l === L ? '<i>ŷ</i>' : `<i>h</i>${sup(l)}`;
+    const fn = l === L ? 'σ' : 'ReLU';
+    rows.push(`<div class="eq-row"><span>${lhs} = <span class="fn">${fn}</span>(<i>W</i>${sup(l)} ${prev} + <i>b</i>${sup(l)})</span>`
+      + `<span class="shape">W${sup(l)} ∈ ℝ<sup>${ls[l]}×${ls[l - 1]}</sup>, b${sup(l)} ∈ ℝ<sup>${ls[l]}</sup></span></div>`);
+  }
+  $('mathEq').innerHTML = rows.join('')
+    + `<div class="eq-defs"><div><span class="fn">ReLU</span>(<i>z</i>) = max(0, <i>z</i>) <span>– ${t('reluNote')}</span></div>`
+    + `<div><span class="fn">σ</span>(<i>z</i>) = 1 / (1 + <i>e</i><sup>−<i>z</i></sup>) <span>– ${t('sigmaNote')}</span></div>`
+    + `<div><span>${t('mathInput')}</span></div></div>`;
+  $('mathEq').dataset.equations = L;
+
+  const nIn = ls[0], nOut = ls[1];
+  const Wm = state.arch.weights[0], b = state.arch.biases[0];
+  const cell = (v) => `<span class="${v >= 0 ? 'pos' : 'neg'}">${fmt(v)}</span>`;
+  let mat = '';
+  for (let o = 0; o < nOut; o++) for (let i = 0; i < nIn; i++) mat += cell(Wm[i][o]);
+  const terms = Array.from({ length: nIn }, (_, i) => {
+    const v = Wm[i][0];
+    return `${i ? (v < 0 ? ' − ' : ' + ') : (v < 0 ? '−' : '')}<span class="${v >= 0 ? 'num-pos' : 'num-neg'}">${fmt(Math.abs(v))}</span>·<i>x</i><sub>${i + 1}</sub>`;
+  }).join('');
+  const b0 = b[0];
+  $('mathExample').innerHTML = `<span class="group-label">${t('mathExampleH')}</span>`
+    + `<div class="mat-row"><span><i>W</i>${sup(1)} =</span><span class="matrix" style="grid-template-columns: repeat(${nIn}, auto)">${mat}</span>`
+    + `<span><i>b</i>${sup(1)} =</span><span class="matrix" style="grid-template-columns: auto">${b.map(cell).join('')}</span></div>`
+    + `<span class="eq-note">${t('mathNeuron')}</span>`
+    + `<div class="eq-row"><span><i>h</i><sub>1</sub>${sup(1)} = <span class="fn">ReLU</span>(${terms}${b0 < 0 ? ' − ' : ' + '}<span class="${b0 >= 0 ? 'num-pos' : 'num-neg'}">${fmt(Math.abs(b0))}</span>)</span></div>`;
+}
+
+function renderWeights() {
+  const ls = layers();
+  $('allWeightsTitle').textContent = t('allWeightsTitle', { n: fmtInt(countParams(ls)) });
+  const st = buildSafetensors();
+  $('weightsList').replaceChildren(...st.tensors.map((tn) => {
+    const g = el('div', 'tensor-group');
+    const head = el('div', 'tensor-head');
+    const from = layerName(tn.layer, ls), to = layerName(tn.layer + 1, ls);
+    head.append(el('code', '', tn.name),
+      el('span', '', tn.kind === 'w' ? t('groupW', { from, to, n: tn.values.length }) : t('groupB', { to, n: tn.values.length })));
+    const chips = el('div', 'w-chips');
+    tn.values.forEach((v) => chips.append(el('span', `w-chip ${v >= 0 ? 'pos' : 'neg'}`, fmt(v, 3))));
+    g.append(head, chips);
+    return g;
+  }));
+  $('weightsCard').dataset.count = st.tensors.reduce((s, tn) => s + tn.values.length, 0);
+  renderSize();
+}
+
+function renderSize() {
+  const prec = PRECISIONS.find((p) => p.id === state.precision);
+  $('precSeg').replaceChildren(...PRECISIONS.map((p) => {
+    const b = el('button', p.id === state.precision ? 'active' : '', `${p.label} · ${p.bytes === 0.5 ? '½' : p.bytes} B`);
+    b.type = 'button'; b.dataset.prec = p.id; b.setAttribute('aria-pressed', p.id === state.precision);
+    return b;
+  }));
+  const n = countParams(layers());
+  const rows = [
+    [t('rowMini'), fmtInt(n), n],
+    [t('rowLlama'), t('approxB', { n: fmt(LLAMA_PARAMS / 1e9, 2) }), LLAMA_PARAMS],
+    [t('rowBig'), t('approxB', { n: '70' }), BIG_PARAMS],
+  ];
+  $('sizeBody').replaceChildren(...rows.map(([name, pTxt, p]) => {
+    const tr = el('tr');
+    tr.append(el('td', '', name), el('td', 'num', pTxt), el('td', 'big', fmtBytes(p * prec.bytes)));
+    return tr;
+  }));
+  const st = buildSafetensors();
+  const vals = Array.from(st.tensors[0].values);
+  const maxAbs = Math.max(...vals.map(Math.abs));
+  // demo weight: the one 4-bit quantisation rounds worst, so precision loss is visible
+  const demoIdx = vals.reduce((best, x, i) => {
+    const err = (y) => Math.abs(quantize(y, maxAbs, 7).v - y);
+    return err(x) > err(vals[best]) ? i : best;
+  }, 0);
+  const v = vals[demoIdx];
+  const nIn = st.tensors[0].shape[1];
+  let line;
+  if (prec.id === 'f32') line = t('precExact', { v: fmt(v, 6) });
+  else if (prec.id === 'f16') { const r = roundF16(v); line = t('precRound', { o: fmt(v, 6), v: fmt(r, 6), e: fmt(Math.abs(r - v), 6) }); }
+  else {
+    const qz = quantize(v, maxAbs, prec.id === 'i8' ? 127 : 7);
+    line = t('precQuant', { q: fmt(qz.q, 0), s: fmt(qz.scale, 4), v: fmt(qz.v, 6), e: fmt(Math.abs(qz.v - v), 6) });
+  }
+  $('precDemo').replaceChildren(el('strong', '', t('precDemoH', { p: prec.label, w: `fc1.weight[${Math.floor(demoIdx / nIn)}][${demoIdx % nIn}]` })), el('code', '', line), el('span', '', t('precNote')));
+  const card = $('sizeCard');
+  card.dataset.precision = prec.id;
+  card.dataset.bytes = n * prec.bytes;
+  card.dataset.demoIndex = demoIdx;
+}
+
+function renderConfig() {
+  setSeg('[data-config]', 'config', state.configView);
+  const view = $('configView');
+  view.replaceChildren();
+  let rows;
+  if (state.configView === 'mini') {
+    rows = Object.entries(buildConfig()).map(([k, v]) => [k, jsonValue(v), t(`cfg_${k}`)]);
+    $('configP').textContent = t('configPMini');
+  } else {
+    rows = LLAMA_CONFIG.map(([k, v]) => [k, v, t(`llm_${k}`)]);
+    $('configP').textContent = t('configPLlama');
+  }
+  const addRow = (codeNodes, note, extra = '') => {
+    const c = el('div', `anno-code ${extra}`);
+    const code = el('span');
+    code.append(...codeNodes);
+    c.append(code);
+    view.append(c, el('div', `anno-note ${extra}`, note));
+  };
+  addRow(['{'], '', 'first');
+  rows.forEach(([k, v, note], i) => {
+    addRow(['  ', el('span', 'k', `"${k}"`), ': ', el('span', 'v', v), i < rows.length - 1 ? ',' : ''], note);
+  });
+  addRow([state.configView === 'mini' ? '}' : '  …\n}'], '', 'last');
+  $('configActions').hidden = state.configView !== 'mini';
+  $('configSize').textContent = t('sizeLine', { n: fmtBytes(new TextEncoder().encode(configText()).length) });
+  const card = $('configCard');
+  card.dataset.view = state.configView;
+  card.dataset.hiddenSizes = state.arch.hidden.join(',');
+}
+
+function renderFile() {
+  const st = buildSafetensors();
+  const total = st.bytes.length;
+  $('fbLen').textContent = t('segLen');
+  $('fbHdr').textContent = t('segHdr', { n: st.headerLen });
+  $('fbData').textContent = t('segData', { n: st.dataLen });
+  $('fbHdr').style.flex = `${st.headerLen} 1 0`;
+  $('fbData').style.flex = `${st.dataLen} 1 0`;
+  $('fileSize').textContent = t('sizeLineSafe', { n: fmtInt(total), h: st.headerLen, d: st.dataLen });
+  setSeg('[data-file-tab]', 'fileTab', state.fileTab);
+  const view = $('fileView');
+  view.replaceChildren();
+  const add = (text, cls) => view.append(cls ? el('span', cls, text) : text);
+  const first = st.tensors[0];
+  const markStart = st.dataStart + first.offsets[0];
+
+  if (state.fileTab === 'json') {
+    add('{\n  "__metadata__": {"format": "pt"},\n');
+    st.tensors.forEach((tn, k) => {
+      add(`  "${tn.name}"`, 'hx-hdr');
+      add(`: {"dtype": "F32", "shape": [${tn.shape.join(', ')}], "data_offsets": [${tn.offsets.join(', ')}]}${k < st.tensors.length - 1 ? ',' : ''}\n`);
+    });
+    add('}');
+    $('fileCaption').textContent = t('capJson');
+    view.scrollTop = 0;
+  } else if (state.fileTab === 'hex') {
+    const region = (i) => (i >= markStart && i < markStart + 4 ? 'hx-mark' : i < 8 ? 'hx-len' : i < st.dataStart ? 'hx-hdr' : 'hx-data');
+    for (let row = 0; row < total; row += 16) {
+      add(row.toString(16).padStart(8, '0') + '  ', 'hx-off');
+      for (let i = row; i < row + 16; i++) {
+        if (i < total) add(hex2(st.bytes[i]), region(i)); else add('  ');
+        add(i === row + 7 ? '  ' : ' ');
+      }
+      add(' |', 'hx-off');
+      for (let i = row; i < Math.min(row + 16, total); i++) {
+        const c = st.bytes[i];
+        add(c >= 32 && c < 127 ? String.fromCharCode(c) : '.', region(i));
+      }
+      add('|\n', 'hx-off');
+    }
+    const mb = Array.from(st.bytes.slice(markStart, markStart + 4), hex2).join(' ');
+    $('fileCaption').textContent = t('capHex', { bytes: mb, v: first.values[0].toFixed(4) });
+    const markEl = view.querySelector('.hx-mark');
+    if (markEl) view.scrollTop = markEl.offsetTop - view.clientHeight / 3;
+  } else {
+    add('>>> from safetensors.torch import load_file\n>>> w = load_file("model.safetensors")\n>>> for name in sorted(w):\n...     print(name, list(w[name].shape))\n', 'c-kw');
+    add(st.tensors.map((tn) => tn.name).sort().map((nm) => `${nm} [${st.tensors.find((x) => x.name === nm).shape.join(', ')}]`).join('\n') + '\n');
+    add('>>> w["fc1.weight"]\n', 'c-kw');
+    add(pyTensor(first) + '\n');
+    add('>>> w["fc1.bias"]\n', 'c-kw');
+    add(pyTensor(st.tensors[1]));
+    $('fileCaption').textContent = t('capPy');
+    view.scrollTop = 0;
+  }
+  const card = $('fileCard');
+  card.dataset.tab = state.fileTab;
+  card.dataset.bytes = total;
+  card.dataset.headerLen = st.headerLen;
+}
+
+function renderFormats() {
+  $('fmtGrid').replaceChildren(...FORMATS.map((f) => {
+    const c = el('div', 'fmt-card');
+    const chips = el('div', 'chips');
+    if (f.arch) chips.append(el('span', 'chip blue', t('kindArch')));
+    if (f.weights) chips.append(el('span', 'chip green', t('kindWeights')));
+    c.append(el('span', 'ext', f.ext), chips, el('p', '', t(f.key)), el('span', 'where', t(`${f.key}Where`)));
+    return c;
+  }));
+}
+
+function renderLoadCode() {
+  const [c1, c2, c3, c4] = t('pyComments');
+  const x = state.arch.inputs.map((v) => v.toFixed(2)).join(', ');
+  const out = modelOutput().toFixed(4);
+  const view = $('loadCode');
+  view.replaceChildren();
+  const add = (text, cls) => view.append(cls ? el('span', cls, text) : text);
+  const kw = (s) => add(s, 'c-kw');
+  const str = (s) => add(s, 'c-str');
+  const com = (s) => add(`  # ${s}\n`, 'c-com');
+  kw('import'); add(' json, torch\n');
+  kw('from'); add(' torch '); kw('import'); add(' nn\n');
+  kw('from'); add(' safetensors.torch '); kw('import'); add(' load_file\n\n');
+  add('config = json.load(open('); str('"config.json"'); add('))'); com(c1);
+  add('\nsizes = [config['); str('"input_size"'); add('], *config['); str('"hidden_sizes"'); add('], config['); str('"output_size"'); add(']]\n');
+  add('model = nn.ModuleDict({f'); str('"fc{i + 1}"'); add(': nn.Linear(sizes[i], sizes[i + 1])\n                       ');
+  kw('for'); add(' i '); kw('in'); add(' range(len(sizes) - 1)})'); com(c2);
+  add('\nmodel.load_state_dict(load_file('); str('"model.safetensors"'); add('))'); com(c3);
+  add('\n'); kw('def'); add(' run(x):\n    '); kw('for'); add(' i, layer '); kw('in'); add(' enumerate(model.values()):\n        x = layer(x)\n        x = torch.relu(x) ');
+  kw('if'); add(' i < len(model) - 1 '); kw('else'); add(' torch.sigmoid(x)\n    '); kw('return'); add(' x\n\n');
+  add('print(run(torch.tensor(['); add(x, 'c-num'); add('])))'); com(c4);
+  add(`# → tensor([${out}], grad_fn=<SigmoidBackward0>)`, 'c-com');
+  view.dataset.output = out;
+}
+
+function renderDynamic() {
+  renderArch();
+  renderFolder();
+  renderWeights();
+  renderConfig();
+  renderFile();
+  renderLoadCode();
+}
+function renderAll() {
+  applyI18n();
+  renderNav();
+  renderFormats();
+  renderDynamic();
+}
+
+function runFlow() {
+  if (state.arch.flowing) return;
+  const ls = layers();
+  state.arch.flowing = true;
+  renderArch();
+  ls.forEach((_, i) => setTimeout(() => {
+    archSvg.querySelectorAll(`.node[data-layer="${i}"]`).forEach((n) => n.classList.add('lit'));
+    archSvg.querySelectorAll(`.edge[data-layer="${i}"]`).forEach((e) => e.classList.add('hot'));
+    if (i === ls.length - 1) {
+      announce(t('flowLive', { v: fmt(modelOutput()) }));
+      setTimeout(() => { state.arch.flowing = false; renderArch(); }, 1600);
+    }
+  }, 150 + i * 450));
+}
+
+function goSection(i) {
+  const id = SECTIONS[i];
+  if (!id) return;
+  $(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  announce(t('secLive', { name: t(NAV_KEYS[i]) }));
+}
+
+function onArchChange() {
+  randomizeArchWeights();
+  renderDynamic();
+  announce(t('archLive', { layers: layers().join('–'), p: countParams(layers()) }));
+}
+
+function shuffleWeights() {
+  randomizeArchWeights();
+  renderDynamic();
+  announce(t('shuffleLive', { v: fmt(modelOutput()) }));
+}
+
+function updateScrollProgress() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const pct = max > 0 ? Math.round((scrollY / max) * 100) : 0;
+  progressFill.style.width = pct + '%';
+  progressBar.setAttribute('aria-valuenow', pct);
+}
+
+// ─── Probe (DOM contract invariants) ───
+function probe() {
+  const checks = [];
+  const check = (name, fn) => { try { checks.push({ name, pass: !!fn() }); } catch (e) { checks.push({ name, pass: false, error: String(e) }); } };
+  const ls = () => $('archControls').dataset.layers.split('-').map(Number);
+  check('arch: node count = sum of layers', () => archSvg.querySelectorAll('.node').length === ls().reduce((a, b) => a + b, 0));
+  check('arch: edge count = sum a·b', () => {
+    const l = ls(); let e = 0; for (let i = 0; i < l.length - 1; i++) e += l[i] * l[i + 1];
+    return archSvg.querySelectorAll('.edge').length === e;
+  });
+  check('arch: params = edges + biases', () => +$('archControls').dataset.params === countParams(ls()));
+  check('forward: output node = recomputed σ(...)', () => {
+    const l = ls(); let a = state.arch.inputs.slice();
+    for (let k = 0; k < l.length - 1; k++) {
+      a = Array.from({ length: l[k + 1] }, (_, o) => {
+        const z = a.reduce((s, v, i) => s + v * state.arch.weights[k][i][o], state.arch.biases[k][o]);
+        return k === l.length - 2 ? sigmoid(z) : relu(z);
+      });
+    }
+    const node = archSvg.querySelector(`.node[data-layer="${l.length - 1}"]`);
+    return Math.abs(+node.dataset.value - a[0]) < 1e-5 && a[0] > 0 && a[0] < 1;
+  });
+  check('neuron panel = selected node value', () => {
+    const p = $('neuronPanel').dataset;
+    const node = archSvg.querySelector(`.node[data-layer="${p.layer}"][data-index="${p.index}"]`);
+    return node && node.dataset.value === p.value;
+  });
+  check('weights list count = params', () => +$('weightsCard').dataset.count === countParams(ls()));
+  check('config.json hidden_sizes = architecture', () => JSON.stringify(JSON.parse(configText()).hidden_sizes) === JSON.stringify(ls().slice(1, -1)));
+  check('safetensors: header length, contiguous offsets, size = 4·params', () => {
+    const bytes = buildSafetensors().bytes;
+    const n = Number(new DataView(bytes.buffer).getBigUint64(0, true));
+    const hdr = JSON.parse(new TextDecoder().decode(bytes.slice(8, 8 + n)));
+    const ts = Object.entries(hdr).filter(([k]) => k !== '__metadata__').map(([, v]) => v).sort((a, b) => a.data_offsets[0] - b.data_offsets[0]);
+    let pos = 0;
+    for (const tn of ts) { if (tn.data_offsets[0] !== pos) return false; pos = tn.data_offsets[1]; }
+    return (8 + n) % 8 === 0 && pos === bytes.length - 8 - n && pos === 4 * countParams(ls());
+  });
+  check('safetensors: first float = W(1)[0][0]', () => {
+    const st = buildSafetensors();
+    return new DataView(st.bytes.buffer).getFloat32(st.dataStart, true) === state.arch.weights[0][0][0];
+  });
+  check('size: bytes = params × precision', () => {
+    const p = PRECISIONS.find((x) => x.id === $('sizeCard').dataset.precision);
+    return +$('sizeCard').dataset.bytes === countParams(ls()) * p.bytes;
+  });
+  check('load code output = model output', () => $('loadCode').dataset.output === modelOutput().toFixed(4));
+  check('math: one equation per layer', () => +$('mathEq').dataset.equations === ls().length - 1);
+  check('lang attr matches state', () => document.documentElement.lang === app.dataset.lang);
+  return checks;
+}
+
+// ─── Listeners ───
+document.addEventListener('click', (e) => {
+  const nav = e.target.closest('button[data-section]');
+  if (nav) { goSection(SECTIONS.indexOf(nav.dataset.section)); return; }
+  const lb = e.target.closest('[data-lang-btn]');
+  if (lb) {
+    state.lang = lb.dataset.langBtn;
+    try { localStorage.setItem('lang', state.lang); } catch {}
+    renderAll();
+    return;
+  }
+  const nb = e.target.closest('[data-neuron]');
+  if (nb) {
+    const [i, d] = nb.dataset.neuron.split(':').map(Number);
+    state.arch.hidden[i] = Math.max(1, Math.min(MAX_NEURONS, state.arch.hidden[i] + d));
+    onArchChange();
+    return;
+  }
+  const node = e.target.closest('.node');
+  if (node) { state.arch.selected = { layer: +node.dataset.layer, index: +node.dataset.index }; renderArch(); return; }
+  const fr = e.target.closest('.file-row');
+  if (fr) { $(fr.dataset.target).scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  const fv = e.target.closest('[data-folder]');
+  if (fv) { state.folderView = fv.dataset.folder; renderFolder(); return; }
+  const cv = e.target.closest('[data-config]');
+  if (cv) { state.configView = cv.dataset.config; renderConfig(); return; }
+  const ft = e.target.closest('[data-file-tab]');
+  if (ft) { state.fileTab = ft.dataset.fileTab; renderFile(); return; }
+  const pr = e.target.closest('[data-prec]');
+  if (pr) { state.precision = pr.dataset.prec; renderSize(); }
+});
+archSvg.addEventListener('keydown', (e) => {
+  const node = e.target.closest('.node');
+  if (node && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    const { layer, index } = node.dataset;
+    state.arch.selected = { layer: +layer, index: +index };
+    renderArch();
+    archSvg.querySelector(`.node[data-layer="${layer}"][data-index="${index}"]`)?.focus();
+  }
+});
+$('layerPlus').addEventListener('click', () => {
+  if (state.arch.hidden.length >= MAX_HIDDEN_LAYERS) return;
+  state.arch.hidden.push(3); onArchChange();
+});
+$('layerMinus').addEventListener('click', () => {
+  if (state.arch.hidden.length <= 1) return;
+  state.arch.hidden.pop(); onArchChange();
+});
+['x1', 'x2'].forEach((id, i) => $(id).addEventListener('input', (e) => {
+  state.arch.inputs[i] = parseFloat(e.target.value);
+  renderArch(); renderLoadCode();
+}));
+$('flowBtn').addEventListener('click', runFlow);
+$('shuffleBtn').addEventListener('click', shuffleWeights);
+$('dlConfigBtn').addEventListener('click', () => download('config.json', configText(), 'application/json'));
+$('dlWeightsBtn').addEventListener('click', () => download('model.safetensors', buildSafetensors().bytes, 'application/octet-stream'));
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  const k = e.key.toLowerCase();
+  if (k >= '1' && k <= String(SECTIONS.length) && k.length === 1) goSection(+k - 1);
+  else if (k === 'f') runFlow();
+  else if (k === 'r') shuffleWeights();
+});
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach((en) => {
+    if (en.isIntersecting && state.section !== en.target.id) { state.section = en.target.id; renderNav(); }
+  });
+}, { rootMargin: '-35% 0px -60% 0px' });
+
+// ─── Init ───
+randomizeArchWeights();
+renderAll();
+SECTIONS.forEach((id) => sectionObserver.observe($(id)));
+updateScrollProgress();
+window.MODEL_DEMO = { state, probe, buildSafetensors, configText };
+</script>
+</body>
+</html>
