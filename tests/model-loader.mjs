@@ -33,7 +33,7 @@ export function createTestClock() {
     nextCallback() { return pending.values().next().value; },
     tick() {
       const [id, callback] = pending.entries().next().value ?? [];
-      if (!callback) throw new Error('No scheduled forward step');
+      if (!callback) throw new Error('No scheduled callback');
       pending.delete(id);
       callback();
     },
@@ -59,19 +59,11 @@ export function loadModel(html = readFileSync(APP_URL, 'utf8'), { clock = create
       buildConfig, configText, buildSafetensors, sigmoid, relu,
       T, t,
       modelFileDestination: typeof modelFileDestination === 'function' ? modelFileDestination : undefined,
-      llmComparisonData: typeof llmComparisonData === 'function' ? llmComparisonData : undefined,
       evaluateNetwork: typeof evaluateNetwork === 'function' ? evaluateNetwork : undefined,
       numericalChecks: typeof numericalChecks === 'function' ? numericalChecks : undefined,
       parameterId: typeof parameterId === 'function' ? parameterId : undefined,
       describeParameter: typeof describeParameter === 'function' ? describeParameter : undefined,
-      parameterArithmetic: typeof parameterArithmetic === 'function' ? parameterArithmetic : undefined,
       selectParameter: typeof selectParameter === 'function' ? selectParameter : undefined,
-      startFlow: typeof startFlow === 'function' ? startFlow : undefined,
-      pauseFlow: typeof pauseFlow === 'function' ? pauseFlow : undefined,
-      stepFlow: typeof stepFlow === 'function' ? stepFlow : undefined,
-      resetFlow: typeof resetFlow === 'function' ? resetFlow : undefined,
-      cancelFlow: typeof cancelFlow === 'function' ? cancelFlow : undefined,
-      runFlow: typeof runFlow === 'function' ? runFlow : undefined,
       setInputs: typeof setInputs === 'function' ? setInputs : undefined,
       setArchitecture: typeof setArchitecture === 'function' ? setArchitecture : undefined,
       setLanguage: typeof setLanguage === 'function' ? setLanguage : undefined,

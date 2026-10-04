@@ -120,11 +120,10 @@ test('deep topology gradients use pre-update weights and updates stay finite', (
   assert.ok(params(result.network).every(Number.isFinite));
 });
 
-test('input, language, flow and topology respect training handoff and cap', () => {
+test('input, language and topology respect training handoff and cap', () => {
   const {api:a,clock}=setup(); assert.equal(typeof a.enterFruitLesson,'function'); a.enterFruitLesson(); a.startTraining();
   assert.throws(()=>a.setArchitecture([4])); assert.throws(()=>a.randomizeArchWeights());
   a.setInputs([.3,.2]); assert.equal(a.state.lesson.phase,'paused'); assert.equal(clock.pendingCount,0);
-  a.startTraining(); a.stepFlow(1); assert.equal(a.state.lesson.phase,'paused');
   a.startTraining(); a.setLanguage('en'); assert.equal(a.state.lesson.phase,'paused');
   a.setArchitecture([4]); assert.equal(a.state.lesson.epoch,0); const initial=weights(a.state.arch);
   a.stepTraining(); a.resetTraining(); assert.equal(weights(a.state.arch),initial);
@@ -135,14 +134,6 @@ test('bad candidate keeps last finite network and pauses with error', () => {
   const {api:a}=setup(); assert.equal(typeof a.enterFruitLesson,'function'); a.enterFruitLesson();
   const before=weights(a.state.arch); a.state.lesson.learningRate=Number.MAX_VALUE; a.stepTraining();
   assert.equal(weights(a.state.arch),before); assert.equal(a.state.lesson.phase,'error'); assert.ok(a.state.lesson.error);
-});
-
-test('paused explorer forward sequence resumes at restored stage even after lesson language change', () => {
-  const {api:a,clock}=setup(); a.stepFlow(1); a.stepFlow(1);
-  assert.equal(a.state.flow.visibleLayer,2); a.enterFruitLesson(); a.setLanguage('en'); a.exitFruitLesson();
-  assert.equal(a.state.flow.phase,'paused'); assert.equal(a.state.flow.visibleLayer,2);
-  a.startFlow(); assert.equal(a.state.flow.visibleLayer,2); clock.tick();
-  assert.equal(a.state.flow.visibleLayer,3); assert.equal(a.state.flow.phase,'complete');
 });
 
 test('reset or pause at the end of an active slice cannot schedule another callback', () => {

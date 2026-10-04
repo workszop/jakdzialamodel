@@ -6,10 +6,10 @@ import { APP_URL } from './model-loader.mjs';
 
 const ORIGINAL_CHECKS = [
   'arch: node count = sum of layers', 'arch: edge count = sum a·b', 'arch: params = edges + biases',
-  'forward: output node = recomputed σ(...)', 'neuron panel = selected node value', 'weights list count = params',
+  'forward: output node = recomputed σ(...)', 'weights list count = params',
   'config.json hidden_sizes = architecture', 'safetensors: header length, contiguous offsets, size = 4·params',
   'safetensors: first float = W(1)[0][0]', 'size: bytes = params × precision',
-  'load code output = model output', 'math: one equation per layer', 'lang attr matches state',
+  'load code output = model output', 'lang attr matches state',
 ];
 
 let stage = 'load Playwright';
@@ -58,7 +58,13 @@ async function inspectDownloads(page) {
 
 async function inspectFruitTraining(page, label) {
   const saved=await page.evaluate(()=>JSON.stringify([MODEL_DEMO.state.arch,MODEL_DEMO.state.selection]));
+  assert.equal(await page.locator('#fruitLesson').evaluate(node=>node.open),false,`${label}: fruit lesson starts collapsed`);
+  assert.equal(await page.locator('#fruitEnter').isVisible(),false);
+  await page.locator('#fruitLesson > summary').click();
   await page.locator('#fruitEnter').click();
+  await page.mouse.move(0,0); // entering scrolls to the diagram; keep the pointer from hover-selecting a plot point
+  assert.equal(await page.locator('#fruitLesson').evaluate(node=>node.open),true);
+  assert.equal(await page.locator('#fruitExit').isVisible(),true,`${label}: exit stays reachable`);
   assert.equal(await page.locator('#fruitLesson').getAttribute('data-training-mode'),'fruit');
   assert.equal(await page.locator('#fruitSampleImage').evaluate(img=>img.complete&&img.naturalWidth===194),true);
   assert.equal(await page.locator('#fruitDecisionPlot [data-grid-x]').count(),400);
@@ -93,10 +99,6 @@ async function inspectFruitTraining(page, label) {
   assert.equal(await page.evaluate(()=>MODEL_DEMO.state.lesson.selectedSampleId),null);
   assert.equal(await page.locator('#fruitSample').getAttribute('data-target'),'');
   assert.equal(await page.evaluate(()=>JSON.stringify([...MODEL_DEMO.buildSafetensors().bytes])),hash);
-  await page.locator('#fruitTrain').click();
-  await page.locator('#flowBtn').click();
-  assert.equal(await page.evaluate(()=>MODEL_DEMO.state.lesson.phase),'paused');
-  await page.evaluate(()=>MODEL_DEMO.pauseFlow());
   await page.locator('#fruitTrain').click();
   await page.locator('[data-lang-btn="en"]').click();
   assert.equal(await page.evaluate(()=>MODEL_DEMO.state.lesson.phase),'paused');
@@ -157,7 +159,7 @@ async function inspect(page, label) {
       const api = window.MODEL_DEMO;
       return [
         ['.file-row', 'data-model', 'wrong'],
-        ['#llmStages [data-llm-stage]', 'data-llm-stage', 'wrong'],
+        ['#archSvg .edge', 'data-param-id', 'wrong'],
         ['#secNav [data-section]', 'data-section', 'wrong'],
       ].map(([selector, attr, value]) => {
         const node = document.querySelector(selector), previous = node.getAttribute(attr);
@@ -167,7 +169,7 @@ async function inspect(page, label) {
         finally { node.setAttribute(attr, previous); }
       });
     });
-    assert.deepEqual(corruptions, Array.from({ length: 3 }, () => ({ failed: true, unchanged: true })), `${label}: shared navigation and conceptual contracts detect corruption`);
+    assert.deepEqual(corruptions, Array.from({ length: 3 }, () => ({ failed: true, unchanged: true })), `${label}: shared navigation and diagram contracts detect corruption`);
   }
   return snapshot;
 }
@@ -229,28 +231,16 @@ async function inspectLinkedParameters(page, label) {
       else await cell.click();
       const selection = await page.evaluate((parameter) => {
         const api = window.MODEL_DEMO, info = api.describeParameter(parameter);
-        const arithmetic = api.parameterArithmetic(parameter);
         const bytes = [...document.querySelectorAll('#fileView [data-byte-offset][data-selected="true"]')]
           .map((span) => ({ id: span.dataset.paramId, offset: +span.dataset.byteOffset, hex: span.textContent }));
-        return { info, arithmetic, bytes, selected: api.state.selection.parameter,
+        return { info, bytes, selected: api.state.selection.parameter,
           activeId: document.activeElement?.dataset.paramId, activeCell: document.activeElement?.matches('.parameter-cell') };
       }, ref);
       assert.deepEqual(selection.selected, ref);
       assert.equal(await cell.getAttribute('data-selected'), 'true');
       assert.equal(await cell.getAttribute('aria-pressed'), 'true');
       assert.match(await cell.textContent(), /^[+−-]/, `${label}: sign is not encoded only by colour`);
-      const diagramClass = ref.kind === 'weight' ? '.edge' : '.bias-marker';
-      assert.equal(await page.locator(`#archSvg ${diagramClass}[data-param-id="${id}"][data-selected="true"]`).count(), 1);
-      if (ref.kind === 'weight') {
-        const hit = page.locator(`#archSvg .edge-hit[data-param-id="${id}"]`);
-        assert.match(await hit.getAttribute('aria-label'), new RegExp(id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-        assert.equal(await hit.getAttribute('role'), 'button');
-        assert.equal(await hit.getAttribute('tabindex'), '0');
-      }
-      assert.equal(await page.locator(`#neuronPanel .calculation-term[data-param-id="${id}"][data-selected="true"]`).count(), 1);
-      assert.equal(await page.locator('#parameterInspector').getAttribute('data-param-id'), id);
-      assert.equal(await page.locator('#parameterInspector').getAttribute('data-file-offset'), String(selection.info.fileOffset));
-      assert.equal(await page.locator('#parameterInspector').getAttribute('data-contribution'), String(selection.arithmetic.contribution));
+      if (ref.kind === 'weight') assert.equal(await page.locator(`#archSvg .edge[data-param-id="${id}"][data-selected="true"]`).count(), 1);
       assert.equal(await page.locator('#fileCard').getAttribute('data-param-id'), id);
       assert.equal(selection.bytes.length, 4, `${label}: exactly four selected hex byte spans, not duplicate ASCII highlights`);
       assert.deepEqual(selection.bytes.map(({ id: byteId }) => byteId), [id, id, id, id]);
@@ -267,181 +257,39 @@ async function inspectLinkedParameters(page, label) {
   await page.locator('[data-lang-btn="pl"]').click();
   assert.match(await page.locator('#paramBreakdown').textContent(), /23.*8.*31/);
   await page.setViewportSize({ width: 375, height: 812 });
-  const mobile = await page.evaluate(() => ({
-    width: document.documentElement.scrollWidth, viewport: innerWidth,
-    detailTop: document.getElementById('neuronPanel').getBoundingClientRect().top,
-    overviewTop: document.getElementById('overviewToggle').getBoundingClientRect().top,
-  }));
+  const mobile = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, viewport: innerWidth }));
   assert.ok(mobile.width <= mobile.viewport, `${label}: no page-level horizontal overflow at 375px`);
-  assert.ok(mobile.detailTop < mobile.overviewTop, `${label}: mobile selected-neuron detail precedes the network overview`);
-  assert.equal(await page.locator('#archSvg').isVisible(), false, `${label}: mobile detail-first default`);
-  assert.equal(await page.locator('#overviewToggle').getAttribute('aria-expanded'), 'false');
-  await page.locator('#overviewToggle').click();
-  assert.equal(await page.locator('#archSvg').isVisible(), true, `${label}: explicit full-network overview remains available`);
-  assert.equal(await page.locator('#overviewToggle').getAttribute('aria-expanded'), 'true');
-  await page.locator('#overviewToggle').click();
+  assert.equal(await page.locator('#archSvg').isVisible(), true, `${label}: mobile shows the network diagram`);
   await inspect(page, `${label}: mobile linked detail`);
   if (label === 'http' && process.env.SMOKE_SCREENSHOT_DIR) {
     await mkdir(process.env.SMOKE_SCREENSHOT_DIR, { recursive: true });
-    await page.locator('#neuronPanel').scrollIntoViewIfNeeded();
+    await page.locator('#weightsCard').scrollIntoViewIfNeeded();
     await page.screenshot({ path: join(process.env.SMOKE_SCREENSHOT_DIR, 'parameter-mobile.png') });
   }
   await page.setViewportSize({ width: 1400, height: 900 });
   if (label === 'http' && process.env.SMOKE_SCREENSHOT_DIR) {
-    await page.locator('#parameterInspector').scrollIntoViewIfNeeded();
+    await page.locator('#weightsCard').scrollIntoViewIfNeeded();
     await page.screenshot({ path: join(process.env.SMOKE_SCREENSHOT_DIR, 'parameter-desktop.png') });
   }
 }
 
-async function inspectForwardSequence(page, label) {
-  const initial = await page.evaluate(() => {
-    const api = window.MODEL_DEMO;
-    api.resetFlow();
-    return { phase: api.state.flow.phase, visible: api.state.flow.visibleLayer,
-      bytes: Array.from(api.buildSafetensors().bytes), weights: JSON.stringify(api.state.arch.weights) };
-  });
-  assert.deepEqual([initial.phase, initial.visible], ['idle', 0]);
-  const invalidVisibility = await page.evaluate(() => {
-    const api = window.MODEL_DEMO, original = api.state.flow.visibleLayer;
-    api.state.flow.visibleLayer = -1;
-    const before = JSON.stringify(api.state);
-    try {
-      return { detected: api.runChecks().some((record) => record.name.startsWith('flow:') && !record.pass), unchanged: JSON.stringify(api.state) === before };
-    } finally { api.state.flow.visibleLayer = original; }
-  });
-  assert.deepEqual(invalidVisibility, { detected: true, unchanged: true }, `${label}: invalid forward visibility fails the contract without repairs`);
-  assert.equal(await page.locator('#flowControls').getAttribute('data-visible-layer'), '0');
-  assert.equal(await page.locator('#archSvg .node[data-revealed="false"]').count(), 8);
-  assert.equal(await page.locator('#neuronPanel .explain-result').textContent(), '?');
-  assert.equal(await page.locator('#parameterInspector').getAttribute('data-revealed'), 'false');
-  await page.locator('#flowNextBtn').click();
-  assert.equal(await page.locator('#flowControls').getAttribute('data-visible-layer'), '1');
-  assert.equal(await page.locator('#neuronPanel').getAttribute('data-layer'), '1');
-  assert.equal(await page.locator('#neuronPanel').getAttribute('data-revealed'), 'true');
-  assert.match(await page.locator('#neuronPanel .explain-result').textContent(), /ReLU\(/);
-  assert.equal(await page.locator('#archSvg .node[data-revealed="false"]').count(), 4);
-  await page.locator('#flowNextBtn').click();
-  assert.equal(await page.locator('#flowControls').getAttribute('data-visible-layer'), '2');
-  await page.locator('#flowBackBtn').click();
-  assert.equal(await page.locator('#flowControls').getAttribute('data-visible-layer'), '1');
-  const ref = { layer: 0, kind: 'weight', output: 2, input: 1 }, id = 'fc1.weight[2,1]';
-  await page.evaluate((parameter) => window.MODEL_DEMO.selectParameter(parameter), ref);
-  assert.equal(await page.locator('#flowControls').getAttribute('data-flow-phase'), 'paused');
-  assert.equal(await page.locator('#parameterInspector').getAttribute('data-param-id'), id);
-  await inspect(page, `${label} paused selection`);
-  const preserved = await page.evaluate(() => ({ bytes: Array.from(window.MODEL_DEMO.buildSafetensors().bytes), weights: JSON.stringify(window.MODEL_DEMO.state.arch.weights) }));
-  assert.deepEqual(preserved, { bytes: initial.bytes, weights: initial.weights });
-
-  for (const owner of ['#weightsList .parameter-cell', '#neuronPanel .calculation-term', '#archSvg .edge-hit']) {
-    const target = page.locator(`${owner}[data-param-id="${id}"]`);
-    await target.focus();
-    await page.keyboard.press('r');
-    assert.equal(await target.evaluate((node) => document.activeElement === node), true, `${label}: R preserves ${owner} focus`);
-    assert.equal(await page.locator('#parameterInspector').getAttribute('data-param-id'), id);
-    await inspect(page, `${label} shuffled ${owner}`);
-  }
-  await page.evaluate(() => {
-    const api = window.MODEL_DEMO;
-    api.startFlow();
-    api.setInputs([0.1, 0.9]);
-  });
-  assert.equal(await page.locator('#flowControls').getAttribute('data-flow-phase'), 'idle');
-  assert.equal(await page.locator('#x1').inputValue(), '0.1');
-  assert.equal(await page.locator('#x2').inputValue(), '0.9');
-  const synchronized = await page.evaluate(() => {
-    const api = window.MODEL_DEMO;
-    return { value: +document.getElementById('parameterInspector').dataset.contribution,
-      expected: api.parameterArithmetic(api.state.selection.parameter).contribution };
-  });
-  assert.equal(synchronized.value, synchronized.expected, `${label}: input mutation updates linked arithmetic`);
-  await page.evaluate(() => window.MODEL_DEMO.startFlow());
-  await page.locator('[data-lang-btn="en"]').click();
-  assert.equal(await page.locator('#flowControls').getAttribute('data-flow-phase'), 'idle');
-  await page.evaluate(() => window.MODEL_DEMO.startFlow());
-  await page.locator('#layerMinus').click();
-  assert.equal(await page.locator('#flowControls').getAttribute('data-flow-phase'), 'idle');
-  await page.locator('#layerPlus').click();
-  await inspect(page, `${label} cancelled contexts`);
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  const immediate = await page.evaluate(() => {
-    const api = window.MODEL_DEMO;
-    const before = Array.from(api.buildSafetensors().bytes);
-    api.runFlow();
-    return { phase: api.state.flow.phase, visible: api.state.flow.visibleLayer,
-      unchanged: JSON.stringify(before) === JSON.stringify(Array.from(api.buildSafetensors().bytes)) };
-  });
-  assert.deepEqual(immediate, { phase: 'complete', visible: 3, unchanged: true });
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
-
-  if (label === 'http') {
-    await page.locator('#flowResetBtn').click();
-    const started = await page.evaluate(() => {
-      const api = window.MODEL_DEMO;
-      api.startFlow();
-      const run = api.state.flow.runId;
-      api.startFlow();
-      return { run, duplicate: api.state.flow.runId, bytes: Array.from(api.buildSafetensors().bytes) };
-    });
-    assert.equal(started.run, started.duplicate);
-    await page.waitForFunction(() => window.MODEL_DEMO.state.flow.visibleLayer === 1, null, { timeout: 1800 });
-    await page.locator('#flowPauseBtn').click();
-    const paused = await page.evaluate(() => ({ phase: window.MODEL_DEMO.state.flow.phase, visible: window.MODEL_DEMO.state.flow.visibleLayer }));
-    await page.waitForTimeout(550);
-    assert.deepEqual(await page.evaluate(() => ({ phase: window.MODEL_DEMO.state.flow.phase, visible: window.MODEL_DEMO.state.flow.visibleLayer })), paused);
-    await page.locator('#flowNextBtn').click();
-    await page.locator('#flowNextBtn').click();
-    assert.equal(await page.locator('#flowControls').getAttribute('data-flow-phase'), 'complete');
-    assert.deepEqual(await page.evaluate(() => Array.from(window.MODEL_DEMO.buildSafetensors().bytes)), started.bytes);
-  }
-  await page.locator('[data-lang-btn="pl"]').click();
-  await page.locator('#flowResetBtn').click();
-}
-
-async function inspectLlmComparison(page, label) {
+async function inspectOutlineAndShortcuts(page, label) {
   assert.equal(await page.locator('main > .section').count(), 5, `${label}: original five-section outline`);
   assert.equal(await page.locator('#secNav [data-section]').count(), 5);
-  assert.equal(await page.locator('#s-arch #s-llm').count(), 1, `${label}: LLM comparison stays within Architecture`);
-  assert.equal(await page.locator('#hLlm').evaluate((node) => node.tagName), 'H3');
-  const expectedIds = ['tokenization', 'embeddings', 'attention', 'feed-forward', 'next-token-scores', 'token-selection', 'repetition'];
-  for (const lang of ['pl', 'en']) {
-    await page.locator(`[data-lang-btn="${lang}"]`).click();
-    const before = await page.evaluate(() => JSON.stringify(window.MODEL_DEMO.state.arch));
-    await page.evaluate(() => window.MODEL_DEMO.renderLlmComparison());
-    const concept = page.locator('#llmComparison');
-    assert.equal(await concept.getAttribute('data-conceptual'), 'true');
-    assert.equal(await concept.getAttribute('data-live-probabilities'), 'false');
-    assert.equal(await concept.getAttribute('data-block-count'), '32');
-    assert.deepEqual(await concept.locator('[data-llm-stage]').evaluateAll((nodes) => nodes.map((node) => node.dataset.llmStage)), expectedIds);
-    assert.equal(await concept.locator('[data-probability], [data-output]').count(), 0, `${label}: no invented live Llama output`);
-    assert.equal(await concept.locator('[data-comparison-column="mini"] dt').count(), 4);
-    assert.equal(await concept.locator('[data-comparison-column="llm"] dt').count(), 4);
-    if (lang === 'en') {
-      assert.equal(await concept.locator('[data-i18n="llmConceptual"]').textContent(), 'Conceptual diagram');
-      assert.equal(await concept.locator('[data-i18n="llmNotMini"]').textContent(), 'Not a miniature Llama');
-    }
-    await page.locator('#llmBlock > summary').focus();
-    await page.keyboard.press('Enter');
-    assert.equal(await page.locator('#llmBlock').evaluate((node) => node.open), true, `${label}: keyboard opens block disclosure`);
-    await page.keyboard.press('Space');
-    assert.equal(await page.locator('#llmBlock').evaluate((node) => node.open), false, `${label}: keyboard closes block disclosure`);
-    assert.equal(await page.evaluate(() => JSON.stringify(window.MODEL_DEMO.state.arch)), before, `${label}: conceptual rendering and disclosure preserve mini state`);
+  for (const id of ['flowControls', 'parameterInspector', 'neuronPanel', 'mathCard', 's-llm']) {
+    assert.equal(await page.locator(`#${id}`).count(), 0, `${label}: removed ${id} stays removed`);
   }
-  await page.setViewportSize({ width: 390, height: 844 });
-  const mobile = await page.locator('#llmComparison').evaluate((node) => {
-    const stages = [...node.querySelectorAll('[data-llm-stage]')].map((stage) => stage.getBoundingClientRect());
-    return {
-      ordered: stages.every((rect, index) => index === 0 || rect.top > stages[index - 1].top),
-      fits: stages.every((rect) => rect.width > 0 && rect.left >= 0 && rect.right <= innerWidth),
-      columns: [...node.querySelectorAll('[data-comparison-column]')].map((column) => ({ id: column.dataset.comparisonColumn, top: column.getBoundingClientRect().top })),
-    };
-  });
-  assert.equal(mobile.ordered, true, `${label}: mobile stage reading order`);
-  assert.equal(mobile.fits, true, `${label}: mobile stages fit viewport`);
-  assert.deepEqual(mobile.columns.map(({ id }) => id), ['mini', 'llm']);
-  assert.ok(mobile.columns[0].top < mobile.columns[1].top, `${label}: mobile comparison reads mini first`);
-  await inspect(page, `${label} mobile LLM comparison`);
-  await page.setViewportSize({ width: 1400, height: 900 });
-  await page.locator('[data-lang-btn="pl"]').click();
+  assert.equal(await page.locator('#archSvg [tabindex], #archSvg [role="button"]').count(), 0, `${label}: diagram is display-only`);
+  const id = 'fc1.weight[2,1]', cell = page.locator(`#weightsList .parameter-cell[data-param-id="${id}"]`);
+  await cell.click();
+  const bytesBefore = await page.evaluate(() => Array.from(window.MODEL_DEMO.buildSafetensors().bytes));
+  await page.keyboard.press('f');
+  assert.deepEqual(await page.evaluate(() => Array.from(window.MODEL_DEMO.buildSafetensors().bytes)), bytesBefore, `${label}: F is no longer a shortcut`);
+  await cell.focus();
+  await page.keyboard.press('r');
+  assert.equal(await cell.evaluate((node) => document.activeElement === node), true, `${label}: R preserves weight-cell focus`);
+  assert.equal(await page.locator('#fileCard').getAttribute('data-param-id'), id);
+  await inspect(page, `${label} shuffled selection`);
 }
 
 try {
@@ -491,23 +339,14 @@ try {
     await inspectFileNavigation(page, label);
     await inspect(page, `${label} file navigation`);
 
-    stage = `${label} conceptual LLM comparison`;
-    await inspectLlmComparison(page, label);
+    stage = `${label} outline and shortcuts`;
+    await inspectOutlineAndShortcuts(page, label);
 
     stage = `${label} linked parameters`;
     await inspectLinkedParameters(page, label);
 
-    stage = `${label} cancellable forward sequence`;
-    await inspectForwardSequence(page, label);
     stage = `${label} live fruit training`;
     await inspectFruitTraining(page,label);
-
-    stage = `${label} verification disclosure`;
-    await page.locator('#checksDisclosure > summary').click();
-    await page.locator('#checksBtn').click();
-    const rows = await page.locator('#checkResults [data-check-name]').evaluateAll((nodes) => nodes.map((node) => ({ name: node.dataset.checkName, pass: node.dataset.pass === 'true' })));
-    assert.deepEqual(rows, baseline.checks.map(({ name, pass }) => ({ name, pass })));
-    assert.equal(await page.locator('#checksDisclosure').getAttribute('data-failed'), '0');
 
     stage = `${label} malformed state and missing contract node`;
     const corruption = await page.evaluate(() => {
@@ -535,7 +374,6 @@ try {
     await page.reload({ waitUntil: 'domcontentloaded', timeout: 10000 });
     await page.waitForFunction(() => !!window.MODEL_DEMO);
     assert.equal(await page.locator('html').getAttribute('lang'), 'en');
-    assert.equal(await page.locator('#checksDisclosure [data-i18n="checksH"]').textContent(), 'Model checks');
     for (const inputs of [[0, 0], [0, 1], [1, 0], [1, 1]]) {
       await page.evaluate((values) => values.forEach((value, index) => {
         const input = document.getElementById(`x${index + 1}`);
@@ -552,25 +390,6 @@ try {
     await page.locator('[data-file-tab="hex"]').click();
     await inspect(page, `${label} precision and file tabs`);
 
-    if (label === 'http') {
-      stage = 'keyboard forward flow';
-      await page.locator('body').click({ position: { x: 10, y: 100 } });
-      await page.keyboard.press('f');
-      await page.waitForFunction(() => window.MODEL_DEMO.state.flow.phase === 'running');
-      await page.waitForFunction(() => window.MODEL_DEMO.state.flow.phase === 'complete');
-      await inspect(page, 'completed flow');
-      if (process.env.SMOKE_SCREENSHOT_DIR) {
-        await mkdir(process.env.SMOKE_SCREENSHOT_DIR, { recursive: true });
-        await page.locator('#checksDisclosure > summary').click();
-        await page.locator('#checksBtn').click();
-        await page.locator('#checksDisclosure').scrollIntoViewIfNeeded();
-        await page.screenshot({ path: join(process.env.SMOKE_SCREENSHOT_DIR, 'checks-desktop.png') });
-        await page.setViewportSize({ width: 390, height: 844 });
-        await inspect(page, 'mobile checks');
-        await page.locator('#checksDisclosure').scrollIntoViewIfNeeded();
-        await page.screenshot({ path: join(process.env.SMOKE_SCREENSHOT_DIR, 'checks-mobile.png') });
-      }
-    }
     assert.deepEqual(pageErrors, [], `${label}: page runtime errors`);
     console.log(`${label}: ${baseline.checks.length} checks passed; corruption, persistence and interaction smoke passed`);
     await page.close();

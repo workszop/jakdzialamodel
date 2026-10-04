@@ -52,7 +52,6 @@
 }
 
 /* ─── Local fruit training ─── */
-.fruit-intro { display: grid; gap: 12px; }
 .fruit-sample, .fruit-scores { min-width: 0; display: grid; gap: 10px; align-content: center; font-size: var(--body-sm); }
 .fruit-sample img { width: 100%; max-width: 130px; height: auto; }
 .fruit-scores img { width: 38px; height: auto; vertical-align: middle; }
@@ -60,13 +59,11 @@
 .fruit-mode #diagramCard { order: 0; }
 .fruit-mode #fruitTrainingPanel { order: 1; }
 .fruit-mode #archControls { order: 2; }
-.fruit-mode #parameterInspector { order: 3; }
-.fruit-mode #neuronPanel { order: 4; }
 .fruit-mode #diagramCard { grid-template-columns: minmax(110px, .8fr) minmax(0, 3fr) minmax(140px, 1fr); align-items: center; }
 .fruit-mode #networkOverview { min-width: 0; }
 .fruit-mode #diagramCard .inputs-row { grid-column: 1 / -1; }
 .fruit-mode #archControls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.fruit-mode #archControls > .card-title, .fruit-mode #archResetNotice, .fruit-mode .flow-controls { grid-column: 1 / -1; }
+.fruit-mode #archControls > .card-title, .fruit-mode #archResetNotice { grid-column: 1 / -1; }
 .fruit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
 .fruit-plots { display: grid; gap: 12px; align-content: start; min-width: 0; }
 .fruit-plot { width: 100%; height: auto; display: block; font-family: var(--font-mono); font-size: var(--caption); overflow: visible; }
@@ -85,19 +82,14 @@
 .fruit-controls { min-width: 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .fruit-controls select { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line-2); padding: 8px; border-radius: var(--r-xs); max-width: 100%; }
 .fruit-notice { min-height: 1.6em; font-size: var(--body-sm); }
-.fruit-delta { font-family: var(--font-mono); font-size: var(--body-sm); overflow-wrap: anywhere; }
-[hidden].fruit-sample, [hidden].fruit-scores, [hidden].fruit-delta { display: none; }
+[hidden].fruit-sample, [hidden].fruit-scores { display: none; }
 #fruitEnter[hidden], #fruitExit[hidden] { display: none; }
 @media (max-width: 768px) {
   .fruit-mode #diagramCard, .fruit-mode #archControls, .fruit-grid { grid-template-columns: minmax(0, 1fr); }
-  .fruit-mode #diagramCard .mobile-overview-toggle { grid-column: 1 / -1; }
   .fruit-sample { grid-template-columns: 74px minmax(0, 1fr); }
   .fruit-sample img { grid-row: span 3; }
   .fruit-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fruit-scores > p { grid-column: 1 / -1; }
-  .fruit-mode .architecture-detail-layout > #archOverviewGrid { order: 0; }
-  .fruit-mode .architecture-detail-layout > #parameterInspector { order: 3; }
-  .fruit-mode .architecture-detail-layout > #neuronPanel { order: 4; }
 }
 
 /* ─── Base ─── */
@@ -204,40 +196,15 @@ main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
 .edge { stroke-linecap: round; transition: opacity .35s; }
 .edge.pos { stroke: var(--blue); }
 .edge.neg { stroke: var(--red); }
-.edge[data-selected="true"] { stroke-dasharray: 6 3; opacity: 1; }
-.edge-hit { stroke: transparent; stroke-width: 16; cursor: pointer; pointer-events: stroke; }
-.edge-hit:focus-visible { stroke: var(--yellow); stroke-opacity: .45; }
-.bias-marker { fill: var(--paper-2); stroke: var(--ink); cursor: pointer; }
-.bias-marker[data-selected="true"], .bias-marker:focus-visible { fill: var(--yellow); stroke-width: 3; }
-.dimmed .edge { opacity: .14; }
-.dimmed .edge.hot { opacity: 1; }
-.node { fill: var(--surface); stroke: var(--ink); stroke-width: 2; transition: fill .35s; cursor: pointer; }
+.node { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
 .node.in { fill: var(--paper-3); }
-.node.lit { fill: var(--yellow); }
-.node.sel { fill: var(--yellow); stroke-width: 4; }
-.node[data-revealed="false"] { stroke-dasharray: 3 3; }
-.node:focus-visible { outline: none; stroke-width: 5; }
 .node-val { font-family: var(--font-mono); font-size: 10.5px; fill: var(--ink); pointer-events: none; }
 .svg-label { font-family: var(--font-mono); font-size: 13px; fill: var(--ink-2); }
 .svg-label.strong { fill: var(--ink); font-weight: 500; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--body-sm); color: var(--ink-2); }
-.flow-controls { display: grid; gap: 10px; }
-.flow-controls .btn-row { flex-wrap: wrap; }
-.flow-stage { font-family: var(--font-display); font-size: var(--h4); color: var(--ink); }
-.flow-note { font-size: var(--caption); }
-.flow-controls progress { width: 100%; accent-color: var(--blue); }
-.explain-step[data-revealed="false"] { border: 1px dashed var(--line-2); }
-.explain-step[data-revealed="true"] .explain-result { background: var(--blue); color: var(--blue-ink); }
 .legend i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
 .legend .pos { background: var(--blue); }
 .legend .neg { background: var(--red); }
-.architecture-detail-layout { display: grid; gap: 22px; min-width: 0; }
-.mobile-overview-toggle { display: none; }
-.parameter-path { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.parameter-path li { display: grid; gap: 6px; padding: 14px; background: var(--paper-2); border-radius: var(--r-md); min-width: 0; }
-.parameter-path strong { font-size: var(--body-sm); }
-.parameter-path code, .parameter-name { font-family: var(--font-mono); font-size: var(--caption); overflow-wrap: anywhere; }
-.parameter-path span, .parameter-note { font-size: var(--caption); color: var(--ink-2); overflow-wrap: anywhere; }
 
 /* ─── Controls ─── */
 .stepper { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 14px; background: var(--paper-2); border-radius: var(--r-pill); }
@@ -263,42 +230,12 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px;
 input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink); cursor: pointer; }
 input[type=range]:focus-visible { box-shadow: var(--focus-ring); }
 
-/* ─── Neuron explainer ─── */
-.explain { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.explain > p { grid-column: 1 / -1; }
-.explain-step { display: grid; grid-template-rows: auto 1fr; gap: 8px; align-content: start; padding: 14px 16px; background: var(--paper-2); border-radius: var(--r-md); }
-.explain-step .n { width: 28px; height: 28px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-weight: 700; font-size: 14px; }
-.explain-step p { color: var(--ink); font-size: 14.5px; line-height: 1.45; }
-.explain-step .calc { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); display: grid; gap: 2px; margin-top: 6px; }
-.explain-step p.explain-note { font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
-.explain-result { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); }
-.num-pos { color: var(--blue); }
-.num-neg { color: var(--red); }
-.calculation-term { font: inherit; color: inherit; text-align: left; border: 1px solid transparent; border-radius: var(--r-xs); background: transparent; cursor: pointer; padding: 3px 5px; overflow-wrap: anywhere; }
-.calculation-term[data-selected="true"] { background: var(--yellow); color: var(--yellow-ink); border-color: var(--ink); font-weight: 600; }
-.calculation-term:focus-visible, .parameter-cell:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-
-/* ─── Math ─── */
+/* ─── Disclosures ─── */
 details.card > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 details.card > summary::-webkit-details-marker { display: none; }
 details.card > summary::after { content: '+'; font-family: var(--font-display); font-weight: 700; font-size: 22px; width: 36px; height: 36px; border-radius: 50%;
   background: var(--paper-2); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
 details.card[open] > summary::after { content: '−'; }
-.math-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: start; }
-.math { display: grid; gap: 10px; font-family: var(--font-sans); font-size: 18px; color: var(--ink); }
-.math i { font-style: italic; }
-.math .fn { font-weight: 600; }
-.eq-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; padding: 10px 16px; background: var(--paper-2); border-radius: var(--r-md); }
-.eq-row .shape { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-2); }
-.eq-defs { display: grid; gap: 4px; font-size: 16px; padding: 4px 16px; }
-.eq-defs span { color: var(--ink-2); font-size: var(--body-sm); }
-.eq-note { font-size: 14px; color: var(--ink-2); }
-.mat-row { min-width: 0; overflow-x: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-.matrix { display: inline-grid; gap: 4px 14px; padding: 6px 10px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-radius: var(--r-xs);
-  font-family: var(--font-mono); font-size: 14px; text-align: right; }
-.matrix .pos { color: var(--blue); }
-.matrix .neg { color: var(--red); }
 
 /* ─── Weights list ─── */
 .tensor-group { min-width: 0; display: grid; gap: 8px; }
@@ -313,7 +250,8 @@ details.card[open] > summary::after { content: '−'; }
 .parameter-cell { font: inherit; min-width: 6em; padding: 7px 8px; border-radius: var(--r-xs); background: var(--surface); border: 1px solid var(--line-2); cursor: pointer; }
 .parameter-cell.pos { color: var(--blue); }
 .parameter-cell.neg { color: var(--red); }
-.parameter-cell[data-selected="true"], .matrix [data-selected="true"] { background: var(--yellow); color: var(--yellow-ink); border-color: var(--ink); font-weight: 600; }
+.parameter-cell:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.parameter-cell[data-selected="true"] { background: var(--yellow); color: var(--yellow-ink); border-color: var(--ink); font-weight: 600; }
 
 /* ─── Size table ─── */
 .size-table { width: 100%; border-collapse: collapse; font-size: 15px; }
@@ -366,42 +304,18 @@ details.card[open] > summary::after { content: '−'; }
 
 .kbd-hints { font-size: 13px; color: var(--ink-3); display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; padding-top: 24px; border-top: 1px solid var(--line); }
 
-/* ─── Verification ─── */
-.checks summary { cursor: pointer; }
-.checks-summary { font-family: var(--font-mono); font-size: var(--caption); color: var(--ink-2); margin-left: 12px; }
-.check-results { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: var(--body-sm); overflow-wrap: anywhere; }
-.check-results [data-pass="false"] { color: var(--red); }
 .notice { padding: 14px 18px; border-radius: var(--r-md); background: var(--yellow); color: var(--yellow-ink); font-size: var(--body-sm); }
-.references ul { padding-left: 20px; margin: 0; display: grid; gap: 6px; font-size: var(--body-sm); }
-.references a { color: var(--ink); overflow-wrap: anywhere; }
 .file-detail-title { overflow-wrap: anywhere; }
 
-/* ─── Conceptual LLM comparison ─── */
-.llm-comparison { display: grid; gap: 18px; }
-.llm-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-.comparison-list { display: grid; gap: 10px; margin: 0; }
-.comparison-list > div { padding: 12px 16px; background: var(--paper-2); border-radius: var(--r-md); }
-.comparison-list dt { font-weight: 600; color: var(--ink); }
-.comparison-list dd { margin: 4px 0 0; color: var(--ink-2); font-size: var(--body-sm); }
-.llm-flow, .llm-block-path { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.llm-stage, .llm-block-path li { padding: 14px 16px; border-radius: var(--r-md); background: var(--paper-2); display: grid; gap: 6px; align-content: start; }
-.llm-stage strong, .llm-block-path strong { font-size: var(--body); }
-.llm-stage p, .llm-block-path p { font-size: var(--body-sm); }
-.llm-transformer { padding: 12px; border: 1px solid var(--line-2); border-radius: var(--r-lg); display: grid; gap: 10px; }
-.llm-transformer > strong { font-family: var(--font-display); font-size: var(--h4); }
-.llm-transformer > p { font-size: var(--caption); }
-.llm-block-flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.llm-subsection { display: grid; gap: 24px; margin-top: 24px; }
 
 /* ─── Responsive ─── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .node, .edge { transition: none; }
+  .edge { transition: none; }
 }
 @media (max-width: 1000px) {
   .sec-nav .txt { display: none; }
   .sec-nav button.active .txt { display: inline; }
-  .explain { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
   .edu-header-inner { padding: 6px 16px; gap: 8px; }
@@ -410,16 +324,9 @@ details.card[open] > summary::after { content: '−'; }
   .sec-nav button { padding: 7px 9px; }
   .sec-nav button.active .txt { display: none; }
   main { padding: 24px 16px 50px; }
-  .grid-2, .math-grid, .load-steps, .anno, .inputs-row, .explain, .llm-columns, .llm-flow, .llm-block-path { grid-template-columns: 1fr; }
-  .architecture-detail-layout > #neuronPanel { order: 0; }
-  .architecture-detail-layout > #parameterInspector { order: 1; }
-  .architecture-detail-layout > #archOverviewGrid { order: 2; }
-  .mobile-overview-toggle { display: inline-flex; }
-  .diagram-card[data-overview="closed"] .overview-content { display: none; }
-  .parameter-path { grid-template-columns: 1fr; }
+  .grid-2, .load-steps, .anno, .inputs-row { grid-template-columns: 1fr; }
   .anno-note { padding-bottom: 10px; }
   .anno-note:empty { display: none; }
-  .math { font-size: 16px; }
   .file-row { grid-template-columns: 36px 1fr; }
   .file-row .chip, .file-row .file-size { grid-column: 2; justify-self: start; }
   .kbd-hints { display: none; }
@@ -484,31 +391,18 @@ details.card[open] > summary::after { content: '−'; }
       <h2 id="hArch"><span class="sec-num">2</span><span data-i18n="archH"></span></h2>
       <p data-i18n="archP"></p>
     </div>
-    <div class="callout blue edu-block">
-      <h3 data-i18n="archDefH"></h3>
-      <p data-i18n="archDef"></p>
-    </div>
-    <div class="card fruit-intro" id="fruitLesson" data-training-mode="explore" data-training-phase="idle" data-input-kind="features">
-      <h3 data-i18n="fruitTitle"></h3>
-      <p data-i18n="fruitIntro"></p>
-      <p><strong data-i18n="fruitNotPixels"></strong></p>
-      <div class="btn-row"><button class="edu-btn" type="button" id="fruitEnter" data-i18n="fruitEnter"></button><button class="btn-ghost" type="button" id="fruitExit" data-i18n="fruitExit" hidden></button></div>
-    </div>
-    <div class="architecture-detail-layout">
     <div class="grid-2" id="archOverviewGrid">
-      <div class="card diagram-card" id="diagramCard" data-overview="closed">
+      <div class="card diagram-card" id="diagramCard">
         <div class="fruit-sample" id="fruitSample" data-input-kind="features" hidden>
           <img id="fruitSampleImage" width="194" height="192" alt="">
           <strong id="fruitSampleLabel"></strong><span id="fruitSampleFeatures"></span><span class="hint" data-i18n="fruitIllustration"></span>
         </div>
-        <button type="button" class="btn-ghost mobile-overview-toggle" id="overviewToggle" aria-controls="networkOverview" aria-expanded="false" data-i18n="showOverview"></button>
-        <div class="overview-content" id="networkOverview">
+        <div id="networkOverview">
         <svg id="archSvg" class="diagram" viewBox="0 0 600 470" role="group" aria-labelledby="hArch" aria-describedby="networkLegend"></svg>
         <div class="legend" id="networkLegend">
           <span><i class="pos"></i><span data-i18n="legendPos"></span></span>
           <span><i class="neg"></i><span data-i18n="legendNeg"></span></span>
           <span data-i18n="legendWidth"></span>
-          <span data-i18n="legendClick"></span>
         </div>
         </div>
         <div class="fruit-scores" id="fruitScores" hidden>
@@ -522,23 +416,23 @@ details.card[open] > summary::after { content: '−'; }
           <span class="hint" data-i18n="inputsHint"></span>
         </div>
       </div>
-    <div class="card" id="fruitTrainingPanel" hidden>
-      <div class="fruit-controls">
-        <button type="button" class="edu-btn" id="fruitTrain"><span data-i18n="fruitTrain"></span> <kbd>T</kbd></button>
-        <button type="button" class="btn-ghost" id="fruitPause" data-i18n="flowPause"></button>
-        <button type="button" class="btn-ghost" id="fruitStep" data-i18n="fruitStep"></button>
-        <button type="button" class="btn-ghost" id="fruitReset" data-i18n="fruitReset"></button>
-        <label for="fruitRate" data-i18n="fruitRate"></label><select id="fruitRate"><option value="0.01">0.01</option><option value="0.1">0.1</option><option value="0.5">0.5</option></select>
+      <div class="card" id="fruitTrainingPanel" hidden>
+        <div class="fruit-controls">
+          <button type="button" class="edu-btn" id="fruitTrain"><span data-i18n="fruitTrain"></span> <kbd>T</kbd></button>
+          <button type="button" class="btn-ghost" id="fruitPause" data-i18n="fruitPause"></button>
+          <button type="button" class="btn-ghost" id="fruitStep" data-i18n="fruitStep"></button>
+          <button type="button" class="btn-ghost" id="fruitReset" data-i18n="fruitReset"></button>
+          <label for="fruitRate" data-i18n="fruitRate"></label><select id="fruitRate"><option value="0.01">0.01</option><option value="0.1">0.1</option><option value="0.5">0.5</option></select>
+        </div>
+        <div class="fruit-metrics"><span><span data-i18n="fruitEpoch"></span><strong id="fruitEpoch">0</strong></span><span><span data-i18n="fruitLoss"></span><strong id="fruitLoss"></strong></span><span><span data-i18n="fruitAccuracy"></span><strong id="fruitAccuracy"></strong></span><span><span data-i18n="fruitPhaseLabel"></span><strong id="fruitPhase"></strong></span></div>
+        <progress id="fruitProgress" value="0" max="5000" aria-labelledby="fruitEpoch"></progress>
+        <p class="fruit-notice" id="fruitNotice" role="status"></p>
+        <div class="fruit-controls"><label for="fruitSampleSelect" data-i18n="fruitSelect"></label><select id="fruitSampleSelect"></select><label><input type="checkbox" id="fruitUnseen"> <span data-i18n="fruitUnseen"></span></label></div>
+        <div class="fruit-grid">
+          <div class="fruit-plots"><h4 data-i18n="fruitDecision"></h4><svg id="fruitDecisionPlot" class="fruit-plot" viewBox="0 0 380 340" role="group" aria-label=""></svg><p class="hint" data-i18n="fruitDecisionHint"></p><p id="fruitUnseenResult"></p></div>
+          <div class="fruit-plots"><h4 data-i18n="fruitLossHistory"></h4><svg id="fruitLossPlot" class="fruit-plot" viewBox="0 0 380 210" role="img" aria-label=""></svg><p class="hint" data-i18n="fruitTrainingNote"></p><p class="hint"><span data-i18n="fruitCredit"></span> <a href="https://github.com/aegeorge42/aegeorge42.github.io/tree/a5f530d4ca61138383e69341c3a4854d50f3f0f6" target="_blank" rel="noopener noreferrer">aegeorge42 · CC0</a>.</p></div>
+        </div>
       </div>
-      <div class="fruit-metrics"><span><span data-i18n="fruitEpoch"></span><strong id="fruitEpoch">0</strong></span><span><span data-i18n="fruitLoss"></span><strong id="fruitLoss"></strong></span><span><span data-i18n="fruitAccuracy"></span><strong id="fruitAccuracy"></strong></span><span><span data-i18n="fruitPhaseLabel"></span><strong id="fruitPhase"></strong></span></div>
-      <progress id="fruitProgress" value="0" max="5000" aria-labelledby="fruitEpoch"></progress>
-      <p class="fruit-notice" id="fruitNotice" role="status"></p>
-      <div class="fruit-controls"><label for="fruitSampleSelect" data-i18n="fruitSelect"></label><select id="fruitSampleSelect"></select><label><input type="checkbox" id="fruitUnseen"> <span data-i18n="fruitUnseen"></span></label></div>
-      <div class="fruit-grid">
-        <div class="fruit-plots"><h4 data-i18n="fruitDecision"></h4><svg id="fruitDecisionPlot" class="fruit-plot" viewBox="0 0 380 340" role="group" aria-label=""></svg><p class="hint" data-i18n="fruitDecisionHint"></p><p id="fruitUnseenResult"></p></div>
-        <div class="fruit-plots"><h4 data-i18n="fruitLossHistory"></h4><svg id="fruitLossPlot" class="fruit-plot" viewBox="0 0 380 210" role="img" aria-label=""></svg><p class="hint" data-i18n="fruitTrainingNote"></p><p class="hint"><span data-i18n="fruitCredit"></span> <a href="https://github.com/aegeorge42/aegeorge42.github.io/tree/a5f530d4ca61138383e69341c3a4854d50f3f0f6" target="_blank" rel="noopener noreferrer">aegeorge42 · CC0</a>.</p></div>
-      </div>
-    </div>
       <div class="card" id="archControls">
         <span class="card-title" data-i18n="archBuild"></span>
         <p id="archResetNotice" data-i18n="archResetNotice" data-reinitializes="true"></p>
@@ -557,65 +451,14 @@ details.card[open] > summary::after { content: '−'; }
           <span id="paramBreakdown"></span>
           <ul id="paramList"></ul>
         </div>
-        <div class="flow-controls" id="flowControls" role="group" aria-labelledby="flowStage">
-          <p class="flow-stage" id="flowStage" aria-live="polite"></p>
-          <p class="flow-note" data-i18n="flowDistinction"></p>
-          <progress id="flowProgress" value="0" max="3" aria-labelledby="flowStage"></progress>
-          <div class="btn-row">
-            <button class="edu-btn" type="button" id="flowBtn"><span id="flowStartLabel"></span> <kbd>F</kbd></button>
-            <button class="btn-ghost" type="button" id="flowPauseBtn" data-i18n="flowPause"></button>
-            <button class="btn-ghost" type="button" id="flowBackBtn" data-i18n="flowBack"></button>
-            <button class="btn-ghost" type="button" id="flowNextBtn" data-i18n="flowNext"></button>
-            <button class="btn-ghost" type="button" id="flowResetBtn" data-i18n="flowReset"></button>
-          </div>
-        </div>
       </div>
     </div>
-    <div class="card" id="parameterInspector" tabindex="-1" aria-labelledby="parameterFollowTitle">
-      <div class="card-head"><span class="card-title" id="parameterFollowTitle" data-i18n="parameterFollow"></span><code class="parameter-name" id="parameterName"></code></div>
-      <ol class="parameter-path" id="parameterPath"></ol>
-      <p class="fruit-delta" id="fruitParameterDelta" hidden></p>
-      <p class="parameter-note" data-i18n="parameterOffsets"></p>
-      <div class="btn-row">
-        <button type="button" class="btn-ghost" data-param-jump="neuronPanel" data-i18n="jumpCalculation"></button>
-        <button type="button" class="btn-ghost" data-param-jump="weightsCard" data-i18n="jumpMatrix"></button>
-        <button type="button" class="btn-ghost" data-param-jump="fileCard" data-i18n="jumpBytes"></button>
-      </div>
-    </div>
-    <div class="card" id="neuronPanel" tabindex="-1" aria-live="polite">
-      <span class="card-title" id="neuronTitle"></span>
-      <div class="explain" id="neuronExplain"></div>
-    </div>
-    </div>
-    <details class="card" id="mathCard">
-      <summary><span class="card-title" data-i18n="mathH"></span></summary>
-      <p data-i18n="mathP"></p>
-      <div class="math-grid">
-        <div class="math" id="mathEq"></div>
-        <div class="math" id="mathExample"></div>
-      </div>
+    <details class="card fruit-lesson" id="fruitLesson" data-training-mode="explore" data-training-phase="idle" data-input-kind="features">
+      <summary><span class="card-title" data-i18n="fruitSummary"></span></summary>
+      <p data-i18n="fruitIntro"></p>
+      <p><strong data-i18n="fruitNotPixels"></strong></p>
+      <div class="btn-row"><button class="edu-btn" type="button" id="fruitEnter" data-i18n="fruitEnter"></button><button class="btn-ghost" type="button" id="fruitExit" data-i18n="fruitExit" hidden></button></div>
     </details>
-    <section class="llm-subsection" id="s-llm" aria-labelledby="hLlm">
-      <div class="sec-head">
-        <h3 id="hLlm" data-i18n="llmH"></h3>
-        <p data-i18n="llmIntro"></p>
-      </div>
-      <div id="llmComparison" class="llm-comparison">
-        <div class="card">
-          <div class="card-head"><span class="card-title" data-i18n="llmConceptual"></span><span class="chip sand" data-i18n="llmNotMini"></span></div>
-          <p data-i18n="llmScope"></p>
-          <ol class="llm-flow" id="llmStages"></ol>
-        </div>
-        <div class="llm-columns" id="llmColumns"></div>
-        <details class="card" id="llmBlock">
-          <summary><span class="card-title" data-i18n="llmBlockH"></span></summary>
-          <p data-i18n="llmBlockP"></p>
-          <ol class="llm-block-path" id="llmBlockPath"></ol>
-          <p data-i18n="llmAttentionNote"></p>
-          <p data-i18n="llmHeadsNote"></p>
-        </details>
-      </div>
-    </section>
   </section>
 
   <!-- ─── 3. Weights ─── -->
@@ -728,28 +571,8 @@ details.card[open] > summary::after { content: '−'; }
     </div>
   </section>
 
-  <details class="card references" id="referencesDisclosure">
-    <summary><span class="card-title" data-i18n="referencesH"></span></summary>
-    <ul>
-      <li><a href="https://huggingface.co/docs/transformers/model_doc/llama2" target="_blank" rel="noopener noreferrer" data-i18n="refLlama"></a></li>
-      <li><a href="https://huggingface.co/docs/transformers/main_classes/configuration" target="_blank" rel="noopener noreferrer" data-i18n="refConfig"></a></li>
-      <li><a href="https://huggingface.co/docs/transformers/main/create_a_model" target="_blank" rel="noopener noreferrer" data-i18n="refCustom"></a></li>
-      <li><a href="https://huggingface.co/docs/transformers/main_classes/text_generation" target="_blank" rel="noopener noreferrer" data-i18n="refGeneration"></a></li>
-      <li><a href="https://huggingface.co/docs/safetensors/index" target="_blank" rel="noopener noreferrer" data-i18n="refSafetensors"></a></li>
-      <li><a href="https://huggingface.co/docs/transformers/quantization/selecting" target="_blank" rel="noopener noreferrer" data-i18n="refQuantization"></a></li>
-    </ul>
-  </details>
-
-  <details class="card checks" id="checksDisclosure">
-    <summary><span class="card-title" data-i18n="checksH"></span><span class="checks-summary" id="checksSummary"></span></summary>
-    <p data-i18n="checksP"></p>
-    <ul class="check-results" id="checkResults"></ul>
-    <div class="btn-row"><button type="button" class="btn-ghost" id="checksBtn" data-i18n="checksRun"></button></div>
-  </details>
-
   <div class="kbd-hints">
-    <span><kbd>1</kbd>–<kbd>6</kbd> <span data-i18n="hintSections"></span></span>
-    <span><kbd>F</kbd> <span data-i18n="hintFlow"></span></span>
+    <span><kbd>1</kbd>–<kbd>5</kbd> <span data-i18n="hintSections"></span></span>
     <span><kbd>R</kbd> <span data-i18n="hintShuffle"></span></span>
   </div>
 </main>
@@ -759,7 +582,6 @@ details.card[open] > summary::after { content: '−'; }
 const SECTIONS = ['s-files', 's-arch', 's-weights', 's-disk', 's-load'];
 const N_INPUTS = 2;
 const N_OUTPUTS = 1;
-const FLOW_STEP_MS = 450;
 const TRAINING_LIMIT = 5000;
 const FRUIT_IMAGES = {
   strawberry: 'data:image/png;base64,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',
@@ -776,18 +598,6 @@ const MAX_HIDDEN_LAYERS = 3;
 const MAX_NEURONS = 6;
 const LLAMA_PARAMS = 6.74e9;
 const BIG_PARAMS = 70e9;
-const LLAMA_BLOCKS = 32;
-const LLM_STAGES = [
-  { id: 'tokenization', key: 'llmTokenization' },
-  { id: 'embeddings', key: 'llmEmbeddings' },
-  { id: 'attention', key: 'llmAttention' },
-  { id: 'feed-forward', key: 'llmFeedForward' },
-  { id: 'next-token-scores', key: 'llmNextScores' },
-  { id: 'token-selection', key: 'llmSelection' },
-  { id: 'repetition', key: 'llmRepetition' },
-];
-const LLM_COMPARISON_ROWS = ['Inputs', 'Layers', 'Output', 'Execution'];
-const LLM_BLOCK_PATH = ['NormAttention', 'Attention', 'ResidualAttention', 'NormFeedForward', 'FeedForward', 'ResidualFeedForward'];
 const PRECISIONS = [
   { id: 'f32', label: 'float32', bytes: 4 },
   { id: 'f16', label: 'float16', bytes: 2 },
@@ -826,7 +636,7 @@ const FORMATS = [
 // ─── Translations ───
 const T = {
   pl: {
-    fruitTitle: 'Naucz sieć rozpoznawać dwa owoce',
+    fruitSummary: 'Jak sieć się uczy? Przykład z owocami', fruitPause: 'Pauza',
     fruitIntro: 'Teraz nauczymy sieć odróżniać truskawkę od borówki. Każdy owoc opisujemy dwiema liczbami: jak jest długi i jak okrągły. Sieć ćwiczy na 12 przykładach. Gdy wyjdziesz, wróci Twoja poprzednia sieć.',
     fruitNotPixels: 'Sieć nie widzi obrazka – dostaje tylko te dwie liczby.',
     fruitEnter: 'Otwórz trening 2–3–1', fruitExit: 'Wróć do eksploratora',
@@ -850,7 +660,6 @@ const T = {
     fruitLimit: 'Osiągnięto limit 5000 epok. Możesz zresetować trening.',
     fruitError: 'Trening zatrzymany: wynik nie jest liczbą skończoną. Zachowano ostatnie poprawne parametry. Zmniejsz tempo lub zresetuj trening.',
     fruitHeldOut: 'Sprawdzian: {correct}/{total} trafionych. Sieć nigdy nie ćwiczyła na tych przykładach.',
-    fruitDelta: 'Ostatnia aktualizacja wyświetlona: {before} → {after} · Δ {delta}',
     fruitPoint: '{label}, {split}; długość {length}, okrągłość {roundness}; wynik truskawki {score}',
     title: 'Z czego składa się model AI?',
     lead: 'Model AI (tu: sieć neuronowa, taka jak w ChatGPT czy Llamie) to dwie rzeczy: plan i mnóstwo liczb. Plan, czyli architektura, mówi, jak połączona jest sieć – zapisuje się go w małym pliku tekstowym config.json. Liczby, czyli wagi, to wszystko, czego sieć nauczyła się w treningu – trafiają do dużego pliku, np. model.safetensors. Oba pliki leżą razem w folderze, który pobierasz z internetu. Żeby model ruszył, potrzebny jest jeszcze program, który zbuduje sieć według planu i wpisze w nią liczby.',
@@ -870,9 +679,7 @@ const T = {
     knobsP: 'Wyobraź sobie maszynę z mnóstwem pokręteł. Architektura to projekt maszyny: ile jest pokręteł i jak są połączone. Wagi to położenie każdego pokrętła. Trening to cierpliwe przekręcanie ich, aż maszyna zacznie dawać dobre odpowiedzi. Nasz mini-model ma {n} pokręteł, Llama 2 7B – około 7 miliardów.',
     archH: 'Architektura – plan obliczeń',
     archP: 'Sieć neuronowa to kilka kolumn kółek („neuronów”) połączonych liniami. Każde kółko robi prosty rachunek: bierze liczby z poprzedniej kolumny, mnoży je przez wagi, dodaje i przekazuje wynik dalej. Poniżej możesz dodawać i usuwać kółka.',
-    archDefH: 'Architektura',
-    archDef: 'Architektura to plan sieci: ile jest kolumn, ile kółek w każdej i jak są połączone. Sam plan niczego nie umie – to tylko kształt.',
-    legendPos: 'waga dodatnia', legendNeg: 'waga ujemna', legendWidth: 'grubsza linia = silniejsze połączenie', legendClick: 'wybierz połączenie, neuron lub bias b',
+    legendPos: 'waga dodatnia', legendNeg: 'waga ujemna', legendWidth: 'grubsza linia = silniejsze połączenie',
     x1Label: 'Wejście x₁', x2Label: 'Wejście x₂',
     inputsHint: 'Suwaki to dwie liczby, które wkładamy do sieci. Liczby w kółkach to bieżące wyniki – zmieniają się razem z suwakami. Wagi na liniach stoją w miejscu.',
     archResetNotice: 'Gdy zmienisz liczbę kolumn lub kółek, sieć ponownie losuje wszystkie wagi i zaczyna od zera.',
@@ -882,44 +689,12 @@ const T = {
     paramBreakdown: '{weights} wag połączeń + {biases} biasów = {total} parametrów',
     selectParameterLabel: 'Wybierz {id}: {value}',
     parameterSelected: '{id}, wybrany parametr: {value}',
-    parameterFollow: 'Śledź ten parametr', parameterValue: '1. Wartość parametru', parameterArithmetic: '2. Udział w obliczeniu',
-    parameterTensor: '3. Miejsce w tensorze', parameterBytes: '4. Bajty float32',
-    parameterWeightNote: 'Bieżąca aktywacja × waga = wkład do sumy neuronu. Grubość linii pokazuje |wagę|, nie znaczenie wyniku.',
-    parameterBiasNote: 'Bias dodajemy do sumy ważonych aktywacji; nie mnożymy go przez wejście.',
-    parameterTensorNote: 'Indeksy od 0. W macierzy wiersz = neuron wyjściowy, kolumna = neuron wejściowy.',
     parameterOffsets: 'data_offsets w nagłówku liczymy od początku danych tensorów. Tutaj offset to bezwzględna pozycja w pliku, razem z 8 bajtami długości i nagłówkiem.',
     parameterOffset: 'Offset w pliku: {offset} B; 4 bajty, little-endian.',
-    parameterFlatIndex: 'Indeks płaski: {index}; kształt [{shape}].',
-    jumpCalculation: 'Pokaż obliczenie', jumpMatrix: 'Pokaż macierz', jumpBytes: 'Pokaż bajty',
-    showOverview: 'Pokaż całą sieć', hideOverview: 'Ukryj podgląd sieci',
     tensorAxes: 'wiersze: wyjścia; kolumny: wejścia (indeksy od 0)', tensorBiasAxis: 'wektor biasów (indeksy neuronów wyjściowych od 0)',
     tensorInput: 'wej. {index}', tensorOutput: 'wyj. {index}', tensorOutputInput: 'wyj. / wej.', tensorOutputAxis: 'wyjście', tensorBiasValue: 'bias',
-    flowBtn: 'Start', flowPause: 'Pauza', flowBack: 'Wstecz', flowNext: 'Dalej', flowReset: 'Od początku',
-    flowResume: 'Wznów', flowReplay: 'Powtórz', flowInputs: 'Wejście: dwie liczby z suwaków',
-    flowHidden: 'Środek: kolumna {n} z {total}', flowOutput: 'Wynik', flowPaused: 'Pauza: {stage}',
-    flowPending: 'Wynik tej warstwy czeka na odsłonięcie. Użyj Start lub Dalej.', flowNotRevealed: 'wynik jeszcze nieodsłonięty',
-    flowDistinction: 'Zobacz krok po kroku, jak liczby przechodzą przez sieć. Wagi się nie zmieniają – sieć tylko liczy, nie uczy się.',
     lblInput: 'Wejście', lblHidden: 'Środek {n}', lblOutput: 'Wynik',
     archLive: 'Architektura: {layers}. Parametrów: {p}. Wagi i biasy wylosowane ponownie.',
-    flowLive: 'Dane przepłynęły przez wszystkie warstwy. Wynik: {v}.',
-    neuronTitleHidden: 'Co liczy wybrane kółko: środek {l}, kółko {i}',
-    neuronTitleOut: 'Co liczy wybrane kółko: wynik modelu',
-    neuronTitleIn: 'Wybrane wejście x{i}',
-    nInInfo: 'Neurony wejściowe niczego nie liczą – po prostu podają dalej liczbę z suwaka ({v}). Kliknij neuron w warstwie ukrytej albo wyjściowej.',
-    nStep1: 'Bierze liczby z poprzedniej warstwy:',
-    nStep2: 'Mnoży każdą przez wagę swojego połączenia (to właśnie wagi!):',
-    nStep3: 'Dodaje wyniki i swój bias (stałą poprawkę):',
-    nStep4Relu: 'Funkcja ReLU: wynik ujemny zamienia na 0, dodatni zostawia bez zmian.',
-    nStep4Sig: 'Funkcja σ (sigmoida): „ściska” wynik do przedziału od 0 do 1.',
-    nNext: 'Ten wynik trafia do neuronów następnej warstwy.',
-    nFinal: 'To jest odpowiedź modelu.',
-    nSum: 'suma',
-    mathH: 'Dla ciekawskich: cały model jako wzór matematyczny',
-    mathP: 'To samo, co pokazuje diagram, można zapisać wzorem. Architektura to kształt wzoru (ile mnożeń macierzy, jakie funkcje), a wagi to liczby, które wypełniają macierze W i wektory b. Wzór zmienia się razem z diagramem.',
-    mathInput: 'x – wejście (2 liczby), ŷ – wynik modelu',
-    reluNote: 'zeruje wartości ujemne', sigmaNote: 'zamienia wynik na liczbę od 0 do 1',
-    mathExampleH: 'Wybrana warstwa – bieżące liczby',
-    mathNeuron: 'Wybrany neuron liczy więc:',
     weightsH: 'Wagi – parametry modelu',
     weightsP: 'Architektura to tylko plan. To wagi decydują, co model faktycznie robi. Ta sama architektura z innymi wagami może rozpoznawać koty albo prognozować ceny – albo nie umieć nic.',
     wDefH: 'Wagi (parametry)',
@@ -976,31 +751,6 @@ const T = {
     detailShard2: 'Druga z dwóch części zapisu parametrów Llama 2 7B. Obie części są potrzebne do odtworzenia wszystkich parametrów. Nie wyświetlamy tu ich bajtów ani wartości.',
     detailIndex: 'model.safetensors.index.json jest tekstowym indeksem mapującym nazwy tensorów na pliki części. Nie zawiera samych wartości wag.',
     detailTokenizer: 'Plik tokenizera opisuje słownik i reguły zamiany tekstu na identyfikatory tokenów. Identyfikator jest liczbą całkowitą; sieć zamienia go następnie w wektor embeddingu. To nie jest plik wag mini-sieci.',
-    referencesH: 'Źródła i dokumentacja', refLlama: 'Llama 2: architektura i konfiguracja', refConfig: 'Konfiguracja modeli', refCustom: 'Implementacja i rejestracja własnych architektur', refGeneration: 'Ustawienia generowania tekstu', refSafetensors: 'Format Safetensors', refQuantization: 'Wybór metody kwantyzacji',
-    navLlm: 'LLM', llmH: 'Mini-sieć a model językowy',
-    llmIntro: 'Obie sieci mogą korzystać z wyuczonych parametrów, ale eksplorator zaczyna od losowych wag. Przetwarzają inne dane i mają inną architekturę. Duży model językowy nie jest po prostu naszą siecią z większą liczbą kółek.',
-    llmConceptual: 'Diagram pojęciowy', llmNotMini: 'To nie jest miniaturowa Llama',
-    llmScope: 'Uproszczony schemat generowania tekstu, z Llama 2 7B jako punktem odniesienia. Nie uruchamia modelu Llama i nie pokazuje jego prawdopodobieństw. Etapy czytaj w kolejności numerów.',
-    llmTokenization: 'Tokenizacja', llmTokenizationP: 'Tekst → identyfikatory tokenów. Token może być fragmentem słowa; jego identyfikator jest liczbą całkowitą, nie wektorem ani znaczeniem słowa.',
-    llmEmbeddings: 'Embeddingi', llmEmbeddingsP: 'Identyfikator wybiera wiersz wyuczonej tablicy embeddingów: wektor reprezentacji tokenu. W Llama 2 7B ma on 4096 składowych.',
-    llmAttention: 'Uwaga (attention)', llmAttentionP: 'Reprezentacje tokenów łączą informację z dostępnego kontekstu. Maska przy generowaniu nie pozwala zaglądać do przyszłych tokenów.',
-    llmFeedForward: 'Przetwarzanie feed-forward', llmFeedForwardP: 'Wyuczona sieć przetwarza reprezentację każdej pozycji. Uwaga i feed-forward powtarzają się w kolejnych blokach, z normalizacją i ścieżkami resztkowymi.',
-    llmNextScores: 'Wyniki następnego tokenu', llmNextScoresP: 'Końcowa normalizacja i projekcja dają logity dla tokenów słownika: 32 000 wyników w tym punkcie odniesienia. Logity nie są jeszcze prawdopodobieństwami.',
-    llmSelection: 'Wybór tokenu', llmSelectionP: 'Procedura generowania wybiera token na podstawie wyników i ustawień: np. przez najwyższy wynik lub losowanie po przekształceniu wyników w rozkład.',
-    llmRepetition: 'Powtarzanie', llmRepetitionP: 'Wybrany token dołącza do kontekstu; przewidywanie powtarza się do warunku zatrzymania. Obliczenia z wcześniejszych kroków mogą być ponownie użyte z pamięci podręcznej.',
-    llmBlocks: 'Blok transformera × {n}', llmBlockPaths: 'Normalizacja + ścieżki resztkowe w każdym bloku. Każdy z 32 bloków ma własne parametry.',
-    llmMiniTitle: 'Nasza mini-sieć', llmReferenceTitle: 'LLM: punkt odniesienia Llama 2 7B',
-    llmCompareInputs: 'Wejścia', miniCompareInputs: 'Dwie cechy liczbowe.', referenceCompareInputs: 'Tekst zamieniony na identyfikatory tokenów, potem na wektory embeddingów.',
-    llmCompareLayers: 'Przetwarzanie', miniCompareLayers: 'Warstwy w pełni połączone, ReLU i sigmoida.', referenceCompareLayers: '32 bloki transformera z uwagą i feed-forward.',
-    llmCompareOutput: 'Wyjście', miniCompareOutput: 'Jeden wynik od 0 do 1.', referenceCompareOutput: 'Wyniki dla kandydatów na następny token; nie jeden wynik dla całego zdania.',
-    llmCompareExecution: 'Przebieg', miniCompareExecution: 'Jeden przebieg sieci dla podanego wejścia.', referenceCompareExecution: 'Powtarzane przewidywanie i wybór kolejnych tokenów.',
-    llmBlockH: 'Zajrzyj do jednego bloku transformera', llmBlockP: 'Uproszczona ścieżka Llama 2: wejście → normalizacja → uwaga → dodanie wejścia ścieżką resztkową → normalizacja → feed-forward → kolejne dodanie resztkowe. Pomijamy szczegóły implementacji; to nie jest pełna specyfikacja architektury.',
-    llmNormAttention: 'Normalizacja przed uwagą', llmNormAttentionP: 'RMSNorm skaluje reprezentację; jej skale są wyuczonymi parametrami.',
-    llmResidualAttention: 'Dodanie resztkowe', llmResidualAttentionP: 'Do wyniku uwagi dodaj wejście tej części bloku.',
-    llmNormFeedForward: 'Normalizacja przed feed-forward', llmNormFeedForwardP: 'Kolejna RMSNorm przygotowuje reprezentację do sieci feed-forward.',
-    llmResidualFeedForward: 'Dodanie resztkowe', llmResidualFeedForwardP: 'Dodaj wejście tej części do wyniku feed-forward i przekaż dalej.',
-    llmAttentionNote: 'Tymczasowe wyniki uwagi powstają dla bieżącego kontekstu. Nie są wyuczonymi wagami projekcji Q, K, V i wyjścia, które zapisuje się w pliku modelu. Informacja o pozycji też wpływa na uwagę.',
-    llmHeadsNote: 'Głowice uwagi mogą uczyć się różnych wzorców. Nie gwarantuje to, że każda ma jedną unikalną rolę znaczeniową. Ten diagram niczego nie oblicza w mini-sieci.',
     segLen: '8 B', segHdr: '{n} B · nagłówek JSON', segData: '{n} B · wagi (float32)',
     tabJson: 'Nagłówek', tabHex: 'Surowe bajty (hex)', tabPy: 'Odczyt w Pythonie',
     capJson: 'Nagłówek sformatowany dla czytelności. fc1.weight to tabela wag połączeń wejście → warstwa ukryta 1, fc1.bias to biasy tej warstwy; data_offsets mówi, w których bajtach leżą liczby danej tabeli.',
@@ -1032,52 +782,12 @@ const T = {
     sum1: '<b>Architektura</b> = plan obliczeń zaimplementowany w kodzie; config.json podaje jego ustawienia.',
     sum2: '<b>Parametry</b> = wagi i biasy, inicjalizowane przed treningiem i dostosowywane na danych. Zapisuje się je jako tensory.',
     sum3: '<b>Działający model neuronowy</b> = implementacja + konfiguracja + parametry. Aktywacje to tymczasowe wyniki dla konkretnego wejścia.',
-    hintSections: 'sekcje', hintFlow: 'przepuść dane', hintShuffle: 'losuj wagi',
+    hintSections: 'sekcje', hintShuffle: 'losuj wagi',
     secLive: 'Sekcja: {name}',
     pyComments: ['1. plan', '2. pusta sieć (losowe wagi)', '3. wczytujemy zapisane parametry', '4. gotowe – liczymy odpowiedź'],
-    checksH: 'Kontrola modelu', checksP: 'Te same testy sprawdzają obliczenia i elementy aplikacji. Nie zmieniają wag.',
-    checksRun: 'Sprawdź ponownie', checksSummary: '{passed}/{total} kontroli zaliczonych', checksPass: 'OK', checksFail: 'Błąd',
-    checkLabels: {
-      'navigation: original five-section outline': 'Nawigacja zachowuje układ pięciu sekcji',
-      'navigation: file rows retain model identity': 'Pliki i ich opisy wskazują właściwy model oraz precyzję',
-      'LLM: conceptual stages never claim live probabilities': 'Schemat LLM jest konceptualny, bez obliczania prawdopodobieństw',
-      'network: layers and tensor shapes': 'Wymiary warstw, wag i biasów są zgodne',
-      'network: finite inputs and float32 parameters': 'Wejścia są skończone, a parametry zapisane jako float32',
-      'evaluate: finite activations and bounded output': 'Aktywacje są skończone, a wynik mieści się między 0 a 1',
-      'evaluate: preserves network and inputs': 'Obliczenia nie zmieniają sieci ani wejść',
-      'forward: cached values match pure evaluation': 'Wartości w aplikacji zgadzają się z czystym obliczeniem',
-      'arch: node count = sum of layers': 'Liczba neuronów zgadza się z rozmiarami warstw',
-      'arch: edge count = sum a·b': 'Liczba połączeń zgadza się z rozmiarami warstw',
-      'arch: params = edges + biases': 'Liczba parametrów obejmuje wagi i biasy',
-      'forward: output node = recomputed σ(...)': 'Wynik na diagramie zgadza się z obliczeniami',
-      'neuron panel = selected node value': 'Panel neuronu pokazuje wartość wybranego neuronu',
-      'weights list count = params': 'Lista wag zawiera wszystkie parametry',
-      'config.json hidden_sizes = architecture': 'config.json opisuje obecną architekturę',
-      'safetensors: header length, contiguous offsets, size = 4·params': 'Nagłówek, offsety i rozmiar pliku są poprawne',
-      'safetensors: first float = W(1)[0][0]': 'Pierwsza liczba w pliku jest pierwszą wagą',
-      'safetensors: every float matches its parameter': 'Każda liczba w pliku zgadza się z właściwym parametrem',
-      'parameter: selection resolves to exact float32': 'Wybrany parametr odpowiada właściwym bajtom float32',
-      'parameter: matrix rows are outputs and columns are inputs': 'Macierze mają wiersze wyjściowe i kolumny wejściowe',
-      'parameter: accessible edges encode absolute weight magnitude': 'Dostępne połączenia pokazują bezwzględną wartość wagi',
-      'parameter: linked representations share selection': 'Diagram, macierz, obliczenia i plik pokazują ten sam parametr',
-      'parameter: four selected bytes decode to value': 'Cztery wybrane bajty odtwarzają wartość parametru',
-      'flow: state and controls agree': 'Etap przebiegu i jego przyciski są zgodne ze stanem',
-      'flow: unrevealed activations are hidden': 'Nieodsłonięte warstwy nie pokazują jeszcze wyników',
-      'flow: selected arithmetic respects visibility': 'Obliczenia wybranego neuronu respektują odsłonięte warstwy',
-      'flow: training and forward are mutually exclusive': 'Trening i animacja przebiegu nie działają jednocześnie',
-      'training: state and controls agree': 'Stan treningu zgadza się z kontrolkami',
-      'training: samples and scores reflect features': 'Próbka i wyniki odpowiadają cechom wejściowym',
-      'training: decision regions are evaluated predictions': 'Obszary decyzji wynikają z obliczeń sieci',
-      'training: history is finite and current': 'Historia błędu jest poprawna i aktualna',
-      'training: test examples excluded from gradients': 'Przykłady testowe nie wpływają na gradienty',
-      'size: bytes = params × precision': 'Rozmiar wag zgadza się z wybraną precyzją',
-      'load code output = model output': 'Przykład wczytania pokazuje obecny wynik sieci',
-      'math: one equation per layer': 'Każda warstwa ma własne równanie',
-      'lang attr matches state': 'Język dokumentu zgadza się z językiem aplikacji',
-    },
   },
   en: {
-    fruitTitle: 'Train the network to distinguish two fruits',
+    fruitSummary: 'How does a network learn? A fruit example', fruitPause: 'Pause',
     fruitIntro: 'Now let’s teach the network to tell a strawberry from a blueberry. We describe each fruit with two numbers: how long it is and how round it is. The network practises on 12 examples. When you leave, your earlier network comes back.',
     fruitNotPixels: 'The network never sees the picture – it only gets those two numbers.',
     fruitEnter: 'Open 2–3–1 training', fruitExit: 'Return to explorer',
@@ -1101,7 +811,6 @@ const T = {
     fruitLimit: 'Reached the 5000-epoch limit. You can reset training.',
     fruitError: 'Training stopped: nonfinite result. Last valid parameters kept. Lower the rate or reset training.',
     fruitHeldOut: 'Quiz: {correct}/{total} right. The network never practised on these examples.',
-    fruitDelta: 'Last displayed update: {before} → {after} · Δ {delta}',
     fruitPoint: '{label}, {split}; length {length}, roundness {roundness}; strawberry score {score}',
     title: 'What is an AI model made of?',
     lead: 'An AI model (here: a neural network, like the ones behind ChatGPT or Llama) is two things: a plan and a huge pile of numbers. The plan, called the architecture, says how the network is wired – it is saved in a small text file, config.json. The numbers, called weights, are everything the network learned in training – they go into a big file such as model.safetensors. Both files sit together in a folder you download from the internet. To run the model, you also need a program that builds the network from the plan and fills in the numbers.',
@@ -1121,9 +830,7 @@ const T = {
     knobsP: 'Picture a machine covered in knobs. The architecture is the machine’s design: how many knobs there are and how they are wired. The weights are the position of every knob. Training is patiently turning them until the machine gives good answers. Our mini model has {n} knobs; Llama 2 7B has about 7 billion.',
     archH: 'Architecture – the plan of computation',
     archP: 'A neural network is a few columns of circles (“neurons”) joined by lines. Each circle does a simple sum: it takes the numbers from the previous column, multiplies them by weights, adds them up and passes the result on. Below you can add and remove circles.',
-    archDefH: 'Architecture',
-    archDef: 'The architecture is the network’s plan: how many columns, how many circles in each and how they connect. The plan itself knows nothing – it is just the shape.',
-    legendPos: 'positive weight', legendNeg: 'negative weight', legendWidth: 'thicker line = stronger connection', legendClick: 'select a connection, neuron or bias b',
+    legendPos: 'positive weight', legendNeg: 'negative weight', legendWidth: 'thicker line = stronger connection',
     x1Label: 'Input x₁', x2Label: 'Input x₂',
     inputsHint: 'The sliders are the two numbers we feed in. The numbers in the circles are the current results – they change with the sliders. The weights on the lines stay put.',
     archResetNotice: 'If you change the number of columns or circles, the network picks new random weights and starts from scratch.',
@@ -1133,44 +840,12 @@ const T = {
     paramBreakdown: '{weights} connection weights + {biases} biases = {total} parameters',
     selectParameterLabel: 'Select {id}: {value}',
     parameterSelected: '{id}, selected parameter: {value}',
-    parameterFollow: 'Follow this parameter', parameterValue: '1. Parameter value', parameterArithmetic: '2. Contribution to computation',
-    parameterTensor: '3. Tensor location', parameterBytes: '4. Float32 bytes',
-    parameterWeightNote: 'Current activation × weight = contribution to the neuron sum. Line width shows |weight|, not output importance.',
-    parameterBiasNote: 'Bias is added to the weighted activation sum; it is not multiplied by an input.',
-    parameterTensorNote: 'Zero-based indices. Matrix rows = output neurons; columns = input neurons.',
     parameterOffsets: 'Header data_offsets are relative to the start of the tensor data. The offset here is the absolute file position, including the 8-byte length and the header.',
     parameterOffset: 'File offset: {offset} B; 4 bytes, little-endian.',
-    parameterFlatIndex: 'Flat index: {index}; shape [{shape}].',
-    jumpCalculation: 'Show calculation', jumpMatrix: 'Show matrix', jumpBytes: 'Show bytes',
-    showOverview: 'Show the whole network', hideOverview: 'Hide network overview',
     tensorAxes: 'rows: outputs; columns: inputs (zero-based indices)', tensorBiasAxis: 'bias vector (zero-based output-neuron indices)',
     tensorInput: 'in {index}', tensorOutput: 'out {index}', tensorOutputInput: 'out / in', tensorOutputAxis: 'output', tensorBiasValue: 'bias',
-    flowBtn: 'Start', flowPause: 'Pause', flowBack: 'Back', flowNext: 'Next', flowReset: 'Reset',
-    flowResume: 'Resume', flowReplay: 'Replay', flowInputs: 'Input: the two slider numbers',
-    flowHidden: 'Middle: column {n} of {total}', flowOutput: 'Answer', flowPaused: 'Paused: {stage}',
-    flowPending: 'This layer’s result has not been revealed. Use Start or Next.', flowNotRevealed: 'result not yet revealed',
-    flowDistinction: 'Watch, step by step, how the numbers travel through the network. The weights do not change – the network is only calculating, not learning.',
     lblInput: 'Input', lblHidden: 'Middle {n}', lblOutput: 'Answer',
     archLive: 'Architecture: {layers}. Parameters: {p}. Weights and biases reinitialized.',
-    flowLive: 'Data flowed through all layers. Output: {v}.',
-    neuronTitleHidden: 'What the selected circle calculates: middle {l}, circle {i}',
-    neuronTitleOut: 'What the selected circle calculates: the model’s answer',
-    neuronTitleIn: 'Selected input x{i}',
-    nInInfo: 'Input neurons compute nothing – they just pass on the slider’s number ({v}). Click a neuron in a hidden or output layer.',
-    nStep1: 'Takes the numbers from the previous layer:',
-    nStep2: 'Multiplies each by the weight of its connection (these are the weights!):',
-    nStep3: 'Adds the results and its bias (a fixed offset):',
-    nStep4Relu: 'ReLU function: turns a negative result into 0, leaves a positive one unchanged.',
-    nStep4Sig: 'σ function (sigmoid): “squashes” the result into the range 0 to 1.',
-    nNext: 'This result goes on to the neurons of the next layer.',
-    nFinal: 'This is the model’s answer.',
-    nSum: 'sum',
-    mathH: 'For the curious: the whole model as a formula',
-    mathP: 'What the diagram shows can be written as a formula. The architecture is the shape of the formula (how many matrix multiplications, which functions); the weights are the numbers that fill the W matrices and b vectors. The formula changes together with the diagram.',
-    mathInput: 'x – input (2 numbers), ŷ – model output',
-    reluNote: 'zeroes out negative values', sigmaNote: 'squashes the result into a number between 0 and 1',
-    mathExampleH: 'Selected layer – current numbers',
-    mathNeuron: 'So the selected neuron computes:',
     weightsH: 'Weights – model parameters',
     weightsP: 'The architecture is only a plan. The weights decide what the model actually does. The same architecture with different weights could recognise cats or predict prices – or do nothing useful at all.',
     wDefH: 'Weights (parameters)',
@@ -1227,31 +902,6 @@ const T = {
     detailShard2: 'The second of two files storing Llama 2 7B parameters. Both shards are needed to reconstruct all parameters. We do not display their bytes or values here.',
     detailIndex: 'model.safetensors.index.json is a text index mapping tensor names to shard files. It does not contain the weight values themselves.',
     detailTokenizer: 'A tokenizer file describes vocabulary and rules for converting text into token IDs. An ID is an integer; the network then turns it into an embedding vector. This is not the mini network’s weight file.',
-    referencesH: 'Sources and documentation', refLlama: 'Llama 2: architecture and configuration', refConfig: 'Model configuration', refCustom: 'Implementing and registering custom architectures', refGeneration: 'Text generation settings', refSafetensors: 'Safetensors format', refQuantization: 'Choosing a quantization method',
-    navLlm: 'LLM', llmH: 'Mini network versus language model',
-    llmIntro: 'Both networks can use learned parameters, but the explorer starts with random weights. They process different data with different architectures. A large language model is not simply our network with more circles.',
-    llmConceptual: 'Conceptual diagram', llmNotMini: 'Not a miniature Llama',
-    llmScope: 'A simplified text-generation diagram, with Llama 2 7B as a reference. It does not run Llama or display its probabilities. Read the stages in numbered order.',
-    llmTokenization: 'Tokenization', llmTokenizationP: 'Text → token IDs. A token may be part of a word; its ID is an integer, not a vector or a word’s meaning.',
-    llmEmbeddings: 'Embeddings', llmEmbeddingsP: 'An ID selects a row in a learned embedding table: a token representation vector. In Llama 2 7B it has 4096 components.',
-    llmAttention: 'Attention', llmAttentionP: 'Token representations combine information from available context. A generation mask prevents access to future tokens.',
-    llmFeedForward: 'Feed-forward processing', llmFeedForwardP: 'A learned network processes each position’s representation. Attention and feed-forward repeat across blocks, with normalization and residual paths.',
-    llmNextScores: 'Next-token scores', llmNextScoresP: 'Final normalization and projection produce vocabulary logits: 32,000 scores in this reference. Logits are not yet probabilities.',
-    llmSelection: 'Token selection', llmSelectionP: 'The generation procedure selects a token using scores and settings: for example, the highest score or sampling after converting scores into a distribution.',
-    llmRepetition: 'Repetition', llmRepetitionP: 'The selected token joins the context; prediction repeats until a stopping condition. Cached computations from previous steps can be reused.',
-    llmBlocks: 'Transformer block × {n}', llmBlockPaths: 'Normalization + residual paths in every block. Each of the 32 blocks has its own parameters.',
-    llmMiniTitle: 'Our mini network', llmReferenceTitle: 'LLM: Llama 2 7B reference',
-    llmCompareInputs: 'Inputs', miniCompareInputs: 'Two numeric features.', referenceCompareInputs: 'Text converted to token IDs, then embedding vectors.',
-    llmCompareLayers: 'Processing', miniCompareLayers: 'Fully connected layers, ReLU, and sigmoid.', referenceCompareLayers: '32 transformer blocks with attention and feed-forward.',
-    llmCompareOutput: 'Output', miniCompareOutput: 'One score between 0 and 1.', referenceCompareOutput: 'Scores for next-token candidates; not one score for the whole sentence.',
-    llmCompareExecution: 'Execution', miniCompareExecution: 'One network pass for the given input.', referenceCompareExecution: 'Repeated prediction and selection of successive tokens.',
-    llmBlockH: 'Inspect one transformer block', llmBlockP: 'Simplified Llama 2 path: input → normalization → attention → add input through a residual path → normalization → feed-forward → another residual addition. Implementation details are omitted; this is not a complete architecture specification.',
-    llmNormAttention: 'Normalization before attention', llmNormAttentionP: 'RMSNorm scales the representation; its scales are learned parameters.',
-    llmResidualAttention: 'Residual addition', llmResidualAttentionP: 'Add this sublayer’s input to the attention result.',
-    llmNormFeedForward: 'Normalization before feed-forward', llmNormFeedForwardP: 'Another RMSNorm prepares the representation for the feed-forward network.',
-    llmResidualFeedForward: 'Residual addition', llmResidualFeedForwardP: 'Add this sublayer’s input to the feed-forward result and pass it on.',
-    llmAttentionNote: 'Temporary attention scores are computed for the current context. They are not the learned Q, K, V and output projection weights saved in the model file. Position information also affects attention.',
-    llmHeadsNote: 'Attention heads can learn different patterns. A unique semantic role for each head is not guaranteed. This diagram computes nothing in the mini network.',
     segLen: '8 B', segHdr: '{n} B · JSON header', segData: '{n} B · weights (float32)',
     tabJson: 'Header', tabHex: 'Raw bytes (hex)', tabPy: 'Reading in Python',
     capJson: 'Header pretty-printed for readability. fc1.weight is the table of connection weights input → hidden layer 1, fc1.bias the biases of that layer; data_offsets says which bytes hold each table’s numbers.',
@@ -1283,49 +933,9 @@ const T = {
     sum1: '<b>Architecture</b> = a computation plan implemented in code; config.json provides its settings.',
     sum2: '<b>Parameters</b> = weights and biases, initialized before training and adjusted on data. They are saved as tensors.',
     sum3: '<b>A working neural model</b> = implementation + configuration + parameters. Activations are temporary results for a particular input.',
-    hintSections: 'sections', hintFlow: 'pass data through', hintShuffle: 'draw weights',
+    hintSections: 'sections', hintShuffle: 'draw weights',
     secLive: 'Section: {name}',
     pyComments: ['1. the plan', '2. empty network (random weights)', '3. load the stored parameters', '4. done – compute an answer'],
-    checksH: 'Model checks', checksP: 'The same checks verify the calculations and the app interface. They do not change the weights.',
-    checksRun: 'Check again', checksSummary: '{passed}/{total} checks passed', checksPass: 'OK', checksFail: 'Failed',
-    checkLabels: {
-      'navigation: original five-section outline': 'Navigation preserves the five-section outline',
-      'navigation: file rows retain model identity': 'Files and their descriptions identify the correct model and precision',
-      'LLM: conceptual stages never claim live probabilities': 'The LLM diagram is conceptual, without computed probabilities',
-      'network: layers and tensor shapes': 'Layer, weight and bias dimensions agree',
-      'network: finite inputs and float32 parameters': 'Inputs are finite and parameters use float32',
-      'evaluate: finite activations and bounded output': 'Activations are finite and output stays between 0 and 1',
-      'evaluate: preserves network and inputs': 'Evaluation preserves the network and inputs',
-      'forward: cached values match pure evaluation': 'App values agree with pure evaluation',
-      'arch: node count = sum of layers': 'Neuron count agrees with layer sizes',
-      'arch: edge count = sum a·b': 'Connection count agrees with layer sizes',
-      'arch: params = edges + biases': 'Parameter count includes weights and biases',
-      'forward: output node = recomputed σ(...)': 'Diagram output agrees with the calculation',
-      'neuron panel = selected node value': 'Neuron panel shows the selected neuron value',
-      'weights list count = params': 'The weights list contains every parameter',
-      'config.json hidden_sizes = architecture': 'config.json describes the current architecture',
-      'safetensors: header length, contiguous offsets, size = 4·params': 'File header, offsets and size are correct',
-      'safetensors: first float = W(1)[0][0]': 'The first file value is the first weight',
-      'safetensors: every float matches its parameter': 'Every file value matches its parameter',
-      'parameter: selection resolves to exact float32': 'The selected parameter matches its exact float32 bytes',
-      'parameter: matrix rows are outputs and columns are inputs': 'Matrices use output rows and input columns',
-      'parameter: accessible edges encode absolute weight magnitude': 'Accessible connections show absolute weight magnitude',
-      'parameter: linked representations share selection': 'Diagram, matrix, calculation and file share the selected parameter',
-      'parameter: four selected bytes decode to value': 'Four selected bytes decode to the parameter value',
-      'flow: state and controls agree': 'Forward stage and controls agree with the state',
-      'flow: unrevealed activations are hidden': 'Unrevealed layers do not display their results yet',
-      'flow: selected arithmetic respects visibility': 'Selected-neuron arithmetic respects the revealed layers',
-      'flow: training and forward are mutually exclusive': 'Training and forward animation cannot run together',
-      'training: state and controls agree': 'Training state agrees with its controls',
-      'training: samples and scores reflect features': 'Samples and scores reflect input features',
-      'training: decision regions are evaluated predictions': 'Decision regions come from network evaluations',
-      'training: history is finite and current': 'Loss history is finite and current',
-      'training: test examples excluded from gradients': 'Test examples do not affect gradients',
-      'size: bytes = params × precision': 'Weight size agrees with the selected precision',
-      'load code output = model output': 'The loading example shows the current network output',
-      'math: one equation per layer': 'Each layer has its own equation',
-      'lang attr matches state': 'Document and app language agree',
-    },
   },
 };
 const NAV_KEYS = ['navFiles', 'navArch', 'navWeights', 'navDisk', 'navLoad'];
@@ -1340,14 +950,11 @@ const state = {
   fileTab: 'json',
   precision: 'f32',
   selection: { parameter: { layer: 0, kind: 'weight', output: 0, input: 0 } },
-  flow: { phase: 'idle', visibleLayer: 0, runId: 0 },
-  lesson: { mode: 'explore', savedExplorer: null, epoch: 0, learningRate: .1, phase: 'idle', runId: 0, selectedSampleId: null, history: [], initial: null, beforeUpdate: null, error: '', notice: '', showTest: false },
-  overview: false,
-  arch: { hidden: [4, 3], weights: [], biases: [], acts: [], sums: [], inputs: [0.8, 0.3], selected: { layer: 1, index: 0 }, flowing: false },
+  lesson: { mode: 'explore', savedExplorer: null, epoch: 0, learningRate: .1, phase: 'idle', runId: 0, selectedSampleId: null, history: [], initial: null, error: '', notice: '', showTest: false },
+  arch: { hidden: [4, 3], weights: [], biases: [], acts: [], sums: [], inputs: [0.8, 0.3] },
 };
-let flowTimer = null;
-let flowSnapshot = null;
 let trainingTimer = null;
+let announceRun = 0;
 
 // ─── DOM refs ───
 const $ = (id) => document.getElementById(id);
@@ -1379,11 +986,11 @@ function fmtBytes(n) {
   for (const [u, name] of units) if (n >= u) return `${new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(n / u)} ${name}`;
   return `${fmtInt(n)} B`;
 }
-function announce(msg, runId = state.flow.runId) {
+function announce(msg) {
+  const runId = ++announceRun;
   liveRegion.textContent = '';
   requestAnimationFrame(() => {
-    if (runId !== undefined && runId !== state.flow.runId) return;
-    liveRegion.textContent = msg;
+    if (runId === announceRun) liveRegion.textContent = msg;
   });
 }
 function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
@@ -1420,13 +1027,6 @@ function modelFileDestination(file) {
   const target = file.name === 'config.json' ? 'configCard' : file.model === 'mini' ? 'fileCard' : 'modelFileDetail';
   return { model: file.model, name: file.name, target };
 }
-function llmComparisonData() {
-  return {
-    conceptual: true, liveProbabilities: false, blockRepetitions: LLAMA_BLOCKS,
-    stages: LLM_STAGES.map(({ id, key }) => ({ id, label: t(key), description: t(`${key}P`) })),
-    rows: LLM_COMPARISON_ROWS.map((key) => ({ label: t(`llmCompare${key}`), mini: t(`miniCompare${key}`), llm: t(`referenceCompare${key}`) })),
-  };
-}
 function layers() { return [N_INPUTS, ...state.arch.hidden, N_OUTPUTS]; }
 function countParams(ls) {
   let total = 0;
@@ -1440,7 +1040,6 @@ function randomizeArchWeights() {
     Object.assign(state.arch, createFruitNetwork(state.arch.hidden, fruitRand));
     clampSelection(); recordFruitInitialization(); return;
   }
-  cancelFlow(false);
   const ls = layers();
   // Math.fround: keep values exactly representable as float32, as they are stored in the file
   state.arch.weights = ls.slice(0, -1).map((n, i) =>
@@ -1526,9 +1125,6 @@ function trainEpoch(network, samples, learningRate) {
   if (!Number.isFinite(loss)) throw new RangeError('Nonfinite loss');
   return { network: next, loss };
 }
-function revealFruitPrediction() {
-  forward(); state.flow.visibleLayer = layers().length-1; state.flow.phase = 'complete'; state.arch.flowing = false;
-}
 function pauseTraining(render = true) {
   if (trainingTimer !== null) clearTimeout(trainingTimer);
   trainingTimer = null; state.lesson.runId++;
@@ -1537,30 +1133,27 @@ function pauseTraining(render = true) {
   return state.lesson;
 }
 function recordFruitInitialization() {
-  pauseTraining(false); cancelFlow(false);
+  pauseTraining(false);
   const lesson = state.lesson;
-  lesson.epoch = 0; lesson.history = []; lesson.beforeUpdate = null; lesson.error = ''; lesson.phase = 'idle';
+  lesson.epoch = 0; lesson.history = []; lesson.error = ''; lesson.phase = 'idle';
   lesson.initial = copyData({ hidden: state.arch.hidden, weights: state.arch.weights, biases: state.arch.biases, inputs: state.arch.inputs });
   lesson.notice = 'fruitReinitialized'; lesson.selectedSampleId = FRUIT_SAMPLES[0].id;
-  revealFruitPrediction();
+  forward();
 }
 function enterFruitLesson() {
   if (state.lesson.mode === 'fruit') return;
-  pauseFlow();
-  state.lesson.savedExplorer = copyData({ arch: state.arch, selection: state.selection, rng: rand.getState(), flow: state.flow, overview: state.overview });
-  cancelFlow(false); fruitRand.setState(42);
-  state.lesson.mode = 'fruit'; state.lesson.showTest = false; state.overview = true;
+  state.lesson.savedExplorer = copyData({ arch: state.arch, selection: state.selection, rng: rand.getState() });
+  fruitRand.setState(42);
+  state.lesson.mode = 'fruit'; state.lesson.showTest = false;
   Object.assign(state.arch,createFruitNetwork([3],fruitRand)); clampSelection(); recordFruitInitialization();
   state.lesson.notice = 'fruitInitialized'; renderAll(); announce(t('fruitInitialized'));
 }
 function exitFruitLesson() {
   if (state.lesson.mode !== 'fruit') return;
-  pauseTraining(false); cancelFlow(false);
-  const saved = state.lesson.savedExplorer, runId = state.flow.runId;
+  pauseTraining(false);
+  const saved = state.lesson.savedExplorer;
   state.arch = copyData(saved.arch); state.selection = copyData(saved.selection); rand.setState(saved.rng);
-  state.flow = { ...saved.flow, runId }; state.overview = saved.overview;
   state.lesson.mode = 'explore'; state.lesson.phase = 'idle'; state.lesson.savedExplorer = null;
-  flowSnapshot = state.flow.phase === 'paused' ? flowContext() : null;
   renderAll(); announce(t('fruitRestored'));
 }
 function advanceTraining() {
@@ -1578,25 +1171,24 @@ function scheduleTraining(runId) {
   trainingTimer = setTimeout(() => {
     if (runId !== state.lesson.runId || state.lesson.mode !== 'fruit' || state.lesson.phase !== 'running') return;
     trainingTimer = null;
-    state.lesson.beforeUpdate = copyData({weights:state.arch.weights,biases:state.arch.biases});
     for (let i=0;i<TRAINING_SLICE && state.lesson.epoch<TRAINING_LIMIT;i++) if (!advanceTraining()) break;
     if (state.lesson.epoch >= TRAINING_LIMIT) { pauseTraining(false); state.lesson.notice = 'fruitLimit'; announce(t('fruitLimit')); }
-    revealFruitPrediction(); renderDynamic();
+    forward(); renderDynamic();
     if (runId === state.lesson.runId && state.lesson.phase === 'running') scheduleTraining(runId);
   },100);
 }
 function startTraining() {
   if (state.lesson.mode !== 'fruit' || state.lesson.phase === 'running' || state.lesson.epoch >= TRAINING_LIMIT) return;
-  cancelFlow(false); pauseTraining(false); state.lesson.phase = 'running'; state.lesson.notice = ''; state.lesson.error = '';
-  revealFruitPrediction(); renderDynamic(); scheduleTraining(state.lesson.runId);
+  pauseTraining(false); state.lesson.phase = 'running'; state.lesson.notice = ''; state.lesson.error = '';
+  forward(); renderDynamic(); scheduleTraining(state.lesson.runId);
 }
 function stepTraining() {
   if (state.lesson.mode !== 'fruit') return;
-  pauseTraining(false); cancelFlow(false);
+  pauseTraining(false);
   if (state.lesson.epoch < TRAINING_LIMIT) {
-    state.lesson.phase = 'paused'; state.lesson.beforeUpdate = copyData({weights:state.arch.weights,biases:state.arch.biases}); advanceTraining();
+    state.lesson.phase = 'paused'; advanceTraining();
   }
-  revealFruitPrediction(); renderDynamic();
+  forward(); renderDynamic();
 }
 function resetTraining() {
   if (state.lesson.mode !== 'fruit') return;
@@ -1610,108 +1202,16 @@ function selectFruitSample(id) {
   if (state.lesson.mode !== 'fruit') return;
   const sample = FRUIT_SAMPLES.find(s=>s.id===id);
   if (!sample) throw new RangeError('Unknown fruit sample');
-  pauseTraining(false); cancelFlow(false); state.lesson.selectedSampleId = id; state.arch.inputs = sample.inputs.slice();
+  pauseTraining(false); state.lesson.selectedSampleId = id; state.arch.inputs = sample.inputs.slice();
   if (sample.split === 'test') state.lesson.showTest = true;
-  revealFruitPrediction(); renderDynamic();
-}
-function flowContext() {
-  return JSON.stringify([state.arch.hidden, state.arch.inputs, state.lang, state.lesson?.mode ?? 'explore', state.arch.weights, state.arch.biases]);
-}
-function invalidateFlow() {
-  if (flowTimer !== null) clearTimeout(flowTimer);
-  flowTimer = null;
-  state.flow.runId++;
-  state.arch.flowing = false;
-}
-function cancelFlow(render = true) {
-  invalidateFlow();
-  flowSnapshot = null;
-  state.flow.phase = 'idle';
-  state.flow.visibleLayer = 0;
-  if (render) renderDynamic();
-  return state.flow;
-}
-function resetFlow() { return cancelFlow(); }
-function pauseFlow() {
-  if (state.flow.phase !== 'running') return state.flow;
-  invalidateFlow();
-  state.flow.phase = 'paused';
-  renderDynamic();
-  announce(t('flowPaused', { stage: flowStage() }), state.flow.runId);
-  return state.flow;
-}
-function revealFlowLayer(layer) {
-  const ls = layers();
-  state.flow.visibleLayer = layer;
-  if (layer > 0) {
-    const p = state.selection.parameter;
-    state.selection.parameter = { layer: layer - 1, kind: p.kind, output: Math.min(p.output, ls[layer] - 1),
-      input: p.kind === 'bias' ? null : Math.min(p.input, ls[layer - 1] - 1) };
-    state.arch.selected = { layer, index: state.selection.parameter.output };
-  }
-}
-function flowStage() {
-  const layer = state.flow.visibleLayer;
-  return layer === 0 ? t('flowInputs') : layer === layers().length - 1 ? t('flowOutput') : t('flowHidden', { n: layer, total: state.arch.hidden.length });
-}
-function finishFlowStep() {
-  if (state.flow.visibleLayer === layers().length - 1) {
-    state.flow.phase = 'complete';
-    state.arch.flowing = false;
-  }
-  renderDynamic();
-  announce(state.flow.phase === 'complete' ? t('flowLive', { v: fmt(modelOutput()) }) : flowStage(), state.flow.runId);
-}
-function scheduleFlow(runId) {
-  flowTimer = setTimeout(() => {
-    if (runId !== state.flow.runId || state.flow.phase !== 'running') return;
-    if (flowSnapshot !== flowContext()) { cancelFlow(); return; }
-    flowTimer = null;
-    revealFlowLayer(state.flow.visibleLayer + 1);
-    finishFlowStep();
-    if (state.flow.phase === 'running') scheduleFlow(runId);
-  }, FLOW_STEP_MS);
-}
-function startFlow() {
-  if (state.flow.phase === 'running') return state.flow;
-  if (typeof pauseTraining === 'function') pauseTraining();
-  const resume = state.flow.phase === 'paused' && flowSnapshot === flowContext();
-  invalidateFlow();
-  if (!resume) state.flow.visibleLayer = 0;
-  forward();
-  flowSnapshot = flowContext();
-  state.flow.phase = 'running';
-  state.arch.flowing = true;
-  if (typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    revealFlowLayer(layers().length - 1);
-    finishFlowStep();
-  } else {
-    renderDynamic();
-    announce(flowStage(), state.flow.runId);
-    scheduleFlow(state.flow.runId);
-  }
-  return state.flow;
-}
-function runFlow() { return startFlow(); }
-function stepFlow(delta) {
-  if (delta !== 1 && delta !== -1) throw new RangeError('Forward step must be +1 or -1');
-  if (typeof pauseTraining === 'function') pauseTraining();
-  if (flowSnapshot !== null && flowSnapshot !== flowContext()) cancelFlow(false);
-  invalidateFlow();
-  forward();
-  flowSnapshot = flowContext();
-  state.flow.phase = 'paused';
-  revealFlowLayer(Math.max(0, Math.min(layers().length - 1, state.flow.visibleLayer + delta)));
-  finishFlowStep();
-  return state.flow;
+  forward(); renderDynamic();
 }
 function setInputs(inputs) {
   if (!Array.isArray(inputs) || inputs.length !== N_INPUTS || !inputs.every(Number.isFinite)) throw new RangeError('Invalid input features');
-  pauseTraining(false); cancelFlow(false);
+  pauseTraining(false);
   if (state.lesson.mode === 'fruit') state.lesson.selectedSampleId = null;
   state.arch.inputs = inputs.slice();
   forward();
-  if (state.lesson.mode === 'fruit') revealFruitPrediction();
   renderDynamic();
 }
 function setArchitecture(hidden) {
@@ -1726,8 +1226,8 @@ function setArchitecture(hidden) {
 }
 function setLanguage(lang) {
   if (lang !== 'pl' && lang !== 'en') throw new RangeError('Invalid language');
-  pauseTraining(false); cancelFlow(false);
-  if (state.lesson.mode === 'fruit') revealFruitPrediction();
+  pauseTraining(false);
+  announceRun++;
   state.lang = lang;
   try { localStorage.setItem('lang', lang); } catch {}
   renderAll();
@@ -1760,11 +1260,14 @@ function numericalChecks(network) {
   return checks;
 }
 function clampSelection() {
-  const ls = layers(), s = state.arch.selected;
-  s.layer = Math.min(s.layer, ls.length - 1);
-  s.index = Math.min(s.index, ls[s.layer] - 1);
-  try { validateParameter(state.selection.parameter); }
-  catch { state.selection.parameter = { layer: Math.max(0, s.layer - 1), kind: 'weight', output: s.layer ? s.index : 0, input: 0 }; }
+  const ls = layers(), p = state.selection.parameter;
+  try { validateParameter(p); }
+  catch {
+    const layer = Math.max(0, Math.min(Number.isSafeInteger(p?.layer) ? p.layer : 0, ls.length - 2));
+    const output = Math.max(0, Math.min(Number.isSafeInteger(p?.output) ? p.output : 0, ls[layer + 1] - 1));
+    const input = Math.max(0, Math.min(Number.isSafeInteger(p?.input) ? p.input : 0, ls[layer] - 1));
+    state.selection.parameter = { layer, kind: 'weight', output, input };
+  }
 }
 function validateParameter(ref) {
   const ls = layers();
@@ -1791,19 +1294,11 @@ function describeParameter(ref, file = buildSafetensors()) {
     byteLength: Float32Array.BYTES_PER_ELEMENT,
   };
 }
-function parameterArithmetic(ref) {
-  const p = validateParameter(ref), result = evaluateNetwork(state.arch, state.arch.inputs);
-  const value = p.kind === 'weight' ? state.arch.weights[p.layer][p.input][p.output] : state.arch.biases[p.layer][p.output];
-  const activation = p.kind === 'weight' ? result.acts[p.layer][p.input] : null;
-  return { activation, value, contribution: p.kind === 'weight' ? activation * value : value,
-    sum: result.sums[p.layer + 1][p.output], output: result.acts[p.layer + 1][p.output] };
-}
 function selectParameter(ref) {
   const p = validateParameter(ref), info = describeParameter(p);
   const focused = document.activeElement?.closest('[data-param-control]');
   const focusOwner = focused?.closest('[id]')?.id;
   state.selection.parameter = p;
-  state.arch.selected = { layer: p.layer + 1, index: p.output };
   renderDynamic();
   if (focusOwner) $(focusOwner)?.querySelector(`[data-param-control][data-param-id="${info.id}"]`)?.focus({ preventScroll: true });
   announce(t('parameterSelected', { id: info.id, value: fmt(info.value, 4) }));
@@ -1838,7 +1333,6 @@ function captureFocus() {
   if (parameter) return { owner: parameter.closest('[id]')?.id, selector: `[data-param-control][data-param-id="${parameter.dataset.paramId}"]` };
   if (focused.dataset?.neuron) return { owner: 'layerSteppers', selector: `[data-neuron="${focused.dataset.neuron}"]` };
   if (focused.dataset?.sampleId) return { owner: 'fruitDecisionPlot', selector: `[data-sample-id="${focused.dataset.sampleId}"]` };
-  if (focused.matches?.('.node')) return { owner: 'archSvg', selector: `.node[data-layer="${focused.dataset.layer}"][data-index="${focused.dataset.index}"]` };
   return null;
 }
 function restoreFocus(focus) {
@@ -1997,10 +1491,6 @@ function renderArch() {
   forward();
   clampSelection();
   const ls = layers();
-  const sel = state.arch.selected;
-  const visibleLayer = state.flow.visibleLayer;
-  archSvg.dataset.visibleLayer = visibleLayer;
-  archSvg.dataset.flowPhase = state.flow.phase;
   const file = buildSafetensors();
   const W = 600, padX = 48, top = 24, bottom = 400;
   const xs = ls.map((_, i) => padX + (i * (W - 2 * padX)) / (ls.length - 1));
@@ -2010,42 +1500,28 @@ function renderArch() {
     return Array.from({ length: n }, (_, j) => ({ x: xs[i], y: y0 + j * gap }));
   });
   archSvg.replaceChildren();
-  archSvg.classList.toggle('dimmed', state.arch.flowing || sel.layer > 0);
   const edgeG = svgEl('g'), nodeG = svgEl('g'), labelG = svgEl('g');
   pos.slice(0, -1).forEach((col, i) => col.forEach((a, j) => pos[i + 1].forEach((bp, k) => {
     const w = state.arch.weights[i][j][k];
-    const hot = state.arch.flowing ? i + 1 === visibleLayer : i + 1 === sel.layer && k === sel.index;
-    const ref = { layer: i, kind: 'weight', output: k, input: j };
     edgeG.append(bindParameter(svgEl('line', {
       x1: a.x, y1: a.y, x2: bp.x, y2: bp.y,
-      class: `edge ${w >= 0 ? 'pos' : 'neg'}${hot ? ' hot' : ''}`, 'stroke-width': (0.6 + Math.abs(w) * 3).toFixed(2), 'data-layer': i,
+      class: `edge ${w >= 0 ? 'pos' : 'neg'}`, 'stroke-width': (0.6 + Math.abs(w) * 3).toFixed(2), 'data-layer': i,
       'aria-hidden': 'true',
-    }), ref, file), bindParameter(svgEl('line', {
-      x1: a.x, y1: a.y, x2: bp.x, y2: bp.y, class: 'edge-hit', tabindex: 0, role: 'button',
-    }), ref, file, true));
+    }), { layer: i, kind: 'weight', output: k, input: j }, file));
   })));
   pos.forEach((col, i) => {
     col.forEach((p, j) => {
-      const isSel = !state.arch.flowing && i === sel.layer && j === sel.index;
       const v = state.arch.acts[i][j];
-      const revealed = i <= visibleLayer;
       nodeG.append(svgEl('circle', {
-        cx: p.x, cy: p.y, r: 19, class: `node${i === 0 ? ' in' : ''}${isSel ? ' sel' : ''}${i > 0 && i === visibleLayer ? ' lit' : ''}`,
-        'data-layer': i, 'data-index': j, 'data-value': v.toFixed(6), tabindex: 0, role: 'button',
-        'data-revealed': revealed,
-        'aria-label': `${layerName(i, ls)} ${j + 1}: ${revealed ? fmt(v) : t('flowNotRevealed')}`,
-      }), svgEl('text', { x: p.x, y: p.y + 4, 'text-anchor': 'middle', class: 'node-val', 'data-layer': i, 'data-revealed': revealed }, revealed ? fmt(v) : '?'));
+        cx: p.x, cy: p.y, r: 19, class: `node${i === 0 ? ' in' : ''}`,
+        'data-layer': i, 'data-index': j, 'data-value': v.toFixed(6), role: 'img',
+        'aria-label': `${layerName(i, ls)} ${j + 1}: ${fmt(v)}`,
+      }), svgEl('text', { x: p.x, y: p.y + 4, 'text-anchor': 'middle', class: 'node-val', 'data-layer': i, 'aria-hidden': 'true' }, fmt(v)));
     });
     const name = i === 0 ? t('lblInput') : i === ls.length - 1 ? t('lblOutput') : t('lblHidden', { n: i });
     labelG.append(svgEl('text', { x: xs[i], y: 438, 'text-anchor': 'middle', class: 'svg-label strong' }, name));
     labelG.append(svgEl('text', { x: xs[i], y: 458, 'text-anchor': 'middle', class: 'svg-label' }, `(${ls[i]})`));
   });
-  {
-    const target = sel.layer > 0 ? sel : { layer: state.selection.parameter.layer + 1, index: state.selection.parameter.output };
-    const p = pos[target.layer][target.index], ref = { layer: target.layer - 1, kind: 'bias', output: target.index, input: null };
-    nodeG.append(bindParameter(svgEl('circle', { cx: p.x + 27, cy: p.y - 23, r: 13, class: 'bias-marker', tabindex: 0, role: 'button' }), ref, file, true),
-      svgEl('text', { x: p.x + 27, y: p.y - 19, class: 'node-val', 'text-anchor': 'middle' }, 'b'));
-  }
   archSvg.append(edgeG, nodeG, labelG);
 
   state.arch.inputs.forEach((v, i) => {
@@ -2078,168 +1554,6 @@ function renderArch() {
   ctrl.dataset.layers = ls.join('-');
   ctrl.dataset.params = total;
   ctrl.dataset.output = modelOutput().toFixed(6);
-  ctrl.dataset.visibleLayer = visibleLayer;
-  ctrl.dataset.flowPhase = state.flow.phase;
-  $('diagramCard').dataset.overview = state.overview ? 'open' : 'closed';
-  $('overviewToggle').setAttribute('aria-expanded', state.overview);
-  $('overviewToggle').textContent = t(state.overview ? 'hideOverview' : 'showOverview');
-  renderNeuronPanel();
-  renderMath();
-  renderParameterInspector();
-  renderFlowControls();
-}
-
-function renderFlowControls() {
-  const { phase, visibleLayer } = state.flow, last = layers().length - 1;
-  const controls = $('flowControls');
-  controls.dataset.visibleLayer = visibleLayer;
-  controls.dataset.flowPhase = phase;
-  $('flowStage').textContent = phase === 'paused' ? t('flowPaused', { stage: flowStage() }) : flowStage();
-  $('flowStartLabel').textContent = t(phase === 'paused' ? 'flowResume' : phase === 'complete' ? 'flowReplay' : 'flowBtn');
-  $('flowPauseBtn').disabled = phase !== 'running';
-  $('flowBackBtn').disabled = visibleLayer === 0;
-  $('flowNextBtn').disabled = visibleLayer === last;
-  $('flowProgress').max = last;
-  $('flowProgress').value = visibleLayer;
-}
-
-function renderParameterInspector() {
-  const ref = state.selection.parameter, file = buildSafetensors(), info = describeParameter(ref, file);
-  const arithmetic = parameterArithmetic(ref), panel = $('parameterInspector');
-  const revealed = ref.layer + 1 <= state.flow.visibleLayer;
-  panel.dataset.revealed = revealed;
-  bindParameter(panel, ref, file);
-  panel.dataset.value = info.value;
-  panel.dataset.activation = arithmetic.activation ?? '';
-  panel.dataset.contribution = arithmetic.contribution;
-  $('parameterName').textContent = info.id;
-  const part = (label, value, note) => {
-    const row = el('li');
-    row.append(el('strong', '', t(label)), el('code', '', value));
-    if (note) row.append(el('span', '', note));
-    return row;
-  };
-  const value = `${info.value < 0 ? '' : '+'}${info.value}`;
-  const activation = ref.layer <= state.flow.visibleLayer ? fmt(arithmetic.activation, 4) : '?';
-  const operation = ref.kind === 'weight'
-    ? `${activation} × (${value}) = ${revealed ? signedValue(arithmetic.contribution, 6) : '?'}`
-    : `${revealed ? fmt(arithmetic.sum - info.value, 6) : '?'} + (${value}) = ${revealed ? fmt(arithmetic.sum, 6) : '?'}`;
-  const bytes = Array.from(file.bytes.slice(info.fileOffset, info.fileOffset + info.byteLength), hex2).join(' ');
-  $('parameterPath').replaceChildren(
-    part('parameterValue', value, info.id),
-    part('parameterArithmetic', operation, t(ref.kind === 'weight' ? 'parameterWeightNote' : 'parameterBiasNote')),
-    part('parameterTensor', info.id, `${t('parameterFlatIndex', { index: info.flatIndex, shape: info.tensorShape.join(', ') })} ${t('parameterTensorNote')}`),
-    part('parameterBytes', bytes, t('parameterOffset', { offset: info.fileOffset })),
-  );
-  const delta = $('fruitParameterDelta'), previous = state.lesson.beforeUpdate;
-  delta.hidden = state.lesson.mode !== 'fruit' || !previous;
-  if (!delta.hidden) {
-    const before = ref.kind === 'weight' ? previous.weights[ref.layer][ref.input][ref.output] : previous.biases[ref.layer][ref.output];
-    delta.dataset.before = before; delta.dataset.after = info.value; delta.dataset.delta = info.value-before; delta.dataset.paramId = info.id;
-    delta.textContent = t('fruitDelta', { before:signedValue(before,6),after:signedValue(info.value,6),delta:signedValue(info.value-before,6) });
-  }
-}
-
-function renderNeuronPanel() {
-  const ls = layers(), L = ls.length - 1;
-  const { layer, index } = state.arch.selected;
-  const panel = $('neuronPanel'), box = $('neuronExplain');
-  const revealed = layer <= state.flow.visibleLayer, previousRevealed = layer - 1 <= state.flow.visibleLayer;
-  panel.dataset.layer = layer;
-  panel.dataset.index = index;
-  panel.dataset.value = state.arch.acts[layer][index].toFixed(6);
-  panel.dataset.revealed = revealed;
-  panel.dataset.visibleLayer = state.flow.visibleLayer;
-  panel.dataset.flowPhase = state.flow.phase;
-  if (layer === 0) {
-    $('neuronTitle').textContent = t('neuronTitleIn', { i: index + 1 });
-    box.replaceChildren(el('p', '', t('nInInfo', { v: fmt(state.arch.inputs[index]) })));
-    return;
-  }
-  $('neuronTitle').textContent = layer === L ? t('neuronTitleOut') : t('neuronTitleHidden', { l: layer, i: index + 1 });
-  const prev = state.arch.acts[layer - 1];
-  const ws = prev.map((_, i) => state.arch.weights[layer - 1][i][index]);
-  const b = state.arch.biases[layer - 1][index];
-  const z = state.arch.sums[layer][index];
-  const out = state.arch.acts[layer][index];
-  const file = buildSafetensors();
-  const numSpan = (v) => el('span', v >= 0 ? 'num-pos' : 'num-neg', fmt(v));
-  const line = (...parts) => { const d = el('div'); d.append(...parts); return d; };
-  const step = (n, text, calcLines, note) => {
-    const s = el('div', 'explain-step');
-    s.dataset.revealed = n === 1 ? previousRevealed : revealed;
-    const body = el('div');
-    body.append(el('p', '', text));
-    const c = el('div', 'calc');
-    c.append(...calcLines);
-    body.append(c);
-    if (note) body.append(el('p', 'explain-note', note));
-    s.append(el('span', 'n', String(n)), body);
-    return s;
-  };
-  const products = prev.map((a, i) => a * ws[i]);
-  const term = (ref, contribution, ...parts) => {
-    const button = bindParameter(el('button', 'calculation-term'), ref, file, true);
-    button.type = 'button';
-    button.dataset.contribution = contribution;
-    button.append(...parts);
-    return button;
-  };
-  box.replaceChildren(
-    ...(!revealed ? [el('p', 'flow-note', t('flowPending'))] : []),
-    step(1, t('nStep1'), prev.map((a) => line(previousRevealed ? fmt(a) : '?'))),
-    step(2, t('nStep2'), prev.map((a, i) => term({ layer: layer - 1, kind: 'weight', output: index, input: i }, products[i], `${previousRevealed ? fmt(a) : '?'} × `, numSpan(ws[i]), ` = ${revealed ? fmt(products[i]) : '?'}`))),
-    step(3, t('nStep3'), [
-      ...products.map((p) => line(revealed ? fmt(p) : '?')),
-      term({ layer: layer - 1, kind: 'bias', output: index, input: null }, b, 'bias: ', numSpan(b)),
-      line(`${t('nSum')} = ${revealed ? fmt(z) : '?'}`),
-    ]),
-    step(4, layer === L ? t('nStep4Sig') : t('nStep4Relu'), [
-      el('div', 'explain-result', revealed ? `${layer === L ? 'σ' : 'ReLU'}(${fmt(z)}) = ${fmt(out)}` : '?'),
-    ], layer === L ? t('nFinal') : t('nNext')),
-  );
-}
-
-function renderMath() {
-  const ls = layers(), L = ls.length - 1;
-  const sup = (l) => `<sup>(${l})</sup>`;
-  const rows = [];
-  for (let l = 1; l <= L; l++) {
-    const prev = l === 1 ? '<i>x</i>' : `<i>h</i>${sup(l - 1)}`;
-    const lhs = l === L ? '<i>ŷ</i>' : `<i>h</i>${sup(l)}`;
-    const fn = l === L ? 'σ' : 'ReLU';
-    rows.push(`<div class="eq-row"><span>${lhs} = <span class="fn">${fn}</span>(<i>W</i>${sup(l)} ${prev} + <i>b</i>${sup(l)})</span>`
-      + `<span class="shape">W${sup(l)} ∈ ℝ<sup>${ls[l]}×${ls[l - 1]}</sup>, b${sup(l)} ∈ ℝ<sup>${ls[l]}</sup></span></div>`);
-  }
-  $('mathEq').innerHTML = rows.join('')
-    + `<div class="eq-defs"><div><span class="fn">ReLU</span>(<i>z</i>) = max(0, <i>z</i>) <span>– ${t('reluNote')}</span></div>`
-    + `<div><span class="fn">σ</span>(<i>z</i>) = 1 / (1 + <i>e</i><sup>−<i>z</i></sup>) <span>– ${t('sigmaNote')}</span></div>`
-    + `<div><span>${t('mathInput')}</span></div></div>`;
-  $('mathEq').dataset.equations = L;
-
-  const selected = state.selection.parameter, layer = selected.layer, file = buildSafetensors();
-  const nIn = ls[layer], nOut = ls[layer + 1];
-  const Wm = state.arch.weights[layer], b = state.arch.biases[layer];
-  const cell = (v, ref) => {
-    const info = describeParameter(ref, file);
-    return `<span class="${v >= 0 ? 'pos' : 'neg'}" data-param-id="${info.id}" data-selected="${info.id === parameterId(selected)}" data-shape="${info.tensorShape.join(',')}" data-file-offset="${info.fileOffset}">${signedValue(v, 2)}</span>`;
-  };
-  let mat = '';
-  for (let o = 0; o < nOut; o++) for (let i = 0; i < nIn; i++) mat += cell(Wm[i][o], { layer, kind: 'weight', output: o, input: i });
-  const inputSymbol = layer === 0 ? '<i>x</i>' : `<i>h</i>${sup(layer)}`;
-  const terms = Array.from({ length: nIn }, (_, i) => {
-    const v = Wm[i][selected.output];
-    const id = parameterId({ layer, kind: 'weight', output: selected.output, input: i });
-    return `${i ? (v < 0 ? ' − ' : ' + ') : (v < 0 ? '−' : '')}<span class="${v >= 0 ? 'num-pos' : 'num-neg'}" data-param-id="${id}" data-selected="${id === parameterId(selected)}">${fmt(Math.abs(v))}</span>·${inputSymbol}<sub>${i + 1}</sub>`;
-  }).join('');
-  const b0 = b[selected.output], biasId = parameterId({ layer, kind: 'bias', output: selected.output, input: null });
-  const lhs = layer === L - 1 ? '<i>ŷ</i>' : `<i>h</i><sub>${selected.output + 1}</sub>${sup(layer + 1)}`;
-  const fn = layer === L - 1 ? 'σ' : 'ReLU';
-  $('mathExample').innerHTML = `<span class="group-label">${t('mathExampleH')} · fc${layer + 1}</span>`
-    + `<div class="mat-row"><span><i>W</i>${sup(layer + 1)} =</span><span class="matrix" style="grid-template-columns: repeat(${nIn}, auto)">${mat}</span>`
-    + `<span><i>b</i>${sup(layer + 1)} =</span><span class="matrix" style="grid-template-columns: auto">${b.map((v, output) => cell(v, { layer, kind: 'bias', output, input: null })).join('')}</span></div>`
-    + `<span class="eq-note">${t('mathNeuron')}</span>`
-    + `<div class="eq-row"><span>${lhs} = <span class="fn">${fn}</span>(${terms}${b0 < 0 ? ' − ' : ' + '}<span class="${b0 >= 0 ? 'num-pos' : 'num-neg'}" data-param-id="${biasId}" data-selected="${biasId === parameterId(selected)}">${fmt(Math.abs(b0))}</span>)</span></div>`;
 }
 
 function renderWeights() {
@@ -2390,7 +1704,6 @@ function navigateModelFile(file) {
   renderModelFileDetail();
   focusDestination(destination.target);
   announce(`${t(destination.model === 'mini' ? 'folderMini' : 'folderLlama')} / ${destination.name}`);
-  renderChecks();
   return true;
 }
 
@@ -2513,7 +1826,6 @@ function renderDynamic() {
   renderModelFileDetail();
   renderLoadCode();
   renderFruitLesson();
-  renderChecks();
   restoreFocus(focused);
 }
 function fruitSampleText(sample) {
@@ -2526,6 +1838,7 @@ function renderFruitLesson() {
   $('s-arch').classList.toggle('fruit-mode',active);
   root.dataset.trainingMode = lesson.mode; root.dataset.trainingPhase = lesson.phase;
   app.dataset.trainingMode = lesson.mode; app.dataset.trainingPhase = lesson.phase;
+  if (active) root.open = true;
   $('fruitEnter').hidden = active; $('fruitExit').hidden = !active;
   ['fruitSample','fruitScores','fruitTrainingPanel'].forEach(id=>{ $(id).hidden = !active; });
   $('shuffleBtn').disabled = active && running;
@@ -2601,58 +1914,9 @@ function renderAll() {
   applyI18n();
   renderNav();
   renderFormats();
-  renderLlmComparison();
   renderDynamic();
 }
 
-function renderLlmComparison() {
-  const comparison = llmComparisonData(), root = $('llmComparison');
-  root.dataset.conceptual = comparison.conceptual;
-  root.dataset.liveProbabilities = comparison.liveProbabilities;
-  root.dataset.blockCount = comparison.blockRepetitions;
-  const stageNodes = comparison.stages.map((stage, index) => {
-    const node = el('li', 'llm-stage');
-    node.dataset.llmStage = stage.id;
-    node.append(el('strong', '', `${index + 1}. ${stage.label}`), el('p', '', stage.description));
-    return node;
-  });
-  const block = el('li', 'llm-transformer'), blockFlow = el('ol', 'llm-block-flow');
-  block.dataset.blockCount = comparison.blockRepetitions;
-  blockFlow.append(stageNodes[2], stageNodes[3]);
-  block.append(el('strong', '', t('llmBlocks', { n: comparison.blockRepetitions })), blockFlow, el('p', '', t('llmBlockPaths')));
-  $('llmStages').replaceChildren(stageNodes[0], stageNodes[1], block, ...stageNodes.slice(4));
-  $('llmColumns').replaceChildren(...['mini', 'llm'].map((kind) => {
-    const column = el('div', 'card'), list = el('dl', 'comparison-list');
-    column.dataset.comparisonColumn = kind;
-    list.append(...comparison.rows.map((row) => {
-      const item = el('div');
-      item.append(el('dt', '', row.label), el('dd', '', row[kind]));
-      return item;
-    }));
-    column.append(el('h3', '', t(kind === 'mini' ? 'llmMiniTitle' : 'llmReferenceTitle')), list);
-    return column;
-  }));
-  $('llmBlockPath').replaceChildren(...LLM_BLOCK_PATH.map((key, index) => {
-    const node = el('li');
-    node.append(el('strong', '', `${index + 1}. ${t(`llm${key}`)}`), el('p', '', t(`llm${key}P`)));
-    return node;
-  }));
-}
-
-function renderChecks() {
-  const checks = runChecks(), passed = checks.filter((record) => record.pass).length;
-  const disclosure = $('checksDisclosure');
-  disclosure.dataset.total = checks.length;
-  disclosure.dataset.failed = checks.length - passed;
-  $('checksSummary').textContent = t('checksSummary', { passed, total: checks.length });
-  $('checkResults').replaceChildren(...checks.map((record) => {
-    const row = el('li', '', `${record.pass ? t('checksPass') : t('checksFail')} · ${t('checkLabels')[record.name] ?? record.name}`);
-    row.dataset.checkName = record.name;
-    row.dataset.pass = record.pass;
-    if (record.error) row.title = record.error;
-    return row;
-  }));
-}
 
 function goSection(i) {
   const id = SECTIONS[i];
@@ -2701,11 +1965,6 @@ function probe() {
     const node = archSvg.querySelector(`.node[data-layer="${l.length - 1}"]`);
     return Math.abs(+node.dataset.value - a[0]) < 1e-5 && a[0] > 0 && a[0] < 1;
   });
-  check('neuron panel = selected node value', () => {
-    const p = $('neuronPanel').dataset;
-    const node = archSvg.querySelector(`.node[data-layer="${p.layer}"][data-index="${p.index}"]`);
-    return node && node.dataset.value === p.value;
-  });
   check('weights list count = params', () => +$('weightsCard').dataset.count === countParams(ls()));
   check('config.json hidden_sizes = architecture', () => JSON.stringify(JSON.parse(configText()).hidden_sizes) === JSON.stringify(ls().slice(1, -1)));
   check('safetensors: header length, contiguous offsets, size = 4·params', () => {
@@ -2726,7 +1985,6 @@ function probe() {
     return +$('sizeCard').dataset.bytes === countParams(ls()) * p.bytes;
   });
   check('load code output = model output', () => $('loadCode').dataset.output === modelOutput().toFixed(4));
-  check('math: one equation per layer', () => +$('mathEq').dataset.equations === ls().length - 1);
   check('lang attr matches state', () => document.documentElement.lang === app.dataset.lang);
   return checks;
 }
@@ -2738,7 +1996,7 @@ function runChecks() {
     const sections = [...document.querySelectorAll('main > .section')].map(node => node.id);
     const links = [...secNav.querySelectorAll('[data-section]')].map(node => node.dataset.section);
     return JSON.stringify(sections) === JSON.stringify(SECTIONS) && JSON.stringify(links) === JSON.stringify(SECTIONS) &&
-      SECTIONS.length === 5 && $('s-arch').contains($('s-llm'));
+      SECTIONS.length === 5;
   });
   check('navigation: file rows retain model identity', () => {
     const rows = [...$('folderList').querySelectorAll('.file-row')];
@@ -2746,12 +2004,6 @@ function runChecks() {
     return rows.length === names.length && rows.every((row, index) => row.dataset.model === state.folderView && row.dataset.fileName === names[index]) &&
       $('configCard').dataset.model === state.configView && $('fileCard').dataset.model === 'mini' && $('fileCard').dataset.dtype === 'F32' &&
       $('precisionNotice').dataset.estimateOnly === 'true';
-  });
-  check('LLM: conceptual stages never claim live probabilities', () => {
-    const data = llmComparisonData(), node = $('llmComparison');
-    const stages = [...node.querySelectorAll('[data-llm-stage]')].map(stage => stage.dataset.llmStage);
-    return node.dataset.conceptual === 'true' && node.dataset.liveProbabilities === 'false' &&
-      +node.dataset.blockCount === data.blockRepetitions && JSON.stringify(stages) === JSON.stringify(data.stages.map(stage => stage.id));
   });
   check('forward: cached values match pure evaluation', () => {
     const result = evaluateNetwork(state.arch, state.arch.inputs);
@@ -2790,36 +2042,6 @@ function runChecks() {
     if(state.lesson.mode!=='fruit') return true;
     return JSON.stringify(computeBatchGradients(state.arch,FRUIT_SAMPLES))===JSON.stringify(computeBatchGradients(state.arch,FRUIT_SAMPLES.filter(s=>s.split==='train')));
   });
-  check('flow: state and controls agree', () => {
-    const { phase, visibleLayer } = state.flow, last = layers().length - 1;
-    return ['idle', 'running', 'paused', 'complete'].includes(phase) && Number.isSafeInteger(visibleLayer) && visibleLayer >= 0 && visibleLayer <= last &&
-      (phase !== 'idle' || visibleLayer === 0) && (phase !== 'complete' || visibleLayer === last) &&
-      state.arch.flowing === (phase === 'running') &&
-      [archSvg, $('archControls'), $('flowControls')].every((node) => +node.dataset.visibleLayer === visibleLayer && node.dataset.flowPhase === phase) &&
-      $('flowProgress').value === visibleLayer && $('flowProgress').max === last &&
-      $('flowBackBtn').disabled === (visibleLayer === 0) && $('flowNextBtn').disabled === (visibleLayer === last) &&
-      $('flowPauseBtn').disabled === (phase !== 'running');
-  });
-  check('flow: unrevealed activations are hidden', () => {
-    const values = [...archSvg.querySelectorAll('.node-val[data-layer]')];
-    return values.length === layers().reduce((total, n) => total + n, 0) && values.every((node) => {
-      const layer = +node.dataset.layer, revealed = layer <= state.flow.visibleLayer;
-      return node.dataset.revealed === String(revealed) && (revealed ? node.textContent !== '?' : node.textContent === '?');
-    }) && [...archSvg.querySelectorAll('.node')].every((node) => {
-      const revealed = +node.dataset.layer <= state.flow.visibleLayer;
-      return node.dataset.revealed === String(revealed) && (revealed || node.getAttribute('aria-label').includes(t('flowNotRevealed')));
-    });
-  });
-  check('flow: selected arithmetic respects visibility', () => {
-    const { layer, index } = state.arch.selected, revealed = layer <= state.flow.visibleLayer;
-    const panel = $('neuronPanel'), inspector = $('parameterInspector');
-    const result = panel.querySelector('.explain-result');
-    const expected = layer === 0 ? null : revealed
-      ? `${layer === layers().length - 1 ? 'σ' : 'ReLU'}(${fmt(state.arch.sums[layer][index])}) = ${fmt(state.arch.acts[layer][index])}` : '?';
-    return panel.dataset.revealed === String(revealed) && (layer === 0 || result?.textContent === expected) &&
-      inspector.dataset.revealed === String(state.selection.parameter.layer + 1 <= state.flow.visibleLayer);
-  });
-  check('flow: training and forward are mutually exclusive', () => state.lesson?.phase !== 'running' || state.flow.phase !== 'running');
   check('safetensors: every float matches its parameter', () => {
     const file = buildSafetensors(), view = new DataView(file.bytes.buffer);
     const headerLen = Number(view.getBigUint64(0, true));
@@ -2863,25 +2085,20 @@ function runChecks() {
       });
     });
   });
-  check('parameter: accessible edges encode absolute weight magnitude', () => {
-    const file = buildSafetensors(), hits = [...archSvg.querySelectorAll('.edge-hit')], edges = [...archSvg.querySelectorAll('.edge')];
-    if (hits.length !== edges.length) return false;
-    return edges.every((edge) => {
-      const hit = hits.find((node) => node.dataset.paramId === edge.dataset.paramId);
-      const info = describeParameter(parameterFromControl(hit), file);
-      return hit?.getAttribute('role') === 'button' && hit.getAttribute('tabindex') === '0' && !!hit.getAttribute('aria-label') &&
-        edge.getAttribute('stroke-width') === (0.6 + Math.abs(info.value) * 3).toFixed(2);
+  check('arch: edge width encodes absolute weight magnitude', () => {
+    const file = buildSafetensors(), edges = [...archSvg.querySelectorAll('.edge')];
+    return edges.length > 0 && edges.every((edge) => {
+      const match = /^fc(\d+)\.weight\[(\d+),(\d+)\]$/.exec(edge.dataset.paramId ?? '');
+      if (!match) return false;
+      const info = describeParameter({ layer: +match[1] - 1, kind: 'weight', output: +match[2], input: +match[3] }, file);
+      return edge.getAttribute('stroke-width') === (0.6 + Math.abs(info.value) * 3).toFixed(2);
     });
   });
-  check('parameter: linked representations share selection', () => {
-    const ref = state.selection.parameter, info = describeParameter(ref), arithmetic = parameterArithmetic(ref);
+  check('parameter: weights table and file share selection', () => {
+    const info = describeParameter(state.selection.parameter);
     const selectedCells = [...$('weightsList').querySelectorAll('.parameter-cell[data-selected="true"]')];
-    const geometry = archSvg.querySelectorAll(`${ref.kind === 'weight' ? '.edge' : '.bias-marker'}[data-param-id="${info.id}"][data-selected="true"]`);
-    const inspector = $('parameterInspector'), file = $('fileCard'), terms = [...$('neuronPanel').querySelectorAll('.calculation-term[data-selected="true"]')];
-    const calculationMatches = state.arch.selected.layer === 0 || (terms.length === 1 && terms[0].dataset.paramId === info.id && +terms[0].dataset.contribution === arithmetic.contribution);
-    return selectedCells.length === 1 && selectedCells[0].dataset.paramId === info.id && geometry.length === 1 && calculationMatches &&
-      [inspector, file, $('fileView')].every((node) => node.dataset.paramId === info.id && node.dataset.selected === 'true' && +node.dataset.fileOffset === info.fileOffset) &&
-      +inspector.dataset.value === info.value && +inspector.dataset.contribution === arithmetic.contribution;
+    return selectedCells.length === 1 && selectedCells[0].dataset.paramId === info.id &&
+      [$('fileCard'), $('fileView')].every((node) => node.dataset.paramId === info.id && node.dataset.selected === 'true' && +node.dataset.fileOffset === info.fileOffset);
   });
   check('parameter: four selected bytes decode to value', () => {
     if (state.fileTab !== 'hex') return true;
@@ -2910,48 +2127,18 @@ document.addEventListener('click', (e) => {
     onArchChange();
     return;
   }
-  const node = e.target.closest('.node');
-  const jump = e.target.closest('[data-param-jump]');
-  if (jump) {
-    if (jump.dataset.paramJump === 'fileCard') { state.fileTab = 'hex'; renderFile(); }
-    focusDestination(jump.dataset.paramJump);
-    return;
-  }
   const parameter = e.target.closest('[data-param-control]');
   if (parameter) { selectParameter(parameterFromControl(parameter)); return; }
-  if (node) {
-    if (+node.dataset.layer > 0) selectParameter({ layer: +node.dataset.layer - 1, kind: 'bias', output: +node.dataset.index, input: null });
-    else { state.arch.selected = { layer: 0, index: +node.dataset.index }; renderArch(); renderChecks(); }
-    return;
-  }
   const fr = e.target.closest('.file-row');
   if (fr) { navigateModelFile({ model: fr.dataset.model, name: fr.dataset.fileName }); return; }
   const fv = e.target.closest('[data-folder]');
   if (fv) { state.folderView = fv.dataset.folder; renderFolder(); return; }
   const cv = e.target.closest('[data-config]');
-  if (cv) { state.configView = cv.dataset.config; state.fileSelection = modelFileDestination({ model: cv.dataset.config, name: 'config.json' }); renderConfig(); renderModelFileDetail(); renderChecks(); return; }
+  if (cv) { state.configView = cv.dataset.config; state.fileSelection = modelFileDestination({ model: cv.dataset.config, name: 'config.json' }); renderConfig(); renderModelFileDetail(); return; }
   const ft = e.target.closest('[data-file-tab]');
   if (ft) { state.fileTab = ft.dataset.fileTab; renderFile(); return; }
   const pr = e.target.closest('[data-prec]');
   if (pr) { state.precision = pr.dataset.prec; renderSize(); }
-});
-archSvg.addEventListener('keydown', (e) => {
-  const parameter = e.target.closest('[data-param-control]');
-  if (parameter && (e.key === 'Enter' || e.key === ' ')) {
-    e.preventDefault();
-    const id = parameter.dataset.paramId;
-    selectParameter(parameterFromControl(parameter));
-    archSvg.querySelector(`[data-param-control][data-param-id="${id}"]`)?.focus({ preventScroll: true });
-    return;
-  }
-  const node = e.target.closest('.node');
-  if (node && (e.key === 'Enter' || e.key === ' ')) {
-    e.preventDefault();
-    const { layer, index } = node.dataset;
-    if (+layer > 0) selectParameter({ layer: +layer - 1, kind: 'bias', output: +index, input: null });
-    else { state.arch.selected = { layer: 0, index: +index }; renderArch(); renderChecks(); }
-    archSvg.querySelector(`.node[data-layer="${layer}"][data-index="${index}"]`)?.focus();
-  }
 });
 $('layerPlus').addEventListener('click', () => {
   if (state.lesson.phase === 'running') return;
@@ -2968,12 +2155,7 @@ $('layerMinus').addEventListener('click', () => {
   inputs[i] = parseFloat(e.target.value) / (state.lesson.mode === 'fruit' ? 10 : 1);
   setInputs(inputs);
 }));
-$('flowBtn').addEventListener('click', runFlow);
-$('flowPauseBtn').addEventListener('click', pauseFlow);
-$('flowNextBtn').addEventListener('click', () => stepFlow(1));
-$('flowBackBtn').addEventListener('click', () => stepFlow(-1));
-$('flowResetBtn').addEventListener('click', resetFlow);
-$('fruitEnter').addEventListener('click', enterFruitLesson);
+$('fruitEnter').addEventListener('click', () => { enterFruitLesson(); $('diagramCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 $('fruitExit').addEventListener('click', exitFruitLesson);
 $('fruitTrain').addEventListener('click', startTraining);
 $('fruitPause').addEventListener('click', () => pauseTraining());
@@ -2996,16 +2178,12 @@ $('shuffleBtn').addEventListener('click', shuffleWeights);
 $('dlConfigBtn').addEventListener('click', () => download('config.json', configText(), 'application/json'));
 $('dlWeightsBtn').addEventListener('click', () => download('model.safetensors', buildSafetensors().bytes, 'application/octet-stream'));
 $('miniInspectorExample').addEventListener('click', () => navigateModelFile({ model: 'mini', name: 'model.safetensors' }));
-$('overviewToggle').addEventListener('click', () => { state.overview = !state.overview; renderArch(); renderChecks(); });
-$('checksDisclosure').addEventListener('toggle', () => { if ($('checksDisclosure').open) renderChecks(); });
-$('checksBtn').addEventListener('click', () => { renderChecks(); announce($('checksSummary').textContent); });
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   const tag = e.target.tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target.isContentEditable) return;
   const k = e.key.toLowerCase();
   if (k >= '1' && k <= String(SECTIONS.length) && k.length === 1) goSection(+k - 1);
-  else if (k === 'f') runFlow();
   else if (k === 'r') shuffleWeights();
   else if (k === 't' && state.lesson.mode === 'fruit') { e.preventDefault(); state.lesson.phase==='running'?pauseTraining():startTraining(); }
 });
@@ -3021,9 +2199,8 @@ randomizeArchWeights();
 renderAll();
 SECTIONS.forEach((id) => sectionObserver.observe($(id)));
 updateScrollProgress();
-window.MODEL_DEMO = { state, probe, buildSafetensors, configText, evaluateNetwork, numericalChecks, runChecks, modelFileDestination, navigateModelFile, llmComparisonData, renderLlmComparison, parameterId, describeParameter, selectParameter, parameterArithmetic,
-  forward, renderDynamic, renderAll, randomizeArchWeights, clampSelection, layers, countParams,
-  startFlow, pauseFlow, stepFlow, cancelFlow, resetFlow, runFlow, setInputs, setArchitecture, setLanguage };
+window.MODEL_DEMO = { state, probe, buildSafetensors, configText, evaluateNetwork, numericalChecks, runChecks, modelFileDestination, navigateModelFile, parameterId, describeParameter, selectParameter,
+  forward, renderDynamic, renderAll, randomizeArchWeights, clampSelection, layers, countParams, setInputs, setArchitecture, setLanguage };
 Object.assign(window.MODEL_DEMO, { FRUIT_SAMPLES, createFruitNetwork, computeBatchGradients, trainEpoch, fruitMetrics,
   enterFruitLesson, startTraining, pauseTraining, stepTraining, resetTraining, exitFruitLesson, selectFruitSample, setLearningRate });
 </script>

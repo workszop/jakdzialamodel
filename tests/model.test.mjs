@@ -214,37 +214,6 @@ test('folder routes retain model and filename identity, with Llama files never r
   }
 });
 
-test('conceptual LLM stages keep tokenization-to-repetition order in both languages without reading or changing mini weights', () => {
-  const api = loadModel();
-  assert.equal(typeof api.llmComparisonData, 'function');
-  api.randomizeArchWeights();
-  const before = JSON.stringify(api.state.arch);
-  const expectedIds = ['tokenization', 'embeddings', 'attention', 'feed-forward', 'next-token-scores', 'token-selection', 'repetition'];
-  const expectedLabels = {
-    pl: ['Tokenizacja', 'Embeddingi', 'Uwaga (attention)', 'Przetwarzanie feed-forward', 'Wyniki następnego tokenu', 'Wybór tokenu', 'Powtarzanie'],
-    en: ['Tokenization', 'Embeddings', 'Attention', 'Feed-forward processing', 'Next-token scores', 'Token selection', 'Repetition'],
-  };
-  for (const lang of ['pl', 'en']) {
-    api.state.lang = lang;
-    const comparison = api.llmComparisonData();
-    assert.equal(comparison.conceptual, true);
-    assert.equal(comparison.liveProbabilities, false);
-    assert.equal(comparison.blockRepetitions, 32);
-    assert.deepEqual(plain(comparison.stages.map(({ id }) => id)), expectedIds);
-    assert.deepEqual(plain(comparison.stages.map(({ label }) => label)), expectedLabels[lang]);
-    assert.equal(JSON.stringify(api.state.arch), before);
-    assert.equal(comparison.rows.length, 4);
-    assert.ok(comparison.rows.every((row) => row.label && row.mini && row.llm));
-  }
-  api.state.lang = 'en';
-  assert.equal(api.t('llmConceptual'), 'Conceptual diagram');
-  assert.equal(api.t('llmNotMini'), 'Not a miniature Llama');
-  assert.deepEqual(Object.keys(api.T.pl).sort(), Object.keys(api.T.en).sort(), 'Every translation key must exist in both languages');
-  api.state.arch.weights = null;
-  assert.deepEqual(plain(api.llmComparisonData().stages.map(({ id }) => id)), expectedIds, 'Conceptual view must not depend on inference state');
-  assert.equal(api.state.arch.weights, null);
-});
-
 test('canonical parameter identity uses output-first tensor cells while network weights remain input-first', () => {
   const api = loadModel();
   assert.equal(typeof api.describeParameter, 'function', 'Canonical parameter lookup must be available');
@@ -322,7 +291,6 @@ test('selection follows the parameter output neuron and preserves identity acros
   api.selectParameter(ref);
   ref.output = 0;
   assert.deepEqual(plain(api.state.selection.parameter), { layer: 1, kind: 'weight', output: 2, input: 3 });
-  assert.deepEqual(plain(api.state.arch.selected), { layer: 2, index: 2 });
   const selected = plain(api.state.selection.parameter), original = api.describeParameter(selected);
   const bytes = Array.from(api.buildSafetensors().bytes);
   api.state.arch.inputs = [0, 1];
@@ -338,7 +306,7 @@ test('selection follows the parameter output neuron and preserves identity acros
   assert.notEqual(refreshed.value, original.value);
   assert.equal(new DataView(api.buildSafetensors().bytes.buffer).getFloat32(refreshed.fileOffset, true), refreshed.value);
   api.selectParameter({ layer: 2, kind: 'bias', output: 0, input: null });
-  assert.deepEqual(plain(api.state.arch.selected), { layer: 3, index: 0 });
+  assert.deepEqual(plain(api.state.selection.parameter), { layer: 2, kind: 'bias', output: 0, input: null });
 });
 
 test('topology reinitialization replaces invalid selection with a valid parameter without aliasing the old reference', () => {
@@ -358,146 +326,6 @@ test('topology reinitialization replaces invalid selection with a valid paramete
   assert.equal(new DataView(api.buildSafetensors().bytes.buffer).getFloat32(api.describeParameter(api.state.selection.parameter).fileOffset, true), api.describeParameter(api.state.selection.parameter).value);
 });
 
-test('linked arithmetic uses the preceding layer activation, and bias is an addition rather than an input weight', () => {
-  const api = loadModel();
-  assert.equal(typeof api.parameterArithmetic, 'function', 'Linked parameter arithmetic must be available');
-  api.state.arch.hidden = [2];
-  api.state.arch.weights = [[[1, -1], [2, 3]], [[2], [-1]]];
-  api.state.arch.biases = [[0.5, -0.5], [0.25]];
-  const before = JSON.stringify(api.state.arch);
-  const weight = api.parameterArithmetic({ layer: 1, kind: 'weight', output: 0, input: 0 });
-  closeTo(weight.activation, 1.9);
-  assert.equal(weight.value, 2);
-  closeTo(weight.contribution, 3.8);
-  closeTo(weight.sum, 4.05);
-  closeTo(weight.output, 0.9828759666842724);
-  const bias = api.parameterArithmetic({ layer: 1, kind: 'bias', output: 0, input: null });
-  assert.equal(bias.activation, null);
-  assert.equal(bias.value, 0.25);
-  assert.equal(bias.contribution, 0.25);
-  closeTo(bias.sum, 4.05);
-  assert.equal(JSON.stringify(api.state.arch), before, 'Describing arithmetic must not write the forward cache');
-});
-
-test('forward stages start at inputs, reveal one layer on Next, and hide it again on Back without changing parameters', () => {
-  const api = loadModel();
-  assert.equal(typeof api.stepFlow, 'function', 'Forward steps must be exported');
-  api.randomizeArchWeights();
-  api.forward();
-  const bytes = Array.from(api.buildSafetensors().bytes), activations = plain(api.state.arch.acts);
-  assert.equal(api.state.flow.phase, 'idle');
-  assert.equal(api.state.flow.visibleLayer, 0);
-  api.stepFlow(1);
-  assert.equal(api.state.flow.phase, 'paused');
-  assert.equal(api.state.flow.visibleLayer, 1);
-  assert.equal(api.state.arch.flowing, false);
-  api.stepFlow(1);
-  assert.equal(api.state.flow.visibleLayer, 2);
-  assert.deepEqual(plain(api.state.arch.selected), { layer: 2, index: api.state.selection.parameter.output });
-  assert.equal(api.state.selection.parameter.layer, 1);
-  api.stepFlow(-1);
-  assert.equal(api.state.flow.visibleLayer, 1);
-  api.stepFlow(-1);
-  api.stepFlow(-1);
-  assert.equal(api.state.flow.visibleLayer, 0, 'Back clamps at the inputs');
-  assert.deepEqual(plain(api.state.arch.acts), activations, 'Visibility must not erase computed results');
-  assert.deepEqual(Array.from(api.buildSafetensors().bytes), bytes, 'Inference preserves every parameter byte');
-});
-
-test('Start schedules one sequence, Pause invalidates callbacks, completion can replay, and Reset clears visibility', () => {
-  const clock = createTestClock(), api = loadModel(undefined, { clock });
-  assert.equal(typeof api.startFlow, 'function', 'Forward autoplay must be exported');
-  api.randomizeArchWeights();
-  const bytes = Array.from(api.buildSafetensors().bytes);
-  api.startFlow();
-  const runId = api.state.flow.runId, delayed = clock.nextCallback();
-  assert.equal(api.state.flow.phase, 'running');
-  assert.equal(api.state.flow.visibleLayer, 0);
-  assert.equal(clock.pendingCount, 1);
-  api.startFlow();
-  assert.equal(api.state.flow.runId, runId, 'Repeated Start must not create another sequence');
-  assert.equal(clock.pendingCount, 1);
-  clock.tick();
-  assert.equal(api.state.flow.visibleLayer, 1);
-  api.pauseFlow();
-  assert.equal(clock.pendingCount, 0);
-  const paused = JSON.stringify(api.state);
-  delayed();
-  assert.equal(JSON.stringify(api.state), paused, 'An already queued stale callback cannot mutate a paused run');
-  api.selectParameter({ layer: 0, kind: 'bias', output: 2, input: null });
-  assert.equal(api.state.flow.visibleLayer, 1, 'Selection during Pause does not advance the flow');
-  api.startFlow();
-  assert.equal(api.state.flow.visibleLayer, 1, 'Start resumes a paused sequence');
-  clock.tick();
-  clock.tick();
-  assert.equal(api.state.flow.phase, 'complete');
-  assert.equal(api.state.flow.visibleLayer, 3);
-  assert.equal(api.state.arch.flowing, false);
-  assert.equal(clock.pendingCount, 0);
-  api.stepFlow(1);
-  assert.equal(api.state.flow.visibleLayer, 3, 'Next clamps at the output');
-  api.runFlow();
-  assert.equal(api.state.flow.phase, 'running');
-  assert.equal(api.state.flow.visibleLayer, 0, 'Compatible wrapper replays completed sequences');
-  const replay = clock.nextCallback();
-  api.resetFlow();
-  const reset = JSON.stringify(api.state);
-  replay();
-  assert.equal(JSON.stringify(api.state), reset);
-  assert.equal(api.state.flow.phase, 'idle');
-  assert.equal(api.state.flow.visibleLayer, 0);
-  assert.equal(clock.pendingCount, 0);
-  assert.deepEqual(Array.from(api.buildSafetensors().bytes), bytes);
-});
-
-for (const [label, change] of [
-  ['inputs', (api) => api.setInputs([0.1, 0.9])],
-  ['architecture', (api) => api.setArchitecture([1])],
-  ['language', (api) => api.setLanguage('en')],
-  ['lesson mode', (api) => { api.state.lesson = { mode: 'fruit', phase: 'idle' }; }],
-]) {
-  test(`changing ${label} cancels and invalidates the previous forward sequence`, () => {
-    const clock = createTestClock(), api = loadModel(undefined, { clock });
-    assert.equal(typeof api.startFlow, 'function', 'Forward autoplay must be exported');
-    api.randomizeArchWeights();
-    api.startFlow();
-    const delayed = clock.nextCallback(), oldRun = api.state.flow.runId;
-    change(api);
-    delayed();
-    assert.equal(api.state.flow.phase, 'idle');
-    assert.equal(api.state.flow.visibleLayer, 0);
-    assert.ok(api.state.flow.runId > oldRun);
-    assert.equal(api.state.arch.flowing, false);
-    assert.equal(clock.pendingCount, 0);
-    const cancelled = JSON.stringify(api.state);
-    delayed();
-    assert.equal(JSON.stringify(api.state), cancelled);
-    api.startFlow();
-    const nextRun = api.state.flow.runId;
-    delayed();
-    assert.equal(api.state.flow.runId, nextRun, 'Old callbacks cannot overwrite a later run');
-    clock.tick();
-    assert.equal(api.state.flow.visibleLayer, 1);
-  });
-}
-
-test('reduced motion completes immediately while manual steps remain available and parameter bytes remain unchanged', () => {
-  const clock = createTestClock(), api = loadModel(undefined, { clock, reducedMotion: true });
-  assert.equal(typeof api.startFlow, 'function', 'Forward autoplay must be exported');
-  api.randomizeArchWeights();
-  const bytes = Array.from(api.buildSafetensors().bytes);
-  api.startFlow();
-  assert.equal(api.state.flow.phase, 'complete');
-  assert.equal(api.state.flow.visibleLayer, 3);
-  assert.equal(clock.pendingCount, 0);
-  api.stepFlow(-1);
-  assert.equal(api.state.flow.phase, 'paused');
-  assert.equal(api.state.flow.visibleLayer, 2);
-  api.cancelFlow();
-  assert.equal(api.state.flow.visibleLayer, 0);
-  assert.deepEqual(Array.from(api.buildSafetensors().bytes), bytes);
-});
-
 test('tiny negative parameters keep an explicit sign even when the displayed magnitude rounds to zero', () => {
   const api = loadModel();
   api.state.lang = 'en';
@@ -505,20 +333,7 @@ test('tiny negative parameters keep an explicit sign even when the displayed mag
   assert.equal(api.signedValue(0.0000001, 4), '+0.0000');
 });
 
-test('a cancelled forward sequence cannot publish a delayed live announcement', () => {
-  const frames = [], api = loadModel(undefined, { requestFrame: (callback) => frames.push(callback) });
-  api.randomizeArchWeights();
-  api.startFlow();
-  api.cancelFlow();
-  frames.forEach((callback) => callback());
-  assert.equal(api.liveAnnouncement, '', 'The cancelled run must not announce its stale stage');
-});
-
-test('navigation and conceptual comparison checks have bilingual dashboard labels', () => {
+test('every translation key exists in both languages', () => {
   const api = loadModel();
-  for (const lang of ['pl', 'en']) {
-    for (const name of ['navigation: original five-section outline', 'navigation: file rows retain model identity', 'LLM: conceptual stages never claim live probabilities']) {
-      assert.ok(api.T[lang].checkLabels[name], `${lang}: missing dashboard label for ${name}`);
-    }
-  }
+  assert.deepEqual(Object.keys(api.T.pl).sort(), Object.keys(api.T.en).sort(), 'Every translation key must exist in both languages');
 });

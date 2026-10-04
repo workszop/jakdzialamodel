@@ -2,7 +2,7 @@
 
 Interaktywna strona edukacyjna (PL / EN): z czego składa się model AI – architektura i wagi – oraz jak jest zapisany na dysku (`config.json` + pliki wag, np. `.safetensors`).
 
-To demonstracja małej sieci neuronowej, nie miniaturowa Llama. Implementacja definiuje operacje, konfiguracja ich ustawienia, a parametry zawierają liczby. Schemat LLM jest osobnym, konceptualnym porównaniem, nie działającym modelem językowym.
+To demonstracja małej sieci neuronowej, nie miniaturowa Llama. Implementacja definiuje operacje, konfiguracja ich ustawienia, a parametry zawierają liczby. Llama 2 7B pojawia się jako punkt odniesienia dla folderu, rozmiaru i konfiguracji.
 
 **Strona:** https://workszop.github.io/jakdzialamodel/
 
@@ -10,10 +10,10 @@ Jeden samodzielny plik `index.html` – bez instalacji i budowania, działa też
 
 ## Eksperymenty
 
-- Zmieniaj architekturę i wejścia. Nowa architektura losuje parametry od nowa; samo obliczenie odpowiedzi ich nie zmienia.
-- Wybierz połączenie, bias lub komórkę macierzy. Ten sam parametr jest oznaczony w obliczeniu, tensorze i jego czterech bajtach float32.
-- Przechodź przez obliczenie warstwa po warstwie. Skróty: `1`–`5` – sekcje, `F` – przepływ, `R` – losowanie wag.
-- W lekcji owocowej uruchom trening, zatrzymaj go, wykonaj jedną epokę albo zresetuj. Wagi, błąd i granica decyzji wynikają z rzeczywistych obliczeń w przeglądarce. Powrót do eksploratora przywraca poprzednią sieć.
+- Zmieniaj architekturę i wejścia. Nowa architektura losuje parametry od nowa; samo obliczenie odpowiedzi ich nie zmienia. Rozmiary plików w kolejnych sekcjach zmieniają się razem z siecią.
+- Kliknij komórkę w tabeli wag. Ten sam parametr jest oznaczony w tensorze i w jego czterech bajtach float32 w pliku `model.safetensors`.
+- Skróty: `1`–`5` – sekcje, `R` – losowanie wag.
+- Opcjonalnie, w zwiniętej lekcji „Jak sieć się uczy?”, uruchom trening na przykładzie owoców, zatrzymaj go, wykonaj jedną epokę albo zresetuj. Wagi, błąd i granica decyzji wynikają z rzeczywistych obliczeń w przeglądarce. Powrót przywraca poprzednią sieć.
 
 **Owoce:** sieć otrzymuje dwie syntetyczne cechy: długość i okrągłość, a nie piksele ilustracji. To nie jest rozpoznawanie zdjęć. Przykłady testowe nie uczestniczą w uczeniu. Wyniki modelu nie są gwarancją ani skalibrowaną pewnością.
 
@@ -23,7 +23,7 @@ Ilustracje truskawki i borówki oraz inspiracja końcowym sandboxem: [Neural Net
 
 ## Weryfikacja
 
-Panel „Kontrola modelu” w aplikacji uruchamia te same inwarianty danych i DOM, które sprawdzają testy przeglądarkowe.
+Aplikacja udostępnia `window.MODEL_DEMO.runChecks()` – inwarianty danych i DOM, które sprawdzają testy przeglądarkowe.
 
 ```bash
 node --test tests/model.test.mjs tests/training.test.mjs
