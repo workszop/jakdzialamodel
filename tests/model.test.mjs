@@ -119,14 +119,14 @@ for (const hidden of [[1], [6], [4, 3], [6, 6, 6]]) {
   });
 }
 
-test('seed-42 Safetensors is 556 bytes and contains all 31 known float32 values in output-first tensor order', () => {
+test('seed-42 Safetensors is 524 bytes and contains all 31 known float32 values in output-first tensor order', () => {
   const api = loadModel();
   api.randomizeArchWeights();
   const before = JSON.stringify(api.state.arch);
   const file = api.buildSafetensors();
-  assert.equal(file.bytes.length, 556);
-  assert.equal(file.headerLen, 424);
-  assert.equal(file.dataStart, 432);
+  assert.equal(file.bytes.length, 524);
+  assert.equal(file.headerLen, 392);
+  assert.equal(file.dataStart, 400);
   assert.equal(file.dataLen, 124);
   const view = new DataView(file.bytes.buffer);
   const headerLen = Number(view.getBigUint64(0, true));
@@ -222,7 +222,7 @@ test('canonical parameter identity uses output-first tensor cells while network 
   assert.equal(api.parameterId(ref), 'fc1.weight[2,1]');
   assert.deepEqual(plain(api.describeParameter(ref)), {
     id: 'fc1.weight[2,1]', value: -0.453544020652771, tensorName: 'fc1.weight',
-    tensorShape: [4, 2], flatIndex: 5, fileOffset: 452, byteLength: 4,
+    tensorShape: [4, 2], flatIndex: 5, fileOffset: 420, byteLength: 4,
   });
   assert.equal(api.describeParameter(ref).value, api.state.arch.weights[0][1][2]);
   assert.notEqual(api.describeParameter(ref).value, api.state.arch.weights[0][0][1]);

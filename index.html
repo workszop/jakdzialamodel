@@ -904,7 +904,7 @@ const state = {
   lang: readLang(),
   section: 's-files',
   folderView: 'mini',
-  configView: 'mini',
+  configView: 'llama',
   fileSelection: null,
   fileTab: 'json',
   precision: 'f32',
@@ -1317,7 +1317,7 @@ function buildSafetensors() {
     tensors.push({ name: `fc${l + 1}.weight`, shape: [nOut, nIn], values: w, layer: l, kind: 'w' });
     tensors.push({ name: `fc${l + 1}.bias`, shape: [nOut], values: Float32Array.from(state.arch.biases[l]), layer: l, kind: 'b' });
   }
-  const header = { __metadata__: { format: 'pt' } };
+  const header = {};
   let offset = 0;
   for (const tn of tensors) {
     tn.offsets = [offset, offset + tn.values.length * 4];
@@ -1621,7 +1621,7 @@ function renderFile() {
   const markStart = info.fileOffset;
 
   if (state.fileTab === 'json') {
-    add('{\n  "__metadata__": {"format": "pt"},\n');
+    add('{\n');
     st.tensors.forEach((tn, k) => {
       const row = el('span', tn.name === info.tensorName ? 'hx-mark' : 'hx-hdr', `  "${tn.name}": {"dtype": "F32", "shape": [${tn.shape.join(', ')}], "data_offsets": [${tn.offsets.join(', ')}]}${k < st.tensors.length - 1 ? ',' : ''}\n`);
       if (tn.name === info.tensorName) bindParameter(row, ref, st);
