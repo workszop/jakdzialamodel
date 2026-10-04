@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23FFD500'/><rect x='29' y='6' width='6' height='12' fill='%231C1917'/><circle cx='32' cy='7' r='5' fill='%231C1917'/><rect x='2' y='30' width='7' height='16' rx='2' fill='%231C1917'/><rect x='55' y='30' width='7' height='16' rx='2' fill='%231C1917'/><rect x='7' y='16' width='50' height='44' rx='10' fill='%231C1917'/><circle cx='22' cy='34' r='6.5' fill='%23FFD500'/><circle cx='42' cy='34' r='6.5' fill='%23FFD500'/><rect x='19' y='47' width='26' height='5' rx='2.5' fill='%23FFD500'/></svg>">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADL0lEQVR4nMRXW0gUURj+ZnZ2W9d11dACpbKLZWolXUCzQCG1hy4SXSC06KFegqQbQT2EPdhLFgWC1EtpEFQPWT2I9BBkFJimoKJFYRcFMTJdL+vepnPOOjUzu9vOWdb8YNg5//5zvv96LhJUkHtRCT/KISCfDNMQWwxBxluIeCJko1ERCrPEywjxbTIqNTpb3QMb7jbZ2HvFrmlUVUzCMGS0EENOEEO+BAzoRishLzT6/at2Cw5fSNbIGq6OoniLGxxoFXKwXZR7cIyHnKKt2xwke99rBie2UW6RhOMQOLF+tSdItma5F9wg3CL5yQMnikioczNJuGWZPbmrPCjbOoMokCeS8C8GJyQJKMknBggCe0oKZpiMG4RbxDxDIIUg64UTUwIu3kzAux4LhkZE+HwCooHJJCMt1Y/NOW7UVDlht8mRDej7LOF4dSIGBqOJaXhkpHtx5/IYslZoi1WTAr8fOHfNEXNyCjpndb2dcYQ1oLPPjK4P3P1sGK0dCxhHWAN6PsXecz30HJrRyM/QTSGKMjKX+tj7x68mEkYhaj09R0SXdxe5UHNqHEmOQK3+GicdcsuBZy+tUenpwbrg4NlkvOmyQCJt41W1nM3qR8ejH4iP07bP5LSAjQdSMOUSufSYx7McBRvceFg7GqgBSk7h1S3nGem+oEkpqIz+x6un5lA4530l/KcBA4MmFkY9qIz+x6vHbQDN3flaBysoBfSdytR5NaoXCqwIl+yY3RDp9ioEexLLNlRzfHsxDEMrD52of0CKmZ4aLD60JSikuV8I/3AonJrd8Pq9eNxotAd9lBDvx/5SF5IT/DCCUaeIxy1WOCeD83+6cgJnjv49QRvyeW+xC1dOOsEDDzk23n9ui6inMTF1YWgPaV7VFR4JVDdcLeg5JJKAYeVcmLMy9Mm2rduCdfsWIRbQcBBuGoFOZZyX5WHPXIEWnm7+TpEkoV4ZicScuktjSLQbKzYepCT52NyiOumEW7maNZM0lClyumE0PI1D82sr2smNx+2J7lBqMcvYlO3BzkIXjuyZ1rd5E7malQcM6EcWvCwVC/B/MAEL1gqZ+K5xbT6u578BAAD//9uUC5IAAAAGSURBVAMAWZRZ4t8AXiMAAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<meta name="theme-color" content="#FFD500">
 <title>Z czego składa się model AI</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
@@ -127,6 +131,7 @@ kbd { font-family: var(--font-mono); font-size: 11px; background: var(--paper-2)
 /* ─── Segmented toggle ─── */
 .edu-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: var(--paper-2); border-radius: var(--r-pill); justify-self: start; }
 .edu-seg button { border: none; background: transparent; padding: 7px 14px; border-radius: var(--r-pill); font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.edu-seg button[hidden] { display: none; }
 .edu-seg button.active { background: var(--yellow); color: var(--yellow-ink); }
 
 /* ─── Layout ─── */
@@ -170,6 +175,7 @@ main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
 .edu-btn { font-family: var(--font-display); font-weight: 600; border: none; cursor: pointer; background: var(--yellow); color: var(--on-primary);
   border-radius: var(--r-pill); padding: 12px 22px; box-shadow: var(--shadow-primary); transition: background-color .15s, transform .12s cubic-bezier(.32,.72,.32,1);
   display: inline-flex; gap: 8px; align-items: center; }
+.edu-btn[hidden] { display: none; }
 .edu-btn:hover { background: var(--yellow-600); }
 .edu-btn:active { transform: scale(.96); }
 .btn-ghost { font-family: var(--font-display); font-weight: 600; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); cursor: pointer;
@@ -500,9 +506,9 @@ details.card[open] > summary::after { content: '−'; }
       <div class="btn-row"><button class="btn-ghost" type="button" id="miniInspectorExample" data-i18n="miniInspectorExample"></button></div>
     </div>
     <div class="card" id="fileCard" tabindex="-1">
-      <span class="card-title" data-i18n="fileH"></span>
-      <p data-i18n="fileP"></p>
-      <p id="exportDtype" data-i18n="exportDtype"></p>
+      <span class="card-title" id="fileTitle"></span>
+      <p id="fileLead"></p>
+      <p id="exportDtype"></p>
       <div class="file-bar" id="fileBar" aria-hidden="true">
         <div class="fb-len" id="fbLen"></div><div class="fb-hdr" id="fbHdr"></div><div class="fb-data" id="fbData"></div>
       </div>
@@ -602,6 +608,18 @@ const LLAMA_CONFIG = [
   ['hidden_act', '"silu"'],
   ['torch_dtype', '"float16"'],
 ];
+const LLAMA_LAYER_TENSORS = [
+  ['input_layernorm.weight', (h) => [h]],
+  ['self_attn.q_proj.weight', (h) => [h, h]],
+  ['self_attn.k_proj.weight', (h) => [h, h]],
+  ['self_attn.v_proj.weight', (h) => [h, h]],
+  ['self_attn.o_proj.weight', (h) => [h, h]],
+  ['post_attention_layernorm.weight', (h) => [h]],
+  ['mlp.gate_proj.weight', (h, m) => [m, h]],
+  ['mlp.up_proj.weight', (h, m) => [m, h]],
+  ['mlp.down_proj.weight', (h, m) => [h, m]],
+];
+const LLAMA_EXAMPLE_TENSOR = 'model.layers.0.self_attn.q_proj.weight';
 const FORMATS = [
   { ext: '.safetensors', arch: false, weights: true, key: 'fmtSafe' },
   { ext: '.gguf', arch: true, weights: true, key: 'fmtGguf' },
@@ -710,6 +728,12 @@ const T = {
     llm_torch_dtype: 'wagi zapisane z precyzją 16-bitową',
     dlConfig: 'Pobierz config.json',
     fileH: 'Mini-model: model.safetensors',
+    fileHLlama: 'Llama 2 7B: pliki .safetensors',
+    filePLlama: 'Ten sam format co w mini-modelu, tylko w dużo większej skali. Wagi Llama 2 7B są podzielone na dwa pliki .safetensors, a model.safetensors.index.json mówi, w którym z nich leży każdy tensor. Każdy plik zaczyna się od 8 bajtów z długością nagłówka i nagłówka JSON, po których idą surowe liczby. Poniżej fragment nagłówka; surowe bajty i odczyt w Pythonie pokazujemy na mini-modelu, bo przeglądarka nie pobiera tych gigabajtów.',
+    exportDtypeLlama: 'Llama 2 7B jest zapisana w float16 (F16), 2 bajty na parametr (torch_dtype w config.json).',
+    segLenLlama: '2 × 8 B', segHdrLlama: '≈ {n} · nagłówki JSON', segDataLlama: '≈ {n} · wagi (float16)',
+    capJsonLlama: 'Fragment nagłówka. Każdy z {layers} bloków (model.layers.0–{last}) ma te same {per} tensorów, łącznie {n} tensorów; wartości data_offsets pominięto. Przykład: {name} ma kształt [{shape}], czyli {count} liczb × 2 B = {bytes}.',
+    sizeLineLlama: 'rozmiar: ≈ {n} w 2 plikach; pasek nie jest w skali',
     fileP: 'Safetensors przechowuje tensory: 8 bajtów z długością nagłówka, nagłówek JSON z nazwami, typami i kształtami, a potem surowe liczby. Typ danych decyduje o liczbie bajtów na wartość. Poniżej rzeczywisty plik bieżącej mini-sieci, nie plik Llama.',
     exportDtype: 'Aktualny eksport: float32 (F32), 4 bajty na parametr, niezależnie od przełącznika szacowania rozmiaru.',
     llamaDetailNotice: 'To objaśnienie pliku Llama 2 7B, nie jego odczyt. Demo nie pobiera ani nie uruchamia modelu Llama. Inspektor poniżej pokazuje wyłącznie plik mini-modelu.',
@@ -852,6 +876,12 @@ const T = {
     llm_torch_dtype: 'weights stored at 16-bit precision',
     dlConfig: 'Download config.json',
     fileH: 'Mini model: model.safetensors',
+    fileHLlama: 'Llama 2 7B: .safetensors files',
+    filePLlama: 'The same format as the mini model, just at a much larger scale. Llama 2 7B weights are split across two .safetensors files, and model.safetensors.index.json says which file holds each tensor. Each file starts with 8 bytes holding the header length and a JSON header, followed by the raw numbers. Below is an excerpt of the header; raw bytes and reading in Python are shown on the mini model, because the browser does not download those gigabytes.',
+    exportDtypeLlama: 'Llama 2 7B is stored in float16 (F16), 2 bytes per parameter (torch_dtype in config.json).',
+    segLenLlama: '2 × 8 B', segHdrLlama: '≈ {n} · JSON headers', segDataLlama: '≈ {n} · weights (float16)',
+    capJsonLlama: 'Header excerpt. Each of the {layers} blocks (model.layers.0–{last}) has the same {per} tensors, {n} tensors in total; data_offsets values are omitted. Example: {name} has shape [{shape}], i.e. {count} numbers × 2 B = {bytes}.',
+    sizeLineLlama: 'size: ≈ {n} in 2 files; the bar is not to scale',
     fileP: 'Safetensors stores tensors: 8 bytes with the header length, a JSON header with names, types and shapes, then raw numbers. The dtype determines bytes per value. Below is the actual file for the current mini network, not a Llama file.',
     exportDtype: 'Current export: float32 (F32), 4 bytes per parameter, regardless of the storage-estimate selector.',
     llamaDetailNotice: 'This explains a Llama 2 7B file; it does not read it. The demo neither downloads nor runs Llama. The inspector below only shows the mini model’s file.',
@@ -1335,6 +1365,25 @@ function buildSafetensors() {
   for (const tn of tensors) tn.values.forEach((v, k) => dv.setFloat32(base + tn.offsets[0] + k * 4, v, true));
   return { bytes, headerLen: hdrBytes.length, dataLen: offset, dataStart: base, tensors };
 }
+function llamaConfigValue(key) { return Number(LLAMA_CONFIG.find(([k]) => k === key)[1]); }
+function llamaTensors() {
+  const h = llamaConfigValue('hidden_size'), m = llamaConfigValue('intermediate_size');
+  const v = llamaConfigValue('vocab_size'), n = llamaConfigValue('num_hidden_layers');
+  const tensors = [{ name: 'model.embed_tokens.weight', shape: [v, h] }];
+  for (let l = 0; l < n; l++) LLAMA_LAYER_TENSORS.forEach(([name, shape]) => tensors.push({ name: `model.layers.${l}.${name}`, shape: shape(h, m), layer: l }));
+  tensors.push({ name: 'model.norm.weight', shape: [h] }, { name: 'lm_head.weight', shape: [v, h] });
+  return tensors.map((tn) => ({ ...tn, count: tn.shape.reduce((a, b) => a * b, 1) }));
+}
+// Header size estimate: real tensor entries with F16 offsets laid out in one sequence.
+function llamaHeaderEstimate(tensors) {
+  let offset = 0;
+  const header = Object.fromEntries(tensors.map((tn) => {
+    const entry = [tn.name, { dtype: 'F16', shape: tn.shape, data_offsets: [offset, offset + tn.count * 2] }];
+    offset += tn.count * 2;
+    return entry;
+  }));
+  return new TextEncoder().encode(JSON.stringify(header)).length;
+}
 function download(name, data, type) {
   pauseTraining();
   const url = URL.createObjectURL(new Blob([data], { type }));
@@ -1593,10 +1642,9 @@ function navigateModelFile(file) {
   const destination = modelFileDestination(file);
   if (!destination) return false;
   state.fileSelection = destination;
-  if (destination.target === 'configCard') {
-    state.configView = destination.model;
-    renderConfig();
-  }
+  state.configView = destination.model;
+  renderConfig();
+  renderFile();
   renderModelFileDetail();
   focusDestination(destination.target);
   announce(`${t(destination.model === 'mini' ? 'folderMini' : 'folderLlama')} / ${destination.name}`);
@@ -1604,6 +1652,46 @@ function navigateModelFile(file) {
 }
 
 function renderFile() {
+  const llama = state.configView === 'llama';
+  $('fileTitle').textContent = t(llama ? 'fileHLlama' : 'fileH');
+  $('fileLead').textContent = t(llama ? 'filePLlama' : 'fileP');
+  $('exportDtype').textContent = t(llama ? 'exportDtypeLlama' : 'exportDtype');
+  document.querySelectorAll('[data-file-tab="hex"], [data-file-tab="py"]').forEach((b) => { b.hidden = llama; });
+  $('dlWeightsBtn').hidden = llama;
+  $('fileBar').dataset.toScale = !llama;
+  if (llama) renderLlamaFile(); else renderMiniFile();
+}
+
+function renderLlamaFile() {
+  const tensors = llamaTensors(), total = tensors.reduce((s, tn) => s + tn.count, 0), dataBytes = total * 2;
+  const perLayer = LLAMA_LAYER_TENSORS.length, layerCount = llamaConfigValue('num_hidden_layers');
+  $('fbLen').textContent = t('segLenLlama');
+  $('fbHdr').textContent = t('segHdrLlama', { n: fmtBytes(llamaHeaderEstimate(tensors)) });
+  $('fbData').textContent = t('segDataLlama', { n: fmtBytes(dataBytes) });
+  $('fbHdr').style.flex = '3 1 0';
+  $('fbData').style.flex = '7 1 0';
+  $('fileSize').textContent = t('sizeLineLlama', { n: fmtBytes(dataBytes) });
+  setSeg('[data-file-tab]', 'fileTab', 'json');
+  const view = $('fileView');
+  view.replaceChildren();
+  const add = (text, cls) => view.append(cls ? el('span', cls, text) : text);
+  const row = (tn, last) => add(`  "${tn.name}": {"dtype": "F16", "shape": [${tn.shape.join(', ')}], "data_offsets": […]}${last ? '' : ','}\n`, tn.name === LLAMA_EXAMPLE_TENSOR ? 'hx-mark' : 'hx-hdr');
+  add('{\n');
+  tensors.filter((tn) => tn.layer === undefined || tn.layer === 0).forEach((tn, k, shown) => {
+    row(tn, k === shown.length - 1);
+    if (shown[k + 1]?.layer === undefined && tn.layer === 0) add(`  …  model.layers.1 – model.layers.${layerCount - 1}: ${perLayer} × ${layerCount - 1}\n`, 'c-com');
+  });
+  add('}');
+  const example = tensors.find((tn) => tn.name === LLAMA_EXAMPLE_TENSOR);
+  $('fileCaption').textContent = t('capJsonLlama', { layers: layerCount, last: layerCount - 1, per: perLayer, n: fmtInt(tensors.length),
+    name: example.name, shape: example.shape.join(', '), count: fmtInt(example.count), bytes: fmtBytes(example.count * 2) });
+  view.scrollTop = 0;
+  const card = $('fileCard');
+  Object.assign(card.dataset, { model: 'llama', fileName: 'model-00001-of-00002.safetensors', dtype: 'F16', tab: 'json', tensors: tensors.length, params: total });
+  for (const node of [card, view]) ['paramId', 'selected', 'shape', 'fileOffset', 'bytes', 'headerLen'].forEach((k) => delete node.dataset[k]);
+}
+
+function renderMiniFile() {
   const st = buildSafetensors();
   const total = st.bytes.length;
   $('fbLen').textContent = t('segLen');
@@ -1668,6 +1756,7 @@ function renderFile() {
   const card = $('fileCard');
   card.dataset.model = 'mini';
   card.dataset.fileName = 'model.safetensors';
+  delete card.dataset.tensors; delete card.dataset.params;
   card.dataset.dtype = 'F32';
   card.dataset.tab = state.fileTab;
   card.dataset.bytes = total;
@@ -1889,7 +1978,7 @@ function runChecks() {
     const rows = [...$('folderList').querySelectorAll('.file-row')];
     const names = state.folderView === 'mini' ? ['config.json', 'model.safetensors'] : LLAMA_FILES.map(file => file.name);
     return rows.length === names.length && rows.every((row, index) => row.dataset.model === state.folderView && row.dataset.fileName === names[index]) &&
-      $('configCard').dataset.model === state.configView && $('fileCard').dataset.model === 'mini' && $('fileCard').dataset.dtype === 'F32' &&
+      $('configCard').dataset.model === state.configView && $('fileCard').dataset.model === state.configView && $('fileCard').dataset.dtype === (state.configView === 'mini' ? 'F32' : 'F16') &&
       $('precisionNotice').dataset.estimateOnly === 'true';
   });
   check('forward: cached values match pure evaluation', () => {
@@ -1959,12 +2048,19 @@ function runChecks() {
       return edge.getAttribute('stroke-width') === (0.6 + Math.abs(info.value) * 3).toFixed(2);
     });
   });
+  check('llama: header tensors add up to the parameter count', () => {
+    const tensors = llamaTensors(), total = tensors.reduce((s, tn) => s + tn.count, 0);
+    return Math.abs(total - LLAMA_PARAMS) / LLAMA_PARAMS < 0.001 &&
+      tensors.length === 3 + LLAMA_LAYER_TENSORS.length * llamaConfigValue('num_hidden_layers') &&
+      ($('fileCard').dataset.model !== 'llama' || (+$('fileCard').dataset.params === total && +$('fileCard').dataset.tensors === tensors.length));
+  });
   check('parameter: file shows the selection', () => {
+    if (state.configView !== 'mini') return $('fileCard').dataset.paramId === undefined && $('fileView').dataset.paramId === undefined;
     const info = describeParameter(state.selection.parameter);
     return [$('fileCard'), $('fileView')].every((node) => node.dataset.paramId === info.id && node.dataset.selected === 'true' && +node.dataset.fileOffset === info.fileOffset);
   });
   check('parameter: four selected bytes decode to value', () => {
-    if (state.fileTab !== 'hex') return true;
+    if (state.fileTab !== 'hex' || state.configView !== 'mini') return true;
     const info = describeParameter(state.selection.parameter), bytes = [...$('fileView').querySelectorAll('[data-byte-offset][data-selected="true"]')];
     if (bytes.length !== info.byteLength || !bytes.every((byte, index) => byte.dataset.paramId === info.id && +byte.dataset.byteOffset === info.fileOffset + index)) return false;
     const data = Uint8Array.from(bytes, (byte) => Number.parseInt(byte.textContent, 16));
@@ -1995,7 +2091,7 @@ document.addEventListener('click', (e) => {
   const fv = e.target.closest('[data-folder]');
   if (fv) { state.folderView = fv.dataset.folder; renderFolder(); return; }
   const cv = e.target.closest('[data-config]');
-  if (cv) { state.configView = cv.dataset.config; state.fileSelection = modelFileDestination({ model: cv.dataset.config, name: 'config.json' }); renderConfig(); renderModelFileDetail(); return; }
+  if (cv) { state.configView = cv.dataset.config; state.fileSelection = modelFileDestination({ model: cv.dataset.config, name: 'config.json' }); renderConfig(); renderFile(); renderModelFileDetail(); return; }
   const ft = e.target.closest('[data-file-tab]');
   if (ft) { state.fileTab = ft.dataset.fileTab; renderFile(); return; }
   const pr = e.target.closest('[data-prec]');

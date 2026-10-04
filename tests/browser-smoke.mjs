@@ -181,8 +181,17 @@ async function inspectFileNavigation(page, label) {
     assert.equal(await page.locator('#untrainedNotice').isVisible(), true, `${label}: early explorer warning`);
     assert.match(await page.locator('#precisionNotice').textContent(), /float32/);
     assert.equal(await page.locator('#precisionNotice').getAttribute('data-estimate-only'), 'true');
+    await page.locator('[data-config="llama"]').click();
+    assert.match(await page.locator('#exportDtype').textContent(), /float16/);
+    assert.equal(await page.locator('#fileCard').getAttribute('data-model'), 'llama');
+    assert.equal(await page.locator('#fileCard').getAttribute('data-dtype'), 'F16');
+    assert.equal(await page.locator('[data-file-tab="hex"]').isVisible(), false, `${label}: Llama has no raw-byte view`);
+    assert.equal(await page.locator('#dlWeightsBtn').isVisible(), false);
+    assert.match(await page.locator('#fileView').textContent(), /model\.layers\.0\.self_attn\.q_proj\.weight.*F16.*\[4096, 4096\]/);
+    await page.locator('[data-config="mini"]').click();
     assert.match(await page.locator('#exportDtype').textContent(), /float32/);
     assert.equal(await page.locator('#fileCard').getAttribute('data-dtype'), 'F32');
+    assert.equal(await page.locator('[data-file-tab="hex"]').isVisible(), true);
     for (const model of ['mini', 'llama']) {
       await page.locator(`[data-folder="${model}"]`).click();
       const names = await page.locator('#folderList .file-row').evaluateAll((rows) => rows.map((row) => row.dataset.fileName));
@@ -200,7 +209,7 @@ async function inspectFileNavigation(page, label) {
           assert.equal(await page.locator('#modelFileDetail').isVisible(), true);
           assert.match(await page.locator('#modelFileDetail').textContent(), /Llama 2 7B/);
           assert.match(await page.locator('#miniInspectorExample').textContent(), lang === 'pl' ? /mini-model/i : /mini.model/i);
-          assert.equal(await page.locator('#fileCard').getAttribute('data-model'), 'mini');
+          assert.equal(await page.locator('#fileCard').getAttribute('data-model'), 'llama', `${label}: file card follows the selected model`);
         }
       }
     }
@@ -220,6 +229,7 @@ async function inspectFileNavigation(page, label) {
 async function inspectLinkedParameters(page, label) {
   for (const lang of ['pl', 'en']) {
     await page.locator(`[data-lang-btn="${lang}"]`).click();
+    await page.locator('[data-config="mini"]').click();
     await page.locator('[data-file-tab="hex"]').click();
     for (const [ref, id] of [
       [{ layer: 0, kind: 'weight', output: 2, input: 1 }, 'fc1.weight[2,1]'],
@@ -376,6 +386,7 @@ try {
     await inspect(page, `${label} changed architecture`);
     await page.locator('#layerPlus').click();
     await page.locator('[data-prec="q4"]').click();
+    await page.locator('[data-config="mini"]').click();
     await page.locator('[data-file-tab="hex"]').click();
     await inspect(page, `${label} precision and file tabs`);
 
