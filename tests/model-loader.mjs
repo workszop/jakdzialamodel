@@ -67,7 +67,6 @@ export function loadModel(html = readFileSync(APP_URL, 'utf8'), { clock = create
       setInputs: typeof setInputs === 'function' ? setInputs : undefined,
       setArchitecture: typeof setArchitecture === 'function' ? setArchitecture : undefined,
       setLanguage: typeof setLanguage === 'function' ? setLanguage : undefined,
-      signedValue,
       createFruitNetwork: typeof createFruitNetwork === 'function' ? createFruitNetwork : undefined,
       computeBatchGradients: typeof computeBatchGradients === 'function' ? computeBatchGradients : undefined,
       trainEpoch: typeof trainEpoch === 'function' ? trainEpoch : undefined,

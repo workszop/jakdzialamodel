@@ -11,8 +11,7 @@ Jeden samodzielny plik `index.html` – bez instalacji i budowania, działa też
 ## Eksperymenty
 
 - Zmieniaj architekturę i wejścia. Nowa architektura losuje parametry od nowa; samo obliczenie odpowiedzi ich nie zmienia. Rozmiary plików w kolejnych sekcjach zmieniają się razem z siecią.
-- Kliknij komórkę w tabeli wag. Ten sam parametr jest oznaczony w tensorze i w jego czterech bajtach float32 w pliku `model.safetensors`.
-- Skróty: `1`–`5` – sekcje, `R` – losowanie wag.
+- Skróty: `1`–`5` – sekcje.
 - Opcjonalnie, w zwiniętej lekcji „Jak sieć się uczy?”, uruchom trening na przykładzie owoców, zatrzymaj go, wykonaj jedną epokę albo zresetuj. Wagi, błąd i granica decyzji wynikają z rzeczywistych obliczeń w przeglądarce. Powrót przywraca poprzednią sieć.
 
 **Owoce:** sieć otrzymuje dwie syntetyczne cechy: długość i okrągłość, a nie piksele ilustracji. To nie jest rozpoznawanie zdjęć. Przykłady testowe nie uczestniczą w uczeniu. Wyniki modelu nie są gwarancją ani skalibrowaną pewnością.

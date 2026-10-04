@@ -6,7 +6,7 @@ import { APP_URL } from './model-loader.mjs';
 
 const ORIGINAL_CHECKS = [
   'arch: node count = sum of layers', 'arch: edge count = sum a·b', 'arch: params = edges + biases',
-  'forward: output node = recomputed σ(...)', 'weights list count = params',
+  'forward: output node = recomputed σ(...)',
   'config.json hidden_sizes = architecture', 'safetensors: header length, contiguous offsets, size = 4·params',
   'safetensors: first float = W(1)[0][0]', 'size: bytes = params × precision',
   'load code output = model output', 'lang attr matches state',
@@ -221,25 +221,18 @@ async function inspectLinkedParameters(page, label) {
   for (const lang of ['pl', 'en']) {
     await page.locator(`[data-lang-btn="${lang}"]`).click();
     await page.locator('[data-file-tab="hex"]').click();
-    for (const [ref, id, viaKeyboard] of [
-      [{ layer: 0, kind: 'weight', output: 2, input: 1 }, 'fc1.weight[2,1]', false],
-      [{ layer: 0, kind: 'bias', output: 2, input: null }, 'fc1.bias[2]', false],
-      [{ layer: 1, kind: 'weight', output: 2, input: 3 }, 'fc2.weight[2,3]', true],
+    for (const [ref, id] of [
+      [{ layer: 0, kind: 'weight', output: 2, input: 1 }, 'fc1.weight[2,1]'],
+      [{ layer: 0, kind: 'bias', output: 2, input: null }, 'fc1.bias[2]'],
+      [{ layer: 1, kind: 'weight', output: 2, input: 3 }, 'fc2.weight[2,3]'],
     ]) {
-      const cell = page.locator(`#weightsList .parameter-cell[data-param-id="${id}"]`);
-      if (viaKeyboard) { await cell.focus(); await page.keyboard.press('Enter'); }
-      else await cell.click();
       const selection = await page.evaluate((parameter) => {
-        const api = window.MODEL_DEMO, info = api.describeParameter(parameter);
+        const api = window.MODEL_DEMO, info = api.selectParameter(parameter);
         const bytes = [...document.querySelectorAll('#fileView [data-byte-offset][data-selected="true"]')]
           .map((span) => ({ id: span.dataset.paramId, offset: +span.dataset.byteOffset, hex: span.textContent }));
-        return { info, bytes, selected: api.state.selection.parameter,
-          activeId: document.activeElement?.dataset.paramId, activeCell: document.activeElement?.matches('.parameter-cell') };
+        return { info, bytes, selected: api.state.selection.parameter };
       }, ref);
       assert.deepEqual(selection.selected, ref);
-      assert.equal(await cell.getAttribute('data-selected'), 'true');
-      assert.equal(await cell.getAttribute('aria-pressed'), 'true');
-      assert.match(await cell.textContent(), /^[+−-]/, `${label}: sign is not encoded only by colour`);
       if (ref.kind === 'weight') assert.equal(await page.locator(`#archSvg .edge[data-param-id="${id}"][data-selected="true"]`).count(), 1);
       assert.equal(await page.locator('#fileCard').getAttribute('data-param-id'), id);
       assert.equal(selection.bytes.length, 4, `${label}: exactly four selected hex byte spans, not duplicate ASCII highlights`);
@@ -247,10 +240,6 @@ async function inspectLinkedParameters(page, label) {
       assert.deepEqual(selection.bytes.map(({ offset }) => offset), Array.from({ length: 4 }, (_, i) => selection.info.fileOffset + i));
       const buffer = Uint8Array.from(selection.bytes.map(({ hex }) => Number.parseInt(hex, 16)));
       assert.equal(new DataView(buffer.buffer).getFloat32(0, true), selection.info.value);
-      if (viaKeyboard) {
-        assert.equal(selection.activeId, id, `${label}: rerender preserves keyboard-selected parameter focus`);
-        assert.equal(selection.activeCell, true);
-      }
       await inspect(page, `${label}: linked ${id} in ${lang}`);
     }
   }
@@ -263,12 +252,12 @@ async function inspectLinkedParameters(page, label) {
   await inspect(page, `${label}: mobile linked detail`);
   if (label === 'http' && process.env.SMOKE_SCREENSHOT_DIR) {
     await mkdir(process.env.SMOKE_SCREENSHOT_DIR, { recursive: true });
-    await page.locator('#weightsCard').scrollIntoViewIfNeeded();
+    await page.locator('#fileCard').scrollIntoViewIfNeeded();
     await page.screenshot({ path: join(process.env.SMOKE_SCREENSHOT_DIR, 'parameter-mobile.png') });
   }
   await page.setViewportSize({ width: 1400, height: 900 });
   if (label === 'http' && process.env.SMOKE_SCREENSHOT_DIR) {
-    await page.locator('#weightsCard').scrollIntoViewIfNeeded();
+    await page.locator('#fileCard').scrollIntoViewIfNeeded();
     await page.screenshot({ path: join(process.env.SMOKE_SCREENSHOT_DIR, 'parameter-desktop.png') });
   }
 }
@@ -280,16 +269,16 @@ async function inspectOutlineAndShortcuts(page, label) {
     assert.equal(await page.locator(`#${id}`).count(), 0, `${label}: removed ${id} stays removed`);
   }
   assert.equal(await page.locator('#archSvg [tabindex], #archSvg [role="button"]').count(), 0, `${label}: diagram is display-only`);
-  const id = 'fc1.weight[2,1]', cell = page.locator(`#weightsList .parameter-cell[data-param-id="${id}"]`);
-  await cell.click();
+  const id = 'fc1.weight[2,1]';
+  await page.evaluate(() => window.MODEL_DEMO.selectParameter({ layer: 0, kind: 'weight', output: 2, input: 1 }));
   const bytesBefore = await page.evaluate(() => Array.from(window.MODEL_DEMO.buildSafetensors().bytes));
   await page.keyboard.press('f');
   assert.deepEqual(await page.evaluate(() => Array.from(window.MODEL_DEMO.buildSafetensors().bytes)), bytesBefore, `${label}: F is no longer a shortcut`);
-  await cell.focus();
   await page.keyboard.press('r');
-  assert.equal(await cell.evaluate((node) => document.activeElement === node), true, `${label}: R preserves weight-cell focus`);
+  assert.deepEqual(await page.evaluate(() => Array.from(window.MODEL_DEMO.buildSafetensors().bytes)), bytesBefore, `${label}: R is no longer a shortcut`);
+  assert.equal(await page.locator('#weightsCard').count(), 0, `${label}: weights list stays removed`);
   assert.equal(await page.locator('#fileCard').getAttribute('data-param-id'), id);
-  await inspect(page, `${label} shuffled selection`);
+  await inspect(page, `${label} shortcuts`);
 }
 
 try {
@@ -359,7 +348,7 @@ try {
         finally { api.state.arch.weights[0] = oldWeights; }
       };
       const malformedResult = malformed();
-      const node = document.getElementById('weightsCard');
+      const node = document.getElementById('fileCard');
       const parent = node.parentNode, next = node.nextSibling;
       const before = JSON.stringify(api.state);
       node.remove();

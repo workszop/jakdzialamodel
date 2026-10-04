@@ -326,13 +326,6 @@ test('topology reinitialization replaces invalid selection with a valid paramete
   assert.equal(new DataView(api.buildSafetensors().bytes.buffer).getFloat32(api.describeParameter(api.state.selection.parameter).fileOffset, true), api.describeParameter(api.state.selection.parameter).value);
 });
 
-test('tiny negative parameters keep an explicit sign even when the displayed magnitude rounds to zero', () => {
-  const api = loadModel();
-  api.state.lang = 'en';
-  assert.equal(api.signedValue(-0.0000001, 4), '−0.0000');
-  assert.equal(api.signedValue(0.0000001, 4), '+0.0000');
-});
-
 test('every translation key exists in both languages', () => {
   const api = loadModel();
   assert.deepEqual(Object.keys(api.T.pl).sort(), Object.keys(api.T.en).sort(), 'Every translation key must exist in both languages');
