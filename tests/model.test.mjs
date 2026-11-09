@@ -4,12 +4,12 @@ import test from 'node:test';
 import { APP_URL, createTestClock, extractNumericalScript, loadModel } from './model-loader.mjs';
 
 const SEED_TENSORS = [
-  { name: 'fc1.weight', shape: [4, 2], values: [0.2022075057029724, -0.6503722071647644, -0.10341887921094894, 0.05318508297204971, 0.7049316167831421, -0.453544020652771, 0.3394680917263031, 0.24948930740356445] },
-  { name: 'fc1.bias', shape: [4], values: [-0.18738481402397156, -0.09321760386228561, -0.17528744041919708, -0.12572439014911652] },
-  { name: 'fc2.weight', shape: [3, 4], values: [0.7309492826461792, 0.7641176581382751, -0.605492353439331, 0.2212418019771576, -0.05536589026451111, 0.4914751350879669, 0.0014589754864573479, -0.9923141002655029, -0.5001525282859802, -0.3859969675540924, 0.37322404980659485, -0.05843615159392357] },
-  { name: 'fc2.bias', shape: [3], values: [0.11341891437768936, 0.012134242802858353, -0.18915055692195892] },
-  { name: 'fc3.weight', shape: [1, 3], values: [0.6746748685836792, -0.8975814580917358, 0.18464797735214233] },
-  { name: 'fc3.bias', shape: [1], values: [-0.13079790771007538] },
+  { name: 'fc1.weight', shape: [4, 2], values: [-0.3310691714286804, 1.0784465074539185, 0.1369863748550415, 1.029578447341919, 1.4534730911254883, 0.7308619618415833, -0.0240019541233778, -1.33936607837677] },
+  { name: 'fc1.bias', shape: [4], values: [-0.06030018627643585, 0.17501269280910492, 0.050376374274492264, -0.06826745718717575] },
+  { name: 'fc2.weight', shape: [3, 4], values: [-1.2919790744781494, 0.5299705862998962, 0.9479320645332336, 1.0588911771774292, -0.992095947265625, 0.7823980450630188, 0.39484134316444397, 0.2981676459312439, 0.019627807661890984, 1.4743698835372925, 1.0109281539916992, -0.4467531442642212] },
+  { name: 'fc2.bias', shape: [3], values: [0.13786794245243073, -0.1393621563911438, -0.05369999259710312] },
+  { name: 'fc3.weight', shape: [1, 3], values: [-0.15927982330322266, 1.1351405382156372, 0.5429666042327881] },
+  { name: 'fc3.bias', shape: [1], values: [-0.1920119673013687] },
 ];
 
 const plain = (value) => JSON.parse(JSON.stringify(value));
@@ -62,10 +62,10 @@ test('seed-42 default forward wrapper retains 2-4-3-1 topology, 31 parameters, a
   api.forward();
   assert.deepEqual(plain(api.layers()), [2, 4, 3, 1]);
   assert.equal(api.countParams(api.layers()), 31);
-  closeTo(api.state.arch.acts.at(-1)[0], 0.4689096695309864);
+  closeTo(api.state.arch.acts.at(-1)[0], 0.8535530771504708);
   assert.equal(typeof api.evaluateNetwork, 'function');
   const result = api.evaluateNetwork(api.state.arch, [0.8, 0.3]);
-  closeTo(result.output, 0.4689096695309864);
+  closeTo(result.output, 0.8535530771504708);
   assert.deepEqual(plain(api.state.arch.acts), plain(result.acts));
   assert.deepEqual(plain(api.state.arch.sums), plain(result.sums));
   api.state.arch.inputs = [1, 0];
@@ -221,7 +221,7 @@ test('canonical parameter identity uses output-first tensor cells while network 
   const ref = { layer: 0, kind: 'weight', output: 2, input: 1 };
   assert.equal(api.parameterId(ref), 'fc1.weight[2,1]');
   assert.deepEqual(plain(api.describeParameter(ref)), {
-    id: 'fc1.weight[2,1]', value: -0.453544020652771, tensorName: 'fc1.weight',
+    id: 'fc1.weight[2,1]', value: 0.7308619618415833, tensorName: 'fc1.weight',
     tensorShape: [4, 2], flatIndex: 5, fileOffset: 420, byteLength: 4,
   });
   assert.equal(api.describeParameter(ref).value, api.state.arch.weights[0][1][2]);

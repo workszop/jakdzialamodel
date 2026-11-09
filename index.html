@@ -561,7 +561,6 @@ details.card[open] > summary::after { content: '−'; }
   <section class="page-head">
     <h1 class="app-title" data-i18n="title"></h1>
     <p class="edu-lead" data-i18n="lead"></p>
-    <p class="notice" id="untrainedNotice" data-i18n="untrainedNotice" data-mode="explore"></p>
   </section>
   <div id="liveRegion" class="sr-only" aria-live="polite"></div>
 
@@ -596,6 +595,7 @@ details.card[open] > summary::after { content: '−'; }
       <h2 id="hArch"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-network"></use></svg></span><span data-i18n="archH"></span></h2>
       <p data-i18n="archP"></p>
     </div>
+    <p class="notice" id="untrainedNotice" data-i18n="untrainedNotice" data-mode="explore"></p>
     <div class="grid-2" id="archOverviewGrid">
       <div class="card diagram-card" id="diagramCard">
         <div class="fruit-sample" id="fruitSample" data-input-kind="features" hidden>
@@ -1243,11 +1243,36 @@ function randomizeArchWeights() {
     clampSelection(); recordFruitInitialization(); return;
   }
   const ls = layers();
-  // Math.fround: keep values exactly representable as float32, as they are stored in the file
-  state.arch.weights = ls.slice(0, -1).map((n, i) =>
-    Array.from({ length: n }, () => Array.from({ length: ls[i + 1] }, () => Math.fround(rand() * 2 - 1))));
-  state.arch.biases = ls.slice(1).map((n) => Array.from({ length: n }, () => Math.fround(rand() * 0.4 - 0.2)));
+  // Still random (seeded), but a draw is kept only when the input sliders visibly move the output:
+  // with plain random ReLU weights many neurons stay at 0 and the output barely reacts.
+  // Math.fround: keep values exactly representable as float32, as they are stored in the file.
+  const draw = () => ({
+    hidden: state.arch.hidden,
+    weights: ls.slice(0, -1).map((n, i) =>
+      Array.from({ length: n }, () => Array.from({ length: ls[i + 1] }, () => Math.fround((rand() * 2 - 1) * WEIGHT_SCALE)))),
+    biases: ls.slice(1).map((n) => Array.from({ length: n }, () => Math.fround(rand() * 0.4 - 0.2))),
+  });
+  let best = null, bestScore = -1;
+  for (let attempt = 0; attempt < MAX_WEIGHT_DRAWS; attempt++) {
+    const candidate = draw(), r = sliderResponse(candidate);
+    const score = Math.min(r.range / MIN_OUTPUT_RANGE, r.sweep[0] / MIN_SLIDER_SWEEP, r.sweep[1] / MIN_SLIDER_SWEEP);
+    if (score > bestScore) { best = candidate; bestScore = score; }
+    if (score >= 1) break;
+  }
+  state.arch.weights = best.weights;
+  state.arch.biases = best.biases;
   clampSelection();
+}
+const WEIGHT_SCALE = 1.5, MAX_WEIGHT_DRAWS = 500, MIN_OUTPUT_RANGE = 0.4, MIN_SLIDER_SWEEP = 0.15;
+// How much the output moves: its range over a 5×5 grid of inputs, and each slider swept 0→1 with the other at 0.5.
+function sliderResponse(network) {
+  const grid = [0, 0.25, 0.5, 0.75, 1], outs = [];
+  for (const a of grid) for (const b of grid) outs.push(evaluateNetwork(network, [a, b]).output);
+  const sweep = [0, 1].map((k) => {
+    const at = (v) => { const x = [0.5, 0.5]; x[k] = v; return evaluateNetwork(network, x).output; };
+    return Math.abs(at(1) - at(0));
+  });
+  return { range: Math.max(...outs) - Math.min(...outs), sweep };
 }
 function evaluateNetwork(network, inputs) {
   const ls = [N_INPUTS, ...network.hidden, N_OUTPUTS], L = ls.length - 1;

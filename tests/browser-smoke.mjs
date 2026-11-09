@@ -330,7 +330,7 @@ try {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 });
     await page.waitForFunction(() => !!window.MODEL_DEMO);
     const baseline = await inspect(page, `${label} baseline`);
-    assert.ok(Math.abs(baseline.output - 0.4689096695309864) < 1e-12);
+    assert.ok(Math.abs(baseline.output - 0.8535530771504708) < 1e-12);
     assert.equal(await page.locator('#archControls').getAttribute('data-layers'), '2-4-3-1');
     assert.equal(await page.evaluate(() => window.MODEL_DEMO.buildSafetensors().bytes.length), 524);
 
