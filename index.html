@@ -8,48 +8,223 @@
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
 <meta name="theme-color" content="#FFD500">
 <title>Z czego składa się model AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+  @keyframes boot-reveal { to { visibility: visible; } }
+  html:not(.app-ready) body { visibility: hidden; animation: boot-reveal 0s 4s forwards; }
+  @media print { html:not(.app-ready) body { visibility: visible; animation: none; } }
+</style>
+<noscript><style>html:not(.app-ready) body { visibility: visible; animation: none; }</style></noscript>
+<style>
 
-/* ─── Tokens (edulab Editorial Color) ─── */
+/* ─── edustyl tokens (copied verbatim from tokens/colors_and_type.css) ─── */
+/* ============================================================
+   edulab - Colors & Type foundation
+   Fonts (Outfit, IBM Plex Sans, Roboto Mono) load from Google Fonts
+   via the <link> tags in tokens/head.html - paste that into <head>.
+   No @import here: it chains requests and blocks rendering.
+   ============================================================ */
+
 :root {
+  /* ---- Brand fonts ---- */
   --font-display: 'Outfit', 'IBM Plex Sans', system-ui, sans-serif;
   --font-sans:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
   --font-mono:    'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --paper:   #FFFFFF;
-  --paper-2: #FBF7E6;
-  --paper-3: #F5EDCB;
-  --surface: #FFFFFF;
+  /* ============================================================
+     RAW COLOR TOKENS
+     ============================================================ */
 
-  --ink:    #1C1917;
-  --ink-2:  #57534E;
-  --ink-3:  #948C82;
-  --line:   #EDE7D2;
-  --line-2: #DDD4B6;
+  /* Paper - page background is white; the stone steps are bands / wells.
+     Warm neutral grey (no yellow cast) so yellow and the colour blocks stay the
+     loudest thing on the page. Stone v2 (2026-10-10) replaced the cream sand
+     (#FBF7E6 / #F5EDCB), which at 1.07:1 on white did not read as a surface. */
+  --paper:    #FFFFFF;   /* page background (white)                       */
+  --paper-2:  #F5F3F0;   /* stone band: alternating sections, card heads   */
+  --paper-3:  #EAE6E0;   /* deepest stone: wells, table heads, bar tracks  */
+  --surface:  #FFFFFF;   /* cards & sheets                                */
 
-  --yellow: #FFD500; --yellow-600: #F0C800; --yellow-soft: #FFD500; --yellow-ink: #1C1917;
-  --blue:   #1E8FC2; --blue-600:   #177AA8; --blue-soft:   #1E8FC2; --blue-ink:   #FFFFFF;
-  --green:  #00A651; --green-600:  #009444; --green-soft:  #00A651; --green-ink:  #FFFFFF;
-  --red:    #E5322D; --red-600:    #C92823; --red-soft:    #E5322D; --red-ink:    #FFFFFF;
+  /* Ink - warm near-black text & lines */
+  --ink:      #1C1917;   /* primary text                                    */
+  --ink-2:    #44403C;   /* secondary text, 10.3:1 on white                 */
+  --ink-3:    #625B53;   /* muted / placeholder: >= 4.5:1 on every paper step */
+  --line:     #E0DBD3;   /* hairline: dividers, table rows, card heads      */
+  --line-2:   #C9C2B7;   /* stronger: card contours, section rules          */
+  --line-strong: #857C69;/* control boundaries (inputs, ghost buttons,
+                            answer options): >= 3:1 on paper steps (WCAG 1.4.11) */
 
-  --on-primary: #1C1917;
-  --header-bg: rgba(255, 255, 255, 0.88);
-  --track: rgba(33, 30, 26, .12);
-  --panel-line: rgba(255, 255, 255, .14);
-  --panel-label: rgba(255, 255, 255, .55);
-  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--yellow) 45%, transparent);
+  /* ---- Brand: Yellow main · Blue + Green secondary · Red danger ----
+     Plain saturated colours. The base colour (--blue) is for large fills,
+     illustrations and large text (>= 24px, or 19px bold). "-soft" is the
+     solid fill for chips and panels that carry small text: it is the
+     AA shade (= "-600"), so its "-ink" (white; dark ink on yellow) reaches
+     4.5:1. A colour used AS text goes only on white and uses "-600".
+     Never colour-on-colour (no green text on green).
+     Gate: python3 scripts/check-contrast.py */
 
+  /* Yellow - primary (buttons, progress, values on dark panels) */
+  --yellow:      #FFD500;
+  --yellow-600:  #F0C800;  /* hover / press          */
+  --yellow-soft: #FFD500;  /* chip / panel fill      */
+  --yellow-ink:  #1C1917;  /* text on yellow         */
+
+  /* Blue - secondary (panels, chips, correct / selected state) */
+  --blue:      #1E8FC2;
+  --blue-600:  #177AA8;
+  --blue-soft: #177AA8;   /* = blue-600, white text 4.8:1 */
+  --blue-ink:  #FFFFFF;
+
+  /* Green - secondary support (chips, success) */
+  --green:      #00A651;
+  --green-600:  #078342;  /* hover / press, AA text shade */
+  --green-soft: #078342;  /* = green-600, white text 4.9:1 */
+  --green-ink:  #FFFFFF;
+
+  /* Red - danger / important / wrong (use sparingly) */
+  --red:      #E5322D;
+  --red-600:  #C92823;
+  --red-soft: #C92823;   /* = red-600, white text 5.5:1 */
+  --red-ink:  #FFFFFF;
+
+  /* Grape - 5th category tone (colour-coded groups), from the play palette */
+  --grape:      #7A5AC2;
+  --grape-soft: #7A5AC2;  /* white text 5.2:1 */
+  --grape-ink:  #FFFFFF;
+
+  /* Legacy role aliases - older edulab apps use these names */
+  --marigold: var(--yellow); --marigold-600: var(--yellow-600); --marigold-soft: var(--yellow-soft); --marigold-ink: var(--yellow-ink);
+  --teal:     var(--blue);   --teal-600:     var(--blue-600);   --teal-soft:     var(--blue-soft);   --teal-ink:     var(--blue-ink);
+  --sky:      var(--green);                                     --sky-soft:      var(--green-soft);  --sky-ink:      var(--green-ink);
+  --coral:    var(--red);    --coral-600:    var(--red-600);    --coral-soft:    var(--red-soft);    --coral-ink:    var(--red-ink);
+
+  /* Play palette - subject/category colours in the kids app */
+  --play-sun:    #FFD500;
+  --play-grass:  #00A651;
+  --play-berry:  #C6478B;
+  --play-grape:  #7A5AC2;
+  --play-sky:    #1E8FC2;
+  --play-coral:  #E5322D;
+
+  /* ---- Semantic ---- */
+  --success:      #00A651;  --success-soft: #078342;  --success-ink: #FFFFFF;
+  --warning:      #FFD500;  --warning-soft: #FFD500;  --warning-ink: #1C1917;
+  --danger:       #E5322D;  --danger-soft:  #C92823;  --danger-ink:  #FFFFFF;
+  --info:         #1E8FC2;  --info-soft:    #177AA8;  --info-ink:    #FFFFFF;
+
+  /* ---- Functional aliases ---- */
+  --bg:        var(--paper);
+  --fg:        var(--ink);
+  --fg-muted:  var(--ink-2);
+  --primary:   var(--yellow);
+  --on-primary:#1C1917;      /* dark text on yellow */
+  /* White gap + ink band: >= 3:1 on paper, sand, yellow and every chip fill.
+     Pair with `outline: 3px solid transparent` so forced-colours mode still shows focus. */
+  --focus-ring: 0 0 0 2px var(--paper), 0 0 0 5px var(--ink);
+  /* Range-slider track */
+  --track: color-mix(in srgb, var(--ink) 24%, transparent);
+
+  /* ============================================================
+     SPACING  (4pt base)
+     ============================================================ */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-16: 64px; --sp-20: 80px; --sp-24: 96px;
+
+  /* ---- Radii (friendly, generous) ---- */
+  /* Page gutter (user decision 2026-11-07): content ~70% of the viewport on wide screens
+     (15% margin each side from ~1280px), never squeezed below 900px, 16-72px on phones/tablets.
+     Every full-width band, header row, page head and footer pads its content with it. */
+  --gutter: max(clamp(16px, 4vw, 72px), min(15vw, calc((100vw - 900px) / 2)));
   --r-xs: 6px; --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(33,30,26,.06), 0 1px 1px rgba(33,30,26,.04);
-  --shadow-md: 0 4px 16px rgba(33,30,26,.08), 0 1px 3px rgba(33,30,26,.05);
+  /* ---- Elevation - warm, low, soft ---- */
+  --shadow-sm: 0 1px 2px rgba(33,30,26,.10), 0 2px 6px rgba(33,30,26,.06);
+  --shadow-md: 0 6px 18px rgba(33,30,26,.12), 0 1px 3px rgba(33,30,26,.08);
   --shadow-lg: 0 16px 40px rgba(33,30,26,.12), 0 3px 8px rgba(33,30,26,.06);
-  --shadow-primary: 0 8px 22px color-mix(in srgb, var(--yellow) 30%, transparent);
+  --shadow-primary:  0 8px 22px color-mix(in srgb, var(--yellow) 30%, transparent);
+  --shadow-marigold: var(--shadow-primary);   /* legacy alias */
 
-  --h2: 33px; --h3: 25px; --h4: 19px;
-  --body-lg: 18px; --body: 16px; --body-sm: 14px; --caption: 13px; --overline: 12px;
-  --shell: 1100px;
+  /* ============================================================
+     TYPE SCALE (semantic sizes)
+     ============================================================ */
+  --display-font:  clamp(48px, 6vw, 72px);
+  --h1: 44px; --h2: 33px; --h3: 25px; --h4: 19px;
+  --body-lg: 18px; --body: 16px; --body-sm: 14px;
+  --caption: 13px; --overline: 12px;
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Apply via element selectors or .edu-prose wrapper.
+   Element defaults are wrapped in :where(.edu) (zero specificity) so any
+   single class wins: <p class="edu-overline">, <p class="edu-small">,
+   <h1 class="app-title"> keep their own font/size instead of the element default.
+   ============================================================ */
+
+.edu-display, :where(.edu) h1.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--display-font);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+:where(.edu) h1, .edu-h1 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--h1);
+  line-height: 1.06; letter-spacing: -0.02em; color: var(--ink);
+}
+:where(.edu) h2, .edu-h2 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--h2);
+  line-height: 1.12; letter-spacing: -0.015em; color: var(--ink);
+}
+:where(.edu) h3, .edu-h3 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--h3);
+  line-height: 1.2; letter-spacing: -0.01em; color: var(--ink);
+}
+:where(.edu) h4, .edu-h4 {
+  font-family: var(--font-sans);
+  font-weight: 700; font-size: var(--h4);
+  line-height: 1.3; color: var(--ink);
+}
+:where(.edu) p, .edu-p, .edu-body {
+  font-family: var(--font-sans);
+  font-weight: 400; font-size: var(--body);
+  line-height: 1.6; color: var(--ink-2);
+}
+.edu-body-lg { font-family: var(--font-sans); font-size: var(--body-lg); line-height: 1.6; color: var(--ink-2); }
+.edu-small  { font-family: var(--font-sans); font-size: var(--body-sm); line-height: 1.5; color: var(--ink-2); }
+.edu-caption{ font-family: var(--font-sans); font-size: var(--caption); line-height: 1.45; color: var(--ink-3); }
+
+/* Overline - mono, tracked; functional labels only (never above page/section titles) */
+.edu-overline {
+  font-family: var(--font-mono);
+  font-weight: 500; font-size: var(--overline);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink);
+}
+:where(.edu) code, .edu-mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em; color: var(--ink);
+  background: var(--paper-3); padding: 0.12em 0.4em; border-radius: var(--r-xs);
+}
+
+/* Solid colour blocks (callouts, stat cards, chips): set background: var(--X-soft) and
+   color: var(--X-ink) on the block, add .edu-block, and every heading/paragraph inside
+   inherits that text colour instead of the default ink. */
+.edu-block, .edu-block h1, .edu-block h2, .edu-block h3, .edu-block h4, .edu-block p,
+.edu-block li, .edu-block small { color: inherit; }
+
+body.edu { background: var(--paper); color: var(--ink); font-family: var(--font-sans); }
+
+/* ─── App: values that are not in the edustyl set ─── */
+:root {
+  --panel-line: rgba(255, 255, 255, .14);
+  --panel-label: rgba(255, 255, 255, .55);
   --fruit-strawberry: var(--red);
   --fruit-blueberry: var(--blue);
   --fruit-region-opacity: .13;
@@ -67,7 +242,7 @@
 .fruit-mode #networkOverview { min-width: 0; }
 .fruit-mode #diagramCard .inputs-row { grid-column: 1 / -1; }
 .fruit-mode #archControls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.fruit-mode #archControls > .card-title, .fruit-mode #archResetNotice { grid-column: 1 / -1; }
+.fruit-mode #archControls > .card-head, .fruit-mode #archResetNotice { grid-column: 1 / -1; }
 .fruit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
 .fruit-plots { display: grid; gap: 12px; align-content: start; min-width: 0; }
 .fruit-plot { width: 100%; height: auto; display: block; font-family: var(--font-mono); font-size: var(--caption); overflow: visible; }
@@ -84,7 +259,7 @@
 .fruit-score-fill.blueberry { background: var(--fruit-blueberry); }
 #fruitTrainingPanel { grid-template-columns: minmax(0, 1fr); }
 .fruit-controls { min-width: 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.fruit-controls select { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line-2); padding: 8px; border-radius: var(--r-xs); max-width: 100%; }
+.fruit-controls select { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); padding: 8px; border-radius: var(--r-xs); max-width: 100%; }
 .fruit-notice { min-height: 1.6em; font-size: var(--body-sm); }
 [hidden].fruit-sample, [hidden].fruit-scores { display: none; }
 #fruitEnter[hidden], #fruitExit[hidden] { display: none; }
@@ -106,16 +281,15 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: var(--h2); l
 h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--h3); line-height: 1.2; letter-spacing: -.01em; }
 p { color: var(--ink-2); }
 button { font: inherit; }
-:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+:focus-visible { outline: 3px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .edu-block, .edu-block h2, .edu-block h3, .edu-block p, .edu-block li { color: inherit; }
 kbd { font-family: var(--font-mono); font-size: 11px; background: var(--paper-2); border: 1px solid var(--line-2); border-radius: var(--r-xs); padding: 1px 6px; color: var(--ink); }
 .group-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
 
 /* ─── Header ─── */
-.edu-header { position: sticky; top: 0; z-index: 50; width: 100%; background: var(--header-bg);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-.edu-header-inner { max-width: var(--shell); margin: 0 auto; padding: 8px 30px; display: flex; align-items: center; gap: 12px; }
+.edu-header { position: sticky; top: 0; z-index: 50; width: 100%; background: var(--paper); border-bottom: 1px solid var(--line-2); }
+.edu-header-inner { padding: 8px var(--gutter); display: flex; align-items: center; gap: 12px; }
 .edu-logo { width: 64px; height: 64px; display: block; margin-right: -6px; }
 .edu-wordmark { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -.02em; color: var(--ink); }
 .spacer { flex: 1; }
@@ -133,26 +307,49 @@ kbd { font-family: var(--font-mono); font-size: 11px; background: var(--paper-2)
 .edu-seg button { border: none; background: transparent; padding: 7px 14px; border-radius: var(--r-pill); font-weight: 600; color: var(--ink-2); cursor: pointer; }
 .edu-seg button[hidden] { display: none; }
 .edu-seg button.active { background: var(--yellow); color: var(--yellow-ink); }
+.card-head .edu-seg { background: var(--surface); }  /* a stone track would vanish on the stone head strip */
 
 /* ─── Layout ─── */
-main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
-.page-head { text-align: center; display: grid; gap: 14px; margin-bottom: 40px; }
-.app-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 4.5vw, 2.85rem); letter-spacing: -.025em; line-height: 1.05; color: var(--ink); }
-.edu-lead { font-size: 1.0625rem; color: var(--ink-2); }
+/* Full-bleed bands; every band pads its content with the page gutter (~70% of the viewport). */
+main { margin: 0; padding: 0; }
+.page-head { text-align: left; display: grid; gap: 14px; padding: 44px var(--gutter) 52px; }
+.app-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.3rem, 5vw, 3.3rem); letter-spacing: -.025em; line-height: 1.05; color: var(--ink); }
+.edu-lead { font-size: 1.15rem; line-height: 1.6; color: var(--ink-2); }
 
-.section { display: grid; gap: 22px; padding: 40px 0; border-top: 1px solid var(--line); scroll-margin-top: 96px; }
-.section:first-of-type { border-top: none; padding-top: 0; }
-.sec-head { display: grid; gap: 8px; }
+.section { display: grid; gap: 22px; padding: 52px var(--gutter) 60px; border-top: 1px solid var(--line); scroll-margin-top: 96px; }
+main > .section:nth-of-type(even) { background: var(--paper-2); }
+.sec-head { display: grid; gap: 12px; }
 .sec-head h2 { display: flex; align-items: center; gap: 14px; }
-.sec-num { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink);
-  display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+.sec-head h2 > span:not(.badge) { flex: 0 1 auto; min-width: 0; }
+.sec-head h2::after { content: ""; flex: 1 0 24px; height: 1px; background: var(--line-2); }
+/* phones: the title sits beside its badge, the rule runs underneath */
+@media (max-width: 768px) {
+  .sec-head h2 { flex-wrap: wrap; gap: 12px 14px; }
+  .sec-head h2 > span:not(.badge) { flex: 1 1 0; }
+  .sec-head h2::after { flex: 1 0 100%; }
+}
+
+/* Icon badges (Lucide, inlined as an SVG sprite) */
+.ic { width: 18px; height: 18px; flex: none; display: block; }
+.badge { flex: none; width: 34px; height: 34px; border-radius: var(--r-sm); display: inline-grid; place-items: center; }
+.badge-lg { width: 46px; height: 46px; border-radius: var(--r-md); }
+.badge-lg .ic { width: 24px; height: 24px; }
+.tone-ink { background: var(--ink); color: var(--paper); }
+.badge.tone-ink { color: var(--yellow); }
+.tile-h { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
 .grid-2 { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 22px; align-items: stretch; }
 
-.card { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl); box-shadow: var(--shadow-sm); padding: 24px; display: grid; gap: 16px; align-content: start; scroll-margin-top: 96px; }
+.card { min-width: 0; background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); padding: 24px; display: grid; gap: 16px; align-content: start; scroll-margin-top: 96px; }
 .card[hidden] { display: none; }
-.card-title { font-family: var(--font-display); font-weight: 600; font-size: var(--h4); color: var(--ink); }
+.card { grid-template-columns: minmax(0, 1fr); }  /* long file names wrap instead of widening the card */
+.card-title { font-family: var(--font-display); font-weight: 600; font-size: var(--h4); color: var(--ink); overflow-wrap: anywhere; min-width: 0; }
+/* Card anatomy: stone head strip -> white body -> dashed foot. The strips cancel the card padding. */
 .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.card > .card-head { margin: -24px -24px 0; padding: 14px 24px; background: var(--paper-2); border-bottom: 1px solid var(--line);
+  border-radius: calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0; }
+.card > .card-foot { margin: 0 -24px -24px; padding: 14px 24px; border-top: 1px dashed var(--line-2); }
+.card-foot .file-size { white-space: normal; min-width: 0; }  /* the size sentence wraps on phones */
 
 /* ─── Callouts ─── */
 .callout { border-radius: var(--r-xl); padding: 28px 32px; display: grid; gap: 10px; align-content: center; }
@@ -178,7 +375,7 @@ main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
 .edu-btn[hidden] { display: none; }
 .edu-btn:hover { background: var(--yellow-600); }
 .edu-btn:active { transform: scale(.96); }
-.btn-ghost { font-family: var(--font-display); font-weight: 600; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); cursor: pointer;
+.btn-ghost { font-family: var(--font-display); font-weight: 600; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); cursor: pointer;
   border-radius: var(--r-pill); padding: 11px 20px; transition: background-color .15s; display: inline-flex; gap: 8px; align-items: center; }
 .btn-ghost:hover { background: var(--paper-2); }
 
@@ -189,8 +386,8 @@ main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
   background: var(--paper-2); border: none; cursor: pointer; text-align: left; transition: background-color .15s; width: 100%; }
 .file-row:hover { background: var(--paper-3); }
 .file-icon { width: 40px; height: 40px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; font-weight: 500; }
-.file-icon.blue { background: var(--blue); color: var(--blue-ink); }
-.file-icon.green { background: var(--green); color: var(--green-ink); }
+.file-icon.blue { background: var(--blue-soft); color: var(--blue-ink); }
+.file-icon.green { background: var(--green-soft); color: var(--green-ink); }
 .file-icon.sand { background: var(--paper-3); color: var(--ink); }
 .file-name { font-family: var(--font-mono); font-size: 14px; color: var(--ink); word-break: break-all; }
 .file-desc { font-size: 13px; color: var(--ink-2); display: block; font-family: var(--font-sans); word-break: normal; }
@@ -216,7 +413,7 @@ main { max-width: var(--shell); margin: 0 auto; padding: 34px 30px 70px; }
 .stepper { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 14px; background: var(--paper-2); border-radius: var(--r-pill); }
 .stepper span { font-size: var(--body-sm); color: var(--ink); }
 .stepper .ctl { display: flex; align-items: center; gap: 6px; }
-.stepper button { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 700; box-shadow: var(--shadow-sm); }
+.stepper button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 700; box-shadow: var(--shadow-sm); }
 .stepper button:hover { background: var(--paper-3); }
 .stepper button[disabled] { opacity: .35; cursor: default; }
 .stepper output { font-family: var(--font-mono); min-width: 24px; text-align: center; color: var(--ink); }
@@ -237,19 +434,26 @@ input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 
 input[type=range]:focus-visible { box-shadow: var(--focus-ring); }
 
 /* ─── Disclosures ─── */
-details.card > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+details.card > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  margin: -24px; padding: 14px 24px; background: var(--paper-2); border-radius: calc(var(--r-lg) - 1px); }
+details.card[open] > summary { margin-bottom: 0; border-bottom: 1px solid var(--line); border-radius: calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0; }
 details.card > summary::-webkit-details-marker { display: none; }
 details.card > summary::after { content: '+'; font-family: var(--font-display); font-weight: 700; font-size: 22px; width: 36px; height: 36px; border-radius: 50%;
-  background: var(--paper-2); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  background: var(--surface); border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
 details.card[open] > summary::after { content: '−'; }
 
 /* ─── Weights list ─── */
 
 /* ─── Size table ─── */
 .size-table { width: 100%; border-collapse: collapse; font-size: 15px; }
-.size-table th { text-align: left; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; padding: 6px 8px; }
+.size-table th { text-align: left; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); font-weight: 500;
+  padding: 12px 12px; background: var(--paper-3); border-bottom: 1px solid var(--line-2); }
 .size-table th.r { text-align: right; }
-.size-table td { padding: 10px 8px; border-top: 1px solid var(--line); color: var(--ink); }
+.size-table td { padding: 12px 12px; border-bottom: 1px solid var(--line); color: var(--ink-2); }
+.size-table tbody tr:nth-child(even) td { background: var(--paper-2); }
+.size-table tbody tr:last-child td { border-bottom: none; }
+.size-table td:first-child { color: var(--ink); font-weight: 600; }
+.size-table td.num, .size-table td.big { font-variant-numeric: tabular-nums; color: var(--ink); }
 .size-table td.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
 .size-table td.big { font-family: var(--font-display); font-weight: 700; font-size: 18px; text-align: right; white-space: nowrap; }
 .prec-demo { background: var(--paper-2); border-radius: var(--r-md); padding: 14px 16px; font-size: 14.5px; color: var(--ink); display: grid; gap: 4px; }
@@ -275,8 +479,8 @@ details.card[open] > summary::after { content: '−'; }
 .file-bar { display: flex; height: 44px; border-radius: var(--r-md); overflow: hidden; font-family: var(--font-mono); font-size: 11.5px; }
 .file-bar > div { display: flex; align-items: center; justify-content: center; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .fb-len { background: var(--yellow); color: var(--yellow-ink); flex: 0 0 auto; }
-.fb-hdr { background: var(--blue); color: var(--blue-ink); }
-.fb-data { background: var(--green); color: var(--green-ink); }
+.fb-hdr { background: var(--blue-soft); color: var(--blue-ink); }
+.fb-data { background: var(--green-soft); color: var(--green-ink); }
 
 /* ─── Formats ─── */
 .fmt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
@@ -287,14 +491,18 @@ details.card[open] > summary::after { content: '−'; }
 .fmt-card .where { font-size: 13px; color: var(--ink-3); }
 
 /* ─── Load steps ─── */
-.load-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.load-step { border-radius: var(--r-lg); padding: 18px; display: grid; gap: 8px; align-content: start; background: var(--paper-2); }
-.load-step .n { width: 30px; height: 30px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); display: flex; align-items: center; justify-content: center;
+/* Chain: bordered links joined by arrows */
+.load-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.load-step { position: relative; border-radius: var(--r-lg); padding: 18px; display: grid; gap: 8px; align-content: start;
+  background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow-sm); }
+.load-step + .load-step::before { content: "→"; position: absolute; left: -15px; top: 50%; transform: translate(-50%, -50%);
+  font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); }
+.load-step .n { width: 34px; height: 34px; border-radius: var(--r-sm); background: var(--ink); color: var(--yellow); display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display); font-weight: 700; }
 .load-step strong { font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--ink); }
 .load-step span { font-size: 14px; color: var(--ink-2); line-height: 1.45; }
 
-.kbd-hints { font-size: 13px; color: var(--ink-3); display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; padding-top: 24px; border-top: 1px solid var(--line); }
+.kbd-hints { font-size: 13px; color: var(--ink-3); display: flex; gap: 16px; flex-wrap: wrap; padding: 24px var(--gutter) 40px; border-top: 1px solid var(--line); }
 
 .notice { padding: 14px 18px; border-radius: var(--r-md); background: var(--yellow); color: var(--yellow-ink); font-size: var(--body-sm); }
 .file-detail-title { overflow-wrap: anywhere; }
@@ -310,12 +518,15 @@ details.card[open] > summary::after { content: '−'; }
   .sec-nav button.active .txt { display: inline; }
 }
 @media (max-width: 768px) {
-  .edu-header-inner { padding: 6px 16px; gap: 8px; }
+  .edu-header-inner { padding: 6px var(--gutter); gap: 8px; }
   .edu-logo { width: 44px; height: 44px; }
   .edu-wordmark { display: none; }
   .sec-nav button { padding: 7px 9px; }
   .sec-nav button.active .txt { display: none; }
-  main { padding: 24px 16px 50px; }
+  .page-head { padding: 28px var(--gutter) 36px; }
+  .section { padding: 36px var(--gutter) 44px; }
+  .load-steps { gap: 26px; }
+  .load-step + .load-step::before { content: "↓"; left: 50%; top: -13px; }
   .grid-2, .load-steps, .anno, .inputs-row { grid-template-columns: 1fr; }
   .anno-note { padding-bottom: 10px; }
   .anno-note:empty { display: none; }
@@ -328,6 +539,8 @@ details.card[open] > summary::after { content: '−'; }
 </style>
 </head>
 <body class="edu">
+<!-- Lucide icons (lucide-static 0.460.0, ISC), inlined so the page works offline -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 10h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/></g></symbol><symbol id="i-cpu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></g></symbol><symbol id="i-file-code" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></g></symbol><symbol id="i-file-json" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></g></symbol><symbol id="i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></g></symbol><symbol id="i-files" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"/></g></symbol><symbol id="i-folder-open" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></g></symbol><symbol id="i-folder" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></g></symbol><symbol id="i-graduation-cap" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></g></symbol><symbol id="i-hard-drive" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/></g></symbol><symbol id="i-network" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></g></symbol><symbol id="i-ruler" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></g></symbol><symbol id="i-sliders-horizontal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></g></symbol></svg>
 
 <header class="edu-header">
   <div class="edu-header-inner">
@@ -355,13 +568,13 @@ details.card[open] > summary::after { content: '−'; }
   <!-- ─── 1. Folder ─── -->
   <section class="section" id="s-files" aria-labelledby="hFiles">
     <div class="sec-head">
-      <h2 id="hFiles"><span class="sec-num">1</span><span data-i18n="filesH"></span></h2>
+      <h2 id="hFiles"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-folder-open"></use></svg></span><span data-i18n="filesH"></span></h2>
       <p data-i18n="filesP"></p>
     </div>
     <div class="grid-2">
       <div class="card" id="folderCard">
         <div class="card-head">
-          <span class="card-title" data-i18n="folderH"></span>
+          <span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-folder"></use></svg></span><span class="card-title" data-i18n="folderH"></span></span>
           <div class="edu-seg" role="group">
             <button type="button" data-folder="mini" data-i18n="folderMini"></button>
             <button type="button" data-folder="llama" data-i18n="folderLlama"></button>
@@ -380,7 +593,7 @@ details.card[open] > summary::after { content: '−'; }
   <!-- ─── 2. Architecture ─── -->
   <section class="section" id="s-arch" aria-labelledby="hArch">
     <div class="sec-head">
-      <h2 id="hArch"><span class="sec-num">2</span><span data-i18n="archH"></span></h2>
+      <h2 id="hArch"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-network"></use></svg></span><span data-i18n="archH"></span></h2>
       <p data-i18n="archP"></p>
     </div>
     <div class="grid-2" id="archOverviewGrid">
@@ -426,7 +639,7 @@ details.card[open] > summary::after { content: '−'; }
         </div>
       </div>
       <div class="card" id="archControls">
-        <span class="card-title" data-i18n="archBuild"></span>
+        <div class="card-head"><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-sliders-horizontal"></use></svg></span><span class="card-title" data-i18n="archBuild"></span></span></div>
         <p id="archResetNotice" data-i18n="archResetNotice" data-reinitializes="true"></p>
         <div class="stepper">
           <span data-i18n="hiddenLayers"></span>
@@ -446,7 +659,7 @@ details.card[open] > summary::after { content: '−'; }
       </div>
     </div>
     <details class="card fruit-lesson" id="fruitLesson" data-training-mode="explore" data-training-phase="idle" data-input-kind="features">
-      <summary><span class="card-title" data-i18n="fruitSummary"></span></summary>
+      <summary><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-graduation-cap"></use></svg></span><span class="card-title" data-i18n="fruitSummary"></span></span></summary>
       <p data-i18n="fruitIntro"></p>
       <p><strong data-i18n="fruitNotPixels"></strong></p>
       <div class="btn-row"><button class="edu-btn" type="button" id="fruitEnter" data-i18n="fruitEnter"></button><button class="btn-ghost" type="button" id="fruitExit" data-i18n="fruitExit" hidden></button></div>
@@ -456,7 +669,7 @@ details.card[open] > summary::after { content: '−'; }
   <!-- ─── 3. Weights ─── -->
   <section class="section" id="s-weights" aria-labelledby="hWeights">
     <div class="sec-head">
-      <h2 id="hWeights"><span class="sec-num">3</span><span data-i18n="weightsH"></span></h2>
+      <h2 id="hWeights"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-binary"></use></svg></span><span data-i18n="weightsH"></span></h2>
       <p data-i18n="weightsP"></p>
     </div>
     <div class="callout green edu-block">
@@ -465,7 +678,7 @@ details.card[open] > summary::after { content: '−'; }
     </div>
     <div class="card" id="sizeCard">
       <div class="card-head">
-        <span class="card-title" data-i18n="sizeH"></span>
+        <span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-ruler"></use></svg></span><span class="card-title" data-i18n="sizeH"></span></span>
         <div class="edu-seg" role="group" id="precSeg"></div>
       </div>
       <p data-i18n="sizeP"></p>
@@ -481,12 +694,12 @@ details.card[open] > summary::after { content: '−'; }
   <!-- ─── 4. Disk ─── -->
   <section class="section" id="s-disk" aria-labelledby="hDisk">
     <div class="sec-head">
-      <h2 id="hDisk"><span class="sec-num">4</span><span data-i18n="diskH"></span></h2>
+      <h2 id="hDisk"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-hard-drive"></use></svg></span><span data-i18n="diskH"></span></h2>
       <p data-i18n="diskP"></p>
     </div>
     <div class="card" id="configCard" tabindex="-1">
       <div class="card-head">
-        <span class="card-title" data-i18n="configH"></span>
+        <span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-file-json"></use></svg></span><span class="card-title" data-i18n="configH"></span></span>
         <div class="edu-seg" role="group">
           <button type="button" data-config="mini" data-i18n="folderMini"></button>
           <button type="button" data-config="llama" data-i18n="folderLlama"></button>
@@ -494,19 +707,19 @@ details.card[open] > summary::after { content: '−'; }
       </div>
       <p id="configP"></p>
       <div class="anno" id="configView"></div>
-      <div class="btn-row" id="configActions">
+      <div class="btn-row card-foot" id="configActions">
         <button class="edu-btn" type="button" id="dlConfigBtn"><span data-i18n="dlConfig"></span></button>
         <span class="file-size" id="configSize"></span>
       </div>
     </div>
     <div class="card" id="modelFileDetail" tabindex="-1" hidden>
-      <span class="card-title file-detail-title" id="modelFileDetailTitle"></span>
+      <div class="card-head"><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-file"></use></svg></span><span class="card-title file-detail-title" id="modelFileDetailTitle"></span></span></div>
       <p id="modelFileDetailP"></p>
       <p data-i18n="llamaDetailNotice"></p>
-      <div class="btn-row"><button class="btn-ghost" type="button" id="miniInspectorExample" data-i18n="miniInspectorExample"></button></div>
+      <div class="btn-row card-foot"><button class="btn-ghost" type="button" id="miniInspectorExample" data-i18n="miniInspectorExample"></button></div>
     </div>
     <div class="card" id="fileCard" tabindex="-1">
-      <span class="card-title" id="fileTitle"></span>
+      <div class="card-head"><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-file-code"></use></svg></span><span class="card-title" id="fileTitle"></span></span></div>
       <p id="fileLead"></p>
       <p id="exportDtype"></p>
       <div class="file-bar" id="fileBar" aria-hidden="true">
@@ -519,13 +732,13 @@ details.card[open] > summary::after { content: '−'; }
       </div>
       <pre class="code-panel" id="fileView" tabindex="0"></pre>
       <p id="fileCaption" style="font-size:14px"></p>
-      <div class="btn-row">
+      <div class="btn-row card-foot">
         <button class="edu-btn" type="button" id="dlWeightsBtn"><span data-i18n="dlWeights"></span></button>
         <span class="file-size" id="fileSize"></span>
       </div>
     </div>
     <div class="card">
-      <span class="card-title" data-i18n="formatsH"></span>
+      <div class="card-head"><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-files"></use></svg></span><span class="card-title" data-i18n="formatsH"></span></span></div>
       <p data-i18n="formatsP"></p>
       <div class="fmt-grid" id="fmtGrid"></div>
     </div>
@@ -534,7 +747,7 @@ details.card[open] > summary::after { content: '−'; }
   <!-- ─── 5. Loading ─── -->
   <section class="section" id="s-load" aria-labelledby="hLoad">
     <div class="sec-head">
-      <h2 id="hLoad"><span class="sec-num">5</span><span data-i18n="loadH"></span></h2>
+      <h2 id="hLoad"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-cpu"></use></svg></span><span data-i18n="loadH"></span></h2>
       <p data-i18n="loadP"></p>
     </div>
     <div class="load-steps">
@@ -2154,6 +2367,14 @@ randomizeArchWeights();
 renderAll();
 SECTIONS.forEach((id) => sectionObserver.observe($(id)));
 updateScrollProgress();
+
+// ─── Reveal (boot gate from edustyl head.html) ───
+const FONT_WAIT_MS = 1500;
+const BRAND_FONTS = ['400 1em Outfit', '700 1em Outfit', '400 1em "IBM Plex Sans"', '600 1em "IBM Plex Sans"', '400 1em "Roboto Mono"'];
+Promise.race([
+  Promise.all(BRAND_FONTS.map(f => document.fonts.load(f).catch(() => null))),
+  new Promise(r => setTimeout(r, FONT_WAIT_MS)),
+]).then(() => document.documentElement.classList.add('app-ready'));
 window.MODEL_DEMO = { state, probe, buildSafetensors, configText, evaluateNetwork, numericalChecks, runChecks, modelFileDestination, navigateModelFile, parameterId, describeParameter, selectParameter,
   forward, renderDynamic, renderAll, randomizeArchWeights, clampSelection, layers, countParams, setInputs, setArchitecture, setLanguage };
 Object.assign(window.MODEL_DEMO, { FRUIT_SAMPLES, createFruitNetwork, computeBatchGradients, trainEpoch, fruitMetrics,
