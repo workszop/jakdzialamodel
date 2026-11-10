@@ -178,7 +178,7 @@ test('educational notices scope random weights to the explorer and distinguish e
     assert.match(api.t('precisionNotice'), lang === 'pl' ? /szacuje.*sieć.*pobierany plik.*float32/i : /estimates.*network.*downloaded file.*float32/i);
     assert.match(api.t('exportDtype'), /float32/);
     assert.match(api.t('archResetNotice'), lang === 'pl' ? /ponown.*losuj/i : /new random/i);
-    assert.match(api.t('loadHf'), lang === 'pl' ? /obsługiwanych.*zarejestrowanych/i : /supported.*registered/i);
+    assert.match(api.t('loadHf'), lang === 'pl' ? /biblioteka ma już kod znanych architektur.*MiniMLP/i : /library already contains the code of well-known architectures.*MiniMLP/i);
   }
   const originalWeights = JSON.stringify(api.state.arch.weights);
   const originalFile = Array.from(api.buildSafetensors().bytes);

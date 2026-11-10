@@ -461,6 +461,7 @@ details.card[open] > summary::after { content: '−'; }
 .prec-demo { background: var(--paper-2); border-radius: var(--r-md); padding: 14px 16px; font-size: 14.5px; color: var(--ink); display: grid; gap: 4px; }
 .prec-demo code { font-family: var(--font-mono); font-size: 13.5px; }
 .prec-demo span { font-size: 13px; color: var(--ink-3); }
+.prec-demo span.impact { font-size: 14px; color: var(--ink); }
 
 /* ─── Annotated JSON & code ─── */
 .anno { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); border-radius: var(--r-lg); overflow: hidden; }
@@ -503,6 +504,104 @@ details.card[open] > summary::after { content: '−'; }
   font-family: var(--font-display); font-weight: 700; }
 .load-step strong { font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--ink); }
 .load-step span { font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+
+
+/* intro recipe: plan + numbers + program = model */
+.recipe { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); gap: 12px; align-items: stretch; }
+.recipe-tile { display: grid; gap: 6px; align-content: start; justify-items: start; padding: 16px 18px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow-sm); font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+.recipe-tile strong { font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--ink); }
+.recipe-tile.out { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.recipe-tile.out strong { color: var(--yellow); }
+.chip.yellow { background: var(--yellow); color: var(--yellow-ink); }
+.recipe-op { align-self: center; font-family: var(--font-display); font-weight: 700; font-size: 26px; color: var(--ink); }
+
+/* weight tracing */
+.edge-hit { stroke: transparent; stroke-width: 14; stroke-linecap: round; cursor: pointer; }
+.edge-hit:hover { stroke: color-mix(in srgb, var(--yellow) 55%, transparent); }
+.edge-halo { stroke: var(--yellow); stroke-width: 13; stroke-linecap: round; }
+.trace { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 12px 16px; border-radius: var(--r-md); background: var(--paper-2); border-left: 6px solid var(--yellow); font-size: var(--body-sm); color: var(--ink); }
+.trace:empty { display: none; }
+.trace .trace-id { font-family: var(--font-mono); font-weight: 500; background: var(--yellow); color: var(--yellow-ink); padding: 2px 8px; border-radius: var(--r-xs); white-space: nowrap; }
+.trace .trace-text { flex: 1 1 260px; min-width: 0; }
+.trace code { font-family: var(--font-mono); font-size: 13px; }
+.trace .btn-ghost { padding: 6px 14px; font-size: 14px; border-radius: var(--r-pill); }
+
+/* weight tables */
+.wgrids { display: flex; flex-wrap: wrap; gap: 20px 28px; align-items: flex-start; }
+.wgrid { display: grid; gap: 8px; min-width: 0; max-width: 100%; }
+.wgrid-title { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-size: 13px; color: var(--ink-2); }
+.wgrid-title code { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--ink); }
+.wgrid-scroll { overflow-x: auto; max-width: 100%; padding: 3px; }
+.wgrid table { border-collapse: separate; border-spacing: 4px; }
+.wgrid th { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--ink-3); padding: 0 4px; white-space: nowrap; text-align: center; }
+.wgrid th[scope="row"] { text-align: right; }
+.wgrid td { padding: 0; }
+.wcell { display: block; width: 100%; min-width: 58px; padding: 8px 6px; border: 1px solid var(--line-2); border-radius: var(--r-xs); font-family: var(--font-mono); font-size: 13px; color: var(--ink); cursor: pointer; text-align: right; font-variant-numeric: tabular-nums; background: var(--surface); }
+.wcell.bias { background: var(--paper-3); }
+.wcell:hover { border-color: var(--ink); }
+.wcell[data-selected="true"] { outline: 3px solid var(--yellow); outline-offset: 1px; border-color: var(--ink); font-weight: 700; }
+.wgrid td.gap { width: 10px; }
+
+/* loading stepper */
+button.load-step { font: inherit; text-align: left; cursor: pointer; color: inherit; }
+button.load-step:hover { border-color: var(--ink); }
+button.load-step.active { border-color: var(--ink); box-shadow: 0 0 0 3px var(--yellow), var(--shadow-sm); }
+button.load-step:not(.active) .n { background: var(--paper-3); color: var(--ink); }
+.st-edge { stroke-linecap: round; transition: stroke .6s, stroke-width .6s, opacity .5s; }
+.st-node { fill: var(--surface); stroke: var(--ink); stroke-width: 2; transition: opacity .4s, fill .4s; }
+.st-val { font-family: var(--font-mono); font-size: 9.5px; fill: var(--ink); transition: opacity .4s; }
+.st-tag { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-2); }
+#loadStageCaption { font-size: var(--body-sm); color: var(--ink); min-height: 3em; }
+.code-panel .c-com.on { background: var(--yellow); color: var(--yellow-ink); border-radius: 3px; }
+
+/* memory */
+.mem-slider { background: var(--paper-2); border-radius: var(--r-lg); padding: 14px 16px; }
+.mem-chart { position: relative; padding: 26px 0 22px; }
+.mem-track { position: relative; display: flex; height: 40px; border-radius: var(--r-md); overflow: hidden; background: var(--paper-3); }
+.mem-seg { height: 100%; transition: width .3s; }
+.mem-seg.w { background: var(--green-soft); }
+.mem-seg.c { background: var(--blue-soft); border-left: 2px solid var(--surface); }
+.mem-mark { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed var(--ink); }
+.mem-mark span { position: absolute; top: 0; transform: translateX(-50%); font-family: var(--font-mono); font-size: 12px; color: var(--ink); white-space: nowrap; background: var(--surface); padding: 0 4px; }
+.mem-mark.end span { transform: translateX(-100%); }
+.mem-axis { position: absolute; left: 0; bottom: 0; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+.mem-legend, .mem-verdicts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: var(--body-sm); color: var(--ink); }
+.mem-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.mem-legend strong, .mem-verdicts strong { font-variant-numeric: tabular-nums; }
+.mem-verdicts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.mem-verdicts li { display: grid; gap: 2px; padding: 12px 14px; border-radius: var(--r-md); background: var(--paper-2); border-left: 6px solid var(--green); }
+.mem-verdicts li[data-fits="false"] { border-left-color: var(--red); }
+
+/* chatbot loop */
+.flow-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 26px; }
+.flow-steps .load-step { padding: 14px; box-shadow: none; background: var(--paper-2); border-color: var(--line); }
+.chat-demo { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 22px; padding: 18px; border-radius: var(--r-lg); background: var(--paper-2); }
+.chat-demo h4 { font-size: 15px; margin: 0 0 10px; }
+.chat-tokens { display: flex; flex-wrap: wrap; gap: 6px; min-height: 58px; }
+.tok { display: grid; justify-items: center; gap: 2px; padding: 6px 10px; border-radius: var(--r-sm); background: var(--surface); border: 1px solid var(--line-2); font-size: 15px; color: var(--ink); white-space: pre; }
+.tok small { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.tok.new { background: var(--yellow); border-color: var(--yellow-600); }
+.tok.new small { color: var(--yellow-ink); }
+.chat-cands { display: grid; gap: 8px; }
+.cand { display: grid; grid-template-columns: minmax(90px, auto) 1fr 48px; gap: 10px; align-items: center; font-size: 14px; color: var(--ink); }
+.cand .name { font-family: var(--font-mono); white-space: pre; }
+.cand .bar { height: 12px; border-radius: 6px; background: var(--paper-3); overflow: hidden; }
+.cand .bar i { display: block; height: 100%; background: var(--blue-soft); border-radius: 6px; }
+.cand.top .bar i { background: var(--green-soft); }
+.cand.top .name { font-weight: 700; }
+.cand .pct { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
+#chatCount { margin-top: 10px; }
+
+@media (max-width: 900px) {
+  .recipe { grid-template-columns: minmax(0, 1fr); }
+  .recipe-op { justify-self: center; line-height: 1; }
+  .flow-steps { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .flow-steps .load-step + .load-step::before { content: "↓"; left: 50%; top: -13px; }
+  .chat-demo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-edge, .st-node, .st-val, .mem-seg { transition: none; }
+}
 
 .kbd-hints { font-size: 13px; color: var(--ink-3); display: flex; gap: 16px; flex-wrap: wrap; padding: 24px var(--gutter) 40px; border-top: 1px solid var(--line); }
 
@@ -563,6 +662,15 @@ details.card[open] > summary::after { content: '−'; }
   <section class="page-head">
     <h1 class="app-title" data-i18n="title"></h1>
     <p class="edu-lead" data-i18n="lead"></p>
+    <div class="recipe" id="recipe">
+      <div class="recipe-tile"><span class="chip blue" data-i18n="rcPlanTag"></span><strong data-i18n="rcPlanH"></strong><span data-i18n="rcPlan"></span></div>
+      <span class="recipe-op" aria-hidden="true">+</span>
+      <div class="recipe-tile"><span class="chip green" data-i18n="rcNumTag"></span><strong data-i18n="rcNumH"></strong><span data-i18n="rcNum"></span></div>
+      <span class="recipe-op" aria-hidden="true">+</span>
+      <div class="recipe-tile"><span class="chip sand" data-i18n="rcProgTag"></span><strong data-i18n="rcProgH"></strong><span data-i18n="rcProg"></span></div>
+      <span class="recipe-op" aria-hidden="true">=</span>
+      <div class="recipe-tile out"><span class="chip yellow" data-i18n="rcOutTag"></span><strong data-i18n="rcOutH"></strong><span data-i18n="rcOut"></span></div>
+    </div>
   </section>
   <div id="liveRegion" class="sr-only" aria-live="polite"></div>
 
@@ -610,7 +718,9 @@ details.card[open] > summary::after { content: '−'; }
           <span><i class="pos"></i><span data-i18n="legendPos"></span></span>
           <span><i class="neg"></i><span data-i18n="legendNeg"></span></span>
           <span data-i18n="legendWidth"></span>
+          <span data-i18n="legendClick"></span>
         </div>
+        <div class="trace" id="tracePanel" aria-live="polite"></div>
         </div>
         <div class="fruit-scores" id="fruitScores" hidden>
           <p data-i18n="fruitScores"></p>
@@ -677,6 +787,13 @@ details.card[open] > summary::after { content: '−'; }
     <div class="callout green edu-block">
       <h3 data-i18n="wDefH"></h3>
       <p data-i18n="wDef"></p>
+    </div>
+    <div class="card" id="gridCard">
+      <div class="card-head"><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-binary"></use></svg></span><span class="card-title" data-i18n="gridH"></span></span></div>
+      <p data-i18n="gridP"></p>
+      <div class="wgrids" id="weightGrids"></div>
+      <p class="hint" data-i18n="gridLegend"></p>
+      <div class="trace" id="gridTrace"></div>
     </div>
     <div class="card" id="sizeCard">
       <div class="card-head">
@@ -752,14 +869,53 @@ details.card[open] > summary::after { content: '−'; }
       <h2 id="hLoad"><span class="badge badge-lg tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-cpu"></use></svg></span><span data-i18n="loadH"></span></h2>
       <p data-i18n="loadP"></p>
     </div>
-    <div class="load-steps">
-      <div class="load-step"><span class="n">1</span><strong data-i18n="ls1H"></strong><span data-i18n="ls1"></span></div>
-      <div class="load-step"><span class="n">2</span><strong data-i18n="ls2H"></strong><span data-i18n="ls2"></span></div>
-      <div class="load-step"><span class="n">3</span><strong data-i18n="ls3H"></strong><span data-i18n="ls3"></span></div>
-      <div class="load-step"><span class="n">4</span><strong data-i18n="ls4H"></strong><span data-i18n="ls4"></span></div>
+    <div class="load-steps" id="loadSteps">
+      <button type="button" class="load-step" data-load-step="1"><span class="n">1</span><strong data-i18n="ls1H"></strong><span data-i18n="ls1"></span></button>
+      <button type="button" class="load-step" data-load-step="2"><span class="n">2</span><strong data-i18n="ls2H"></strong><span data-i18n="ls2"></span></button>
+      <button type="button" class="load-step" data-load-step="3"><span class="n">3</span><strong data-i18n="ls3H"></strong><span data-i18n="ls3"></span></button>
+      <button type="button" class="load-step" data-load-step="4"><span class="n">4</span><strong data-i18n="ls4H"></strong><span data-i18n="ls4"></span></button>
+    </div>
+    <div class="card" id="loadStageCard" data-step="1">
+      <svg id="loadStage" class="diagram" viewBox="0 0 600 240" role="img" aria-labelledby="loadStageCaption"></svg>
+      <p id="loadStageCaption" aria-live="polite"></p>
+      <div class="btn-row">
+        <button class="btn-ghost" type="button" id="loadPrev" data-i18n="loadPrev"></button>
+        <button class="edu-btn" type="button" id="loadNext" data-i18n="loadNext"></button>
+        <button class="btn-ghost" type="button" id="loadPlay" data-i18n="loadPlay"></button>
+      </div>
     </div>
     <pre class="code-panel tall" id="loadCode" tabindex="0"></pre>
     <p data-i18n="loadHf" style="font-size:15px"></p>
+    <div class="card" id="memCard">
+      <div class="card-head">
+        <span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-cpu"></use></svg></span><span class="card-title" data-i18n="memH"></span></span>
+        <div class="edu-seg" role="group" id="memPrecSeg"></div>
+      </div>
+      <p data-i18n="memP"></p>
+      <div class="slider mem-slider"><div class="row"><label for="ctxTokens" data-i18n="memCtxLabel"></label><span class="val" id="ctxVal"></span></div><input type="range" id="ctxTokens" min="0" max="4096" step="64" value="2048"></div>
+      <div class="mem-chart" id="memChart"></div>
+      <ul class="mem-legend" id="memLegend"></ul>
+      <ul class="mem-verdicts" id="memVerdicts"></ul>
+      <p class="hint" id="memFormula"></p>
+      <p class="hint" data-i18n="memNote"></p>
+    </div>
+    <div class="card" id="chatCard">
+      <div class="card-head"><span class="tile-h"><span class="badge tone-ink" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-network"></use></svg></span><span class="card-title" data-i18n="chatH"></span></span></div>
+      <p data-i18n="chatP"></p>
+      <div class="flow-steps">
+        <div class="load-step"><span class="n">1</span><strong data-i18n="cf1H"></strong><span data-i18n="cf1"></span></div>
+        <div class="load-step"><span class="n">2</span><strong data-i18n="cf2H"></strong><span data-i18n="cf2"></span></div>
+        <div class="load-step"><span class="n">3</span><strong data-i18n="cf3H"></strong><span data-i18n="cf3"></span></div>
+        <div class="load-step"><span class="n">4</span><strong data-i18n="cf4H"></strong><span data-i18n="cf4"></span></div>
+        <div class="load-step"><span class="n">5</span><strong data-i18n="cf5H"></strong><span data-i18n="cf5"></span></div>
+      </div>
+      <div class="chat-demo" id="chatDemo" aria-live="polite">
+        <div><h4 data-i18n="chatTokensH"></h4><div class="chat-tokens" id="chatTokens"></div><p class="hint" id="chatCount"></p></div>
+        <div><h4 data-i18n="chatCandsH"></h4><div class="chat-cands" id="chatCands"></div></div>
+      </div>
+      <div class="btn-row"><button class="edu-btn" type="button" id="chatNext" data-i18n="chatNext"></button><button class="btn-ghost" type="button" id="chatReset" data-i18n="chatReset"></button></div>
+      <p class="hint" data-i18n="chatNote"></p>
+    </div>
     <div class="callout ink edu-block">
       <h3 data-i18n="sumH"></h3>
       <ul>
@@ -846,6 +1002,76 @@ const FORMATS = [
 // ─── Translations ───
 const T = {
   pl: {
+    rcPlanTag: 'plan',
+    rcPlanH: 'Architektura',
+    rcPlan: 'Jak połączona jest sieć. Mały plik tekstowy, np. config.json.',
+    rcNumTag: 'liczby',
+    rcNumH: 'Wagi',
+    rcNum: 'Wszystko, czego sieć nauczyła się w treningu. Duży plik, np. model.safetensors.',
+    rcProgTag: 'program',
+    rcProgH: 'Kod',
+    rcProg: 'Buduje sieć według planu, wpisuje w nią liczby i liczy odpowiedzi.',
+    rcOutTag: 'wynik',
+    rcOutH: 'Działający model',
+    rcOut: 'Dostaje dane, oddaje odpowiedź.',
+    legendClick: 'kliknij linię, aby zobaczyć jej wagę',
+    traceWeight: 'To waga linii {from} → {to}.',
+    traceBias: 'To bias: {to}.',
+    traceBytes: 'W pliku model.safetensors zajmuje 4 bajty: {bytes}, od pozycji {offset}.',
+    traceGo: 'Pokaż te bajty w pliku',
+    traceNode: '{layer}, kółko {n}',
+    gridCell: '{id}: {v}',
+    gridH: 'Wagi jako tabele liczb',
+    gridP: 'Wszystkie wagi między dwiema kolumnami sieci zapisuje się w jednej tabeli. Wiersz to kółko, do którego linie wchodzą; kolumna to kółko, z którego wychodzą. Na końcu wiersza stoi bias tego kółka. Taka tabela liczb nazywa się w bibliotekach „tensor”, a jej wymiary – „shape”: [4, 2] to 4 wiersze i 2 kolumny. Kliknij liczbę, a zaznaczy się jej linia na rysunku i jej bajty w pliku.',
+    gridSub: '{to} (wiersze) ← {from} (kolumny)',
+    gridShape: 'shape [{shape}]',
+    gridBias: 'bias',
+    gridRow: 'do {n}',
+    gridCol: 'z {n}',
+    gridLegend: 'Niebieskie tło = waga dodatnia, czerwone = ujemna; im mocniejszy kolor, tym większa waga.',
+    precImpact: 'Każda waga jest wtedy trochę niedokładna. Zwykle model działa dalej, tylko nieco gorzej – dlatego na zwykłych komputerach często używa się zapisu 4-bitowego.',
+    loadNext: 'Następny krok',
+    loadPrev: 'Wstecz',
+    loadPlay: 'Odtwórz od początku',
+    stage1: 'W config.json stoi hidden_sizes = [{h}], więc kolumny mają {cols} kółek. Sieci jeszcze nie ma – jest tylko plan.',
+    stage2: 'Program tworzy {n} kółek i {e} linii. Wagi są losowe (szare linie) – taka sieć niczego nie umie.',
+    stage3: '{p} liczb z model.safetensors ({b} B) trafia na swoje miejsca. Linie dostają kolor i grubość zapisanych wag.',
+    stage4: 'Wejście {x1} i {x2} przechodzi przez sieć kolumna po kolumnie. Wynik: {out} – ten sam co na rysunku w sekcji 2.',
+    memH: 'Czy model zmieści się w pamięci?',
+    memP: 'Żeby model działał, jego wagi muszą w całości trafić z dysku do pamięci komputera (RAM) albo karty graficznej. Do tego dochodzi pamięć kontekstu: model pisze tekst po jednym kawałku (tokenie) i żeby nie liczyć za każdym razem wszystkiego od nowa, przechowuje wyniki pośrednie dla każdego tokenu rozmowy. Im dłuższa rozmowa, tym więcej pamięci. Przykład: Llama 2 7B.',
+    memCtxLabel: 'Długość rozmowy (kontekst)',
+    memCtxVal: '{n} tokenów',
+    memWeights: 'Wagi ({p})',
+    memCtx: 'Kontekst ({t} tokenów)',
+    memTotal: 'Razem',
+    memChartLabel: 'Potrzebna pamięć: {n}',
+    memDev8: 'Laptop, 8 GB RAM',
+    memDev16: 'Laptop, 16 GB RAM',
+    memDev24: 'Karta graficzna, 24 GB',
+    memFits: 'mieści się',
+    memNoFit: 'nie mieści się – brakuje {n}',
+    memFormula: 'Skąd liczba dla kontekstu: {layers} bloki × 2 tabele × {h} liczb × 2 B ≈ {per} na każdy token. Przy {t} tokenach to {ctx}.',
+    memNote: 'To przybliżenie: pomijamy pamięć samego programu i systemu. Pamięć kontekstu zwykle zostaje w float16, nawet gdy wagi są zapisane w 4 bitach. Llama 2 przyjmuje najwyżej 4096 tokenów; modele z kontekstem 100 000 tokenów potrzebują tej pamięci odpowiednio więcej.',
+    chatH: 'A jak z tego powstaje czatbot?',
+    chatP: 'Nasz mini-model zamienia 2 liczby na 1 liczbę. Model językowy robi to samo na większą skalę, a wokół niego działa prosta pętla. Tu przydają się pozostałe pliki z folderu.',
+    cf1H: 'Tekst',
+    cf1: 'Twoje pytanie to litery, a sieć umie liczyć tylko na liczbach.',
+    cf2H: 'Tokenizer',
+    cf2: 'Tnie tekst na kawałki (tokeny) i każdy zamienia na numer ze słownika. Plik: tokenizer.json.',
+    cf3H: 'Sieć',
+    cf3: 'Liczy na tych numerach tak jak nasza: mnożenie przez wagi i dodawanie. Pliki: config.json i wagi.',
+    cf4H: 'Wyniki',
+    cf4: 'Na wyjściu jest po jednej liczbie dla każdego z 32 000 tokenów słownika: jak dobrze pasuje jako następny.',
+    cf5H: 'Pętla',
+    cf5: 'Program wybiera jeden z najlepiej pasujących tokenów, dopisuje go do tekstu i powtarza wszystko – aż trafi na token końca.',
+    chatTokensH: 'Tekst jako tokeny (pod spodem ich numery)',
+    chatCandsH: 'Co sieć proponuje jako następny token',
+    chatNext: 'Dopisz token i policz ponownie',
+    chatReset: 'Od nowa',
+    chatCount: 'W kontekście: {n} z 4096 tokenów. Każdy zajmuje pamięć kontekstu.',
+    chatDone: 'Wybrany został token końca – program przestaje pisać. Numer tego tokenu jest zapisany w generation_config.json.',
+    chatEnd: 'koniec tekstu',
+    chatNote: 'Przykład ilustracyjny: numery tokenów i procenty są wymyślone, bo to demo nie uruchamia Llamy. Prawdziwy model liczy je z wag.',
     fruitSummary: 'Jak sieć się uczy? Przykład z owocami', fruitPause: 'Pauza',
     fruitIntro: 'Teraz nauczymy sieć odróżniać truskawkę od borówki. Każdy owoc opisujemy dwiema liczbami: jak jest długi i jak okrągły. Sieć ćwiczy na 12 przykładach. Gdy wyjdziesz, wróci Twoja poprzednia sieć.',
     fruitNotPixels: 'Sieć nie widzi obrazka – dostaje tylko te dwie liczby.',
@@ -872,7 +1098,7 @@ const T = {
     fruitHeldOut: 'Sprawdzian: {correct}/{total} trafionych. Sieć nigdy nie ćwiczyła na tych przykładach.',
     fruitPoint: '{label}, {split}; długość {length}, okrągłość {roundness}; wynik truskawki {score}',
     title: 'Z czego składa się model AI?',
-    lead: 'Model AI (tu: sieć neuronowa, taka jak w ChatGPT czy Llamie) to dwie rzeczy: plan i mnóstwo liczb. Plan, czyli architektura, mówi, jak połączona jest sieć – zapisuje się go w małym pliku tekstowym config.json. Liczby, czyli wagi, to wszystko, czego sieć nauczyła się w treningu – trafiają do dużego pliku, np. model.safetensors. Oba pliki leżą razem w folderze, który pobierasz z internetu. Żeby model ruszył, potrzebny jest jeszcze program, który zbuduje sieć według planu i wpisze w nią liczby.',
+    lead: 'Model AI (tu: sieć neuronowa, taka jak w ChatGPT czy Llamie) to plan i mnóstwo liczb. Żeby zadziałał, potrzebny jest jeszcze program, który zbuduje sieć według planu i wpisze w nią liczby.',
     untrainedNotice: 'Ta sieć ma na start losowe wagi – jeszcze niczego się nie nauczyła, więc jej odpowiedź to czysty przypadek. Przesuwanie suwaków nie uczy sieci, tylko pokazuje, jak liczy.',
     navFiles: 'Folder', navArch: 'Architektura', navWeights: 'Wagi', navDisk: 'Zapis', navLoad: 'Wczytanie',
     filesH: 'Model to folder z plikami',
@@ -888,10 +1114,10 @@ const T = {
     knobsH: 'Analogia: maszyna z pokrętłami',
     knobsP: 'Wyobraź sobie maszynę z mnóstwem pokręteł. Architektura to projekt maszyny: ile jest pokręteł i jak są połączone. Wagi to położenie każdego pokrętła. Trening to cierpliwe przekręcanie ich, aż maszyna zacznie dawać dobre odpowiedzi. Nasz mini-model ma {n} pokręteł, Llama 2 7B – około 7 miliardów.',
     archH: 'Architektura – plan obliczeń',
-    archP: 'Ten rysunek pokazuje w prosty sposób, jakie obliczenia wykonuje algorytm sieci. Każde kółko („neuron”) to jedno obliczenie: weź liczby z poprzedniej kolumny, pomnóż je przez wagi i dodaj. Komputer nie widzi żadnych kółek ani linii – dostaje te same obliczenia zapisane w kodzie jako wzory matematyczne i po prostu je wykonuje. Poniżej możesz dodawać i usuwać kółka.',
+    archP: 'Ten rysunek pokazuje, jakie obliczenia wykonuje sieć. Każde kółko („neuron”) to jedno obliczenie: weź liczby z poprzedniej kolumny, pomnóż każdą przez wagę jej linii, zsumuj i dodaj jeszcze jedną, własną liczbę kółka (tzw. bias). Jeśli wynik wyjdzie ujemny, kółko zamienia go na 0 (ta reguła nazywa się ReLU) – stąd 0,00 w niektórych kółkach. Ostatnie kółko ściska wynik do zakresu od 0 do 1. Komputer nie widzi kółek ani linii – dostaje te same obliczenia zapisane w kodzie i po prostu je wykonuje.',
     legendPos: 'waga dodatnia', legendNeg: 'waga ujemna', legendWidth: 'grubsza linia = silniejsze połączenie',
     x1Label: 'Wejście x₁', x2Label: 'Wejście x₂',
-    inputsHint: 'Suwaki to dwie liczby, które wkładamy do sieci. Liczby w kółkach to bieżące wyniki – zmieniają się razem z suwakami. Wagi na liniach stoją w miejscu.',
+    inputsHint: 'Suwaki to dwie liczby, które wkładamy do sieci. Liczby w kółkach to bieżące wyniki (tzw. aktywacje) – zmieniają się razem z suwakami. Wagi na liniach stoją w miejscu.',
     archResetNotice: 'Gdy zmienisz liczbę kolumn lub kółek, sieć ponownie losuje wszystkie wagi i zaczyna od zera.',
     archBuild: 'Zbuduj architekturę', hiddenLayers: 'Kolumny w środku (tzw. warstwy ukryte)', layerN: 'Środek {n}: liczba kółek',
     paramLabel: 'Liczba wag (parametrów)',
@@ -899,16 +1125,16 @@ const T = {
     paramBreakdown: '{weights} wag połączeń + {biases} biasów = {total} parametrów',
     parameterSelected: '{id}, wybrany parametr: {value}',
     parameterOffsets: 'data_offsets w nagłówku liczymy od początku danych tensorów. Tutaj offset to bezwzględna pozycja w pliku, razem z 8 bajtami długości i nagłówkiem.',
-    parameterOffset: 'Offset w pliku: {offset} B; 4 bajty, little-endian.',
+    parameterOffset: 'Offset w pliku: {offset} B; 4 bajty zapisane od najmłodszego (little-endian).',
     lblInput: 'Wejście', lblHidden: 'Środek {n}', lblOutput: 'Wynik',
     archLive: 'Architektura: {layers}. Parametrów: {p}. Wagi i biasy wylosowane ponownie.',
     weightsH: 'Wagi – parametry modelu',
     weightsP: 'Architektura to tylko plan. To wagi decydują, co model faktycznie robi. Ta sama architektura z innymi wagami może rozpoznawać koty albo prognozować ceny – albo nie umieć nic.',
     wDefH: 'Wagi (parametry)',
-    wDef: 'Wagi określają siłę połączeń, a biasy są przesunięciami dodawanymi przez neurony. To parametry modelu: podczas treningu dostosowuje się ich wartości, aby zmniejszać błąd. Sama zmiana wejścia zmienia aktywacje, nie parametry.',
+    wDef: 'Wagi to siła połączeń (linie na rysunku), a bias to dodatkowa liczba każdego kółka. Razem nazywamy je parametrami modelu – trening dobiera ich wartości tak, żeby błąd malał. Zmiana wejścia zmienia tylko wyniki w kółkach (aktywacje), a parametrów nie rusza.',
     gIn: 'wejście', gHidden: 'warstwa ukryta {n}', gOut: 'wyjście',
     sizeH: 'Ile miejsca zajmują wagi?',
-    sizeP: 'Nasze demo zapisuje wagi jako float32 – 4 bajty na liczbę. Niższa precyzja zmniejsza rozmiar zapisu; wpływ na szybkość i dokładność zależy od metody, sprzętu i zadania. float16 zajmuje 2 bajty, int8 1 bajt, a 4 bity pół bajtu na wartość przed doliczeniem metadanych.',
+    sizeP: 'Każda waga to liczba, a liczba zajmuje miejsce: w zapisie float32 – 4 bajty. Można ją zapisać mniej dokładnie: float16 to 2 bajty, int8 – 1 bajt, a zapis 4-bitowy – pół bajta. Plik jest wtedy mniejszy, ale liczby są zaokrąglone.',
     precisionNotice: 'Ten przełącznik tylko szacuje rozmiar zapisu. Sieć i pobierany plik pozostają w float32.',
     thModel: 'Model', thParams: 'Liczba wag', thSize: 'Rozmiar wag',
     rowMini: 'Nasz mini-model', rowLlama: 'Llama 2 7B', llamaShipped: 'tak jest publikowana – to pliki z folderu w sekcji 1', llamaShippedAs: 'publikowana w float16: ok. {n}, jak w folderze w sekcji 1', rowBig: 'Model z 70 mld wag',
@@ -919,7 +1145,7 @@ const T = {
     precQuant: 'zapisana jako liczba całkowita {q} × skala {s} = {v} (błąd {e})',
     precNote: 'W rzeczywistych formatach dochodzą jeszcze skale i metadane, więc rozmiary są przybliżone.',
     diskH: 'Jak model jest zapisany na dysku',
-    diskP: 'Potrzebne są implementacja architektury (kod), konfiguracja jej ustawień (np. config.json) oraz wartości parametrów (np. model.safetensors). Kod może pochodzić z zainstalowanej biblioteki, a nie z folderu modelu. Konfigurację czytasz jako tekst; zapis binarny odtwarza tablice liczb.',
+    diskP: 'Do uruchomienia modelu potrzebne są trzy rzeczy: kod architektury, jej ustawienia (config.json) i wartości parametrów (model.safetensors). Kod zwykle nie leży w folderze modelu – pochodzi z zainstalowanej biblioteki. config.json to zwykły tekst, a plik wag to liczby zapisane binarnie.',
     configH: 'Architektura: config.json',
     configPMini: 'Ten JSON opisuje ustawienia naszej prostej sieci. Program musi mieć też implementację MiniMLP, jak w przykładzie poniżej. Konfiguracja jest generowana z bieżącej architektury; nie zawiera kodu ani wartości wag.',
     configPLlama: 'Wybrane pola konfiguracji Llama 2 7B, nie cały plik. Określają ustawienia implementacji LlamaForCausalLM w bibliotece transformers; nie zawierają jej kodu ani miliardów wartości parametrów.',
@@ -936,7 +1162,7 @@ const T = {
     llm_hidden_size: 'wektor reprezentacji tokenu ma 4096 liczb; identyfikator tokenu to pojedyncza liczba całkowita',
     llm_intermediate_size: 'szerokość warstwy „przetwarzającej” w każdym bloku',
     llm_num_hidden_layers: '32 bloki (warstwy) ułożone jeden po drugim',
-    llm_num_attention_heads: '32 głowice uwagi mogą uczyć się różnych wzorców; nie mają gwarantowanych, odrębnych ról znaczeniowych',
+    llm_num_attention_heads: '32 „głowice uwagi” w każdym bloku – każda może śledzić inne zależności między słowami',
     llm_vocab_size: 'słownik: 32 000 tokenów',
     llm_max_position_embeddings: 'maks. długość tekstu (kontekstu) w tokenach',
     llm_hidden_act: 'funkcja aktywacji (odpowiednik naszego ReLU)',
@@ -949,7 +1175,7 @@ const T = {
     segLenLlama: '2 × 8 B', segHdrLlama: '≈ {n} · nagłówki JSON', segDataLlama: '≈ {n} · wagi (float16)',
     capJsonLlama: 'Fragment nagłówka. Każdy z {layers} bloków (model.layers.0–{last}) ma te same {per} tensorów, łącznie {n} tensorów; wartości data_offsets pominięto. Przykład: {name} ma kształt [{shape}], czyli {count} liczb × 2 B = {bytes}.',
     sizeLineLlama: 'rozmiar: ≈ {n} w 2 plikach; pasek nie jest w skali',
-    fileP: 'Safetensors przechowuje tensory: 8 bajtów z długością nagłówka, nagłówek JSON z nazwami, typami i kształtami, a potem surowe liczby. Typ danych decyduje o liczbie bajtów na wartość. Poniżej rzeczywisty plik bieżącej mini-sieci, nie plik Llama.',
+    fileP: 'Safetensors przechowuje tensory, czyli tabele liczb z sekcji 3. Plik ma trzy części: 8 bajtów z długością nagłówka, nagłówek JSON z nazwą, typem i kształtem każdej tabeli, a potem same liczby. Poniżej prawdziwy plik naszej mini-sieci.',
     exportDtype: 'Aktualny eksport: float32 (F32), 4 bajty na parametr, niezależnie od przełącznika szacowania rozmiaru.',
     llamaDetailNotice: 'To objaśnienie pliku Llama 2 7B, nie jego odczyt. Demo nie pobiera ani nie uruchamia modelu Llama. Inspektor poniżej pokazuje wyłącznie plik mini-modelu.',
     miniInspectorExample: 'Otwórz inspektor mini-modelu jako osobny przykład',
@@ -978,13 +1204,13 @@ const T = {
     fmtOnnxWhere: 'ONNX Runtime, aplikacje mobilne i przeglądarkowe',
     fmtKeras: 'Architektura i wagi w jednym pliku, w formacie biblioteki Keras.',
     fmtKerasWhere: 'TensorFlow / Keras',
-    loadH: 'Wczytanie: plan + liczby = działający model',
-    loadP: 'Program łączy implementację architektury, konfigurację i parametry. Klasa MiniMLP poniżej to implementacja naszej architektury – ta sama nazwa stoi w config.json w polu „architectures”.',
+    loadH: 'Wczytanie i uruchomienie: plan + liczby = działający model',
+    loadP: 'Program łączy trzy rzeczy: kod architektury, jej ustawienia i wagi. Przejdź przez cztery kroki i zobacz, co dzieje się z siecią. Klasa MiniMLP w kodzie poniżej to kod naszej architektury – tę samą nazwę ma pole „architectures” w config.json.',
     ls1H: 'Czyta plan', ls1: 'Otwiera config.json i dowiaduje się, ile warstw i neuronów zbudować.',
     ls2H: 'Buduje pustą sieć', ls2: 'Tworzy sieć według planu. Wagi są na razie losowe – model jeszcze nic nie umie.',
     ls3H: 'Wlewa wagi', ls3: 'Wczytuje liczby z model.safetensors i wpisuje je w odpowiednie miejsca sieci.',
     ls4H: 'Gotowe', ls4: 'Model przyjmuje dane wejściowe i liczy odpowiedź – dokładnie tak, jak diagram w sekcji 2.',
-    loadHf: 'Dla obsługiwanych lub zarejestrowanych architektur Hugging Face transformers może wykonać te kroki przez AutoModel.from_pretrained("folder-modelu"). Nasz własny MiniMLP nie jest automatycznie obsługiwany: wymaga implementacji i rejestracji albo kodu wczytującego, jak powyżej.',
+    loadHf: 'W praktyce robi to za Ciebie biblioteka: w Hugging Face transformers wystarczy AutoModel.from_pretrained("folder-modelu"), bo biblioteka ma już kod znanych architektur, np. Llamy. Nasz MiniMLP wymyśliliśmy sami, więc jego kod też musieliśmy napisać sami – jak powyżej.',
     sumH: 'W skrócie',
     sum1: '<b>Architektura</b> = plan obliczeń zaimplementowany w kodzie; config.json podaje jego ustawienia.',
     sum2: '<b>Parametry</b> = wagi i biasy, inicjalizowane przed treningiem i dostosowywane na danych. Zapisuje się je jako tensory.',
@@ -994,6 +1220,76 @@ const T = {
     pyComments: ['1. plan', '2. pusta sieć (losowe wagi)', '3. wczytujemy zapisane parametry', '4. gotowe – liczymy odpowiedź', 'implementacja architektury (kod)', 'tylko liczymy, bez uczenia'],
   },
   en: {
+    rcPlanTag: 'plan',
+    rcPlanH: 'Architecture',
+    rcPlan: 'How the network is wired. A small text file, e.g. config.json.',
+    rcNumTag: 'numbers',
+    rcNumH: 'Weights',
+    rcNum: 'Everything the network learned in training. A large file, e.g. model.safetensors.',
+    rcProgTag: 'program',
+    rcProgH: 'Code',
+    rcProg: 'Builds the network from the plan, fills in the numbers and computes answers.',
+    rcOutTag: 'result',
+    rcOutH: 'Working model',
+    rcOut: 'Takes data in, gives an answer out.',
+    legendClick: 'click a line to see its weight',
+    traceWeight: 'This is the weight of the line {from} → {to}.',
+    traceBias: 'This is the bias of: {to}.',
+    traceBytes: 'In model.safetensors it takes 4 bytes: {bytes}, starting at position {offset}.',
+    traceGo: 'Show these bytes in the file',
+    traceNode: '{layer}, circle {n}',
+    gridCell: '{id}: {v}',
+    gridH: 'Weights as tables of numbers',
+    gridP: 'All the weights between two columns of the network are stored in one table. A row is the circle the lines go into; a column is the circle they come from. The bias of that circle sits at the end of the row. Libraries call such a table of numbers a “tensor”, and its dimensions a “shape”: [4, 2] means 4 rows and 2 columns. Click a number to mark its line in the drawing and its bytes in the file.',
+    gridSub: '{to} (rows) ← {from} (columns)',
+    gridShape: 'shape [{shape}]',
+    gridBias: 'bias',
+    gridRow: 'to {n}',
+    gridCol: 'from {n}',
+    gridLegend: 'Blue background = positive weight, red = negative; the stronger the colour, the larger the weight.',
+    precImpact: 'Every weight is then slightly off. The model usually still works, just a little worse – which is why 4-bit storage is common on ordinary computers.',
+    loadNext: 'Next step',
+    loadPrev: 'Back',
+    loadPlay: 'Play from the start',
+    stage1: 'config.json says hidden_sizes = [{h}], so the columns have {cols} circles. There is no network yet – only the plan.',
+    stage2: 'The program creates {n} circles and {e} lines. The weights are random (grey lines) – this network knows nothing.',
+    stage3: '{p} numbers from model.safetensors ({b} B) go to their places. The lines take the colour and thickness of the stored weights.',
+    stage4: 'The inputs {x1} and {x2} pass through the network column by column. Result: {out} – the same as in the drawing in section 2.',
+    memH: 'Will the model fit in memory?',
+    memP: 'For a model to run, all its weights must be copied from disk into the computer’s memory (RAM) or the graphics card. On top of that comes context memory: the model writes text one piece (token) at a time, and to avoid recomputing everything each time it keeps intermediate results for every token of the conversation. The longer the conversation, the more memory. Example: Llama 2 7B.',
+    memCtxLabel: 'Conversation length (context)',
+    memCtxVal: '{n} tokens',
+    memWeights: 'Weights ({p})',
+    memCtx: 'Context ({t} tokens)',
+    memTotal: 'Total',
+    memChartLabel: 'Memory needed: {n}',
+    memDev8: 'Laptop, 8 GB RAM',
+    memDev16: 'Laptop, 16 GB RAM',
+    memDev24: 'Graphics card, 24 GB',
+    memFits: 'fits',
+    memNoFit: 'does not fit – {n} short',
+    memFormula: 'Where the context number comes from: {layers} blocks × 2 tables × {h} numbers × 2 B ≈ {per} per token. At {t} tokens that is {ctx}.',
+    memNote: 'This is an estimate: it leaves out the memory of the program itself and the system. Context memory usually stays in float16 even when the weights are stored in 4 bits. Llama 2 accepts at most 4096 tokens; models with a 100,000-token context need correspondingly more of this memory.',
+    chatH: 'So how does this become a chatbot?',
+    chatP: 'Our mini model turns 2 numbers into 1 number. A language model does the same on a larger scale, with a simple loop around it. This is where the other files in the folder come in.',
+    cf1H: 'Text',
+    cf1: 'Your question is letters, and a network can only compute with numbers.',
+    cf2H: 'Tokenizer',
+    cf2: 'Cuts the text into pieces (tokens) and turns each into a number from the vocabulary. File: tokenizer.json.',
+    cf3H: 'Network',
+    cf3: 'Computes on those numbers just like ours: multiply by weights and add. Files: config.json and the weights.',
+    cf4H: 'Scores',
+    cf4: 'The output is one number for each of the 32,000 tokens in the vocabulary: how well it fits as the next one.',
+    cf5H: 'Loop',
+    cf5: 'The program picks one of the best-fitting tokens, appends it to the text and repeats everything – until it hits the end token.',
+    chatTokensH: 'The text as tokens (their numbers underneath)',
+    chatCandsH: 'What the network proposes as the next token',
+    chatNext: 'Append the token and compute again',
+    chatReset: 'Start over',
+    chatCount: 'In context: {n} of 4096 tokens. Each one takes context memory.',
+    chatDone: 'The end token was picked – the program stops writing. The number of that token is stored in generation_config.json.',
+    chatEnd: 'end of text',
+    chatNote: 'Illustrative example: the token numbers and percentages are made up, because this demo does not run Llama. A real model computes them from its weights.',
     fruitSummary: 'How does a network learn? A fruit example', fruitPause: 'Pause',
     fruitIntro: 'Now let’s teach the network to tell a strawberry from a blueberry. We describe each fruit with two numbers: how long it is and how round it is. The network practises on 12 examples. When you leave, your earlier network comes back.',
     fruitNotPixels: 'The network never sees the picture – it only gets those two numbers.',
@@ -1020,7 +1316,7 @@ const T = {
     fruitHeldOut: 'Quiz: {correct}/{total} right. The network never practised on these examples.',
     fruitPoint: '{label}, {split}; length {length}, roundness {roundness}; strawberry score {score}',
     title: 'What is an AI model made of?',
-    lead: 'An AI model (here: a neural network, like the ones behind ChatGPT or Llama) is two things: a plan and a huge pile of numbers. The plan, called the architecture, says how the network is wired – it is saved in a small text file, config.json. The numbers, called weights, are everything the network learned in training – they go into a big file such as model.safetensors. Both files sit together in a folder you download from the internet. To run the model, you also need a program that builds the network from the plan and fills in the numbers.',
+    lead: 'An AI model (here: a neural network, like the ones in ChatGPT or Llama) is a plan and a great many numbers. To make it work you also need a program that builds the network from the plan and fills in the numbers.',
     untrainedNotice: 'This network starts with random weights – it has not learned anything yet, so its answer is pure chance. Moving the sliders does not teach it; it only shows how it calculates.',
     navFiles: 'Folder', navArch: 'Architecture', navWeights: 'Weights', navDisk: 'Saving', navLoad: 'Loading',
     filesH: 'A model is a folder of files',
@@ -1036,10 +1332,10 @@ const T = {
     knobsH: 'Analogy: a machine with knobs',
     knobsP: 'Picture a machine covered in knobs. The architecture is the machine’s design: how many knobs there are and how they are wired. The weights are the position of every knob. Training is patiently turning them until the machine gives good answers. Our mini model has {n} knobs; Llama 2 7B has about 7 billion.',
     archH: 'Architecture – the plan of computation',
-    archP: 'This drawing is a simple way to see the calculations the network’s algorithm performs. Each circle (“neuron”) is one calculation: take the numbers from the previous column, multiply them by weights and add them up. The computer sees no circles or lines – it gets the same calculations written in code as maths formulas and simply runs them. Below you can add and remove circles.',
+    archP: 'This drawing shows the calculations the network performs. Each circle (a “neuron”) is one calculation: take the numbers from the previous column, multiply each by the weight of its line, add them up, and add one more number that belongs to the circle (its bias). If the result is negative, the circle turns it into 0 (this rule is called ReLU) – which is why some circles show 0.00. The last circle squeezes the result into the range 0 to 1. A computer sees no circles or lines – it gets the same calculations written as code and simply runs them.',
     legendPos: 'positive weight', legendNeg: 'negative weight', legendWidth: 'thicker line = stronger connection',
     x1Label: 'Input x₁', x2Label: 'Input x₂',
-    inputsHint: 'The sliders are the two numbers we feed in. The numbers in the circles are the current results – they change with the sliders. The weights on the lines stay put.',
+    inputsHint: 'The sliders are the two numbers we feed in. The numbers in the circles are the current results (called activations) – they change with the sliders. The weights on the lines stay put.',
     archResetNotice: 'If you change the number of columns or circles, the network picks new random weights and starts from scratch.',
     archBuild: 'Build the architecture', hiddenLayers: 'Middle columns (so-called hidden layers)', layerN: 'Middle {n}: number of circles',
     paramLabel: 'Number of weights (parameters)',
@@ -1047,16 +1343,16 @@ const T = {
     paramBreakdown: '{weights} connection weights + {biases} biases = {total} parameters',
     parameterSelected: '{id}, selected parameter: {value}',
     parameterOffsets: 'Header data_offsets are relative to the start of the tensor data. The offset here is the absolute file position, including the 8-byte length and the header.',
-    parameterOffset: 'File offset: {offset} B; 4 bytes, little-endian.',
+    parameterOffset: 'File offset: {offset} B; 4 bytes stored lowest byte first (little-endian).',
     lblInput: 'Input', lblHidden: 'Middle {n}', lblOutput: 'Answer',
     archLive: 'Architecture: {layers}. Parameters: {p}. Weights and biases reinitialized.',
     weightsH: 'Weights – model parameters',
     weightsP: 'The architecture is only a plan. The weights decide what the model actually does. The same architecture with different weights could recognise cats or predict prices – or do nothing useful at all.',
     wDefH: 'Weights (parameters)',
-    wDef: 'Weights set connection strengths; biases are offsets added by neurons. These are model parameters: training adjusts their values to reduce error. Changing the input alone changes activations, not parameters.',
+    wDef: 'Weights are connection strengths (the lines in the drawing), and a bias is one extra number per circle. Together they are the model’s parameters – training picks their values so that the error shrinks. Changing the input only changes the results in the circles (activations); the parameters stay the same.',
     gIn: 'input', gHidden: 'hidden layer {n}', gOut: 'output',
     sizeH: 'How much space do the weights take?',
-    sizeP: 'Our demo stores weights as float32 – 4 bytes per number. Lower precision reduces storage; speed and accuracy effects depend on method, hardware, and task. float16 uses 2 bytes, int8 1 byte, and 4 bits half a byte per value before adding metadata.',
+    sizeP: 'Every weight is a number, and a number takes space: 4 bytes as float32. It can be stored less precisely: float16 is 2 bytes, int8 is 1 byte, and 4-bit storage is half a byte. The file gets smaller, but the numbers are rounded.',
     precisionNotice: 'This selector estimates storage. The network and downloaded file remain float32.',
     thModel: 'Model', thParams: 'Weights', thSize: 'Weight size',
     rowMini: 'Our mini model', rowLlama: 'Llama 2 7B', llamaShipped: 'this is how it is published – the files in the folder in section 1', llamaShippedAs: 'published in float16: about {n}, as in the folder in section 1', rowBig: 'A 70-billion-weight model',
@@ -1067,7 +1363,7 @@ const T = {
     precQuant: 'stored as the integer {q} × scale {s} = {v} (error {e})',
     precNote: 'Real formats also store scales and metadata, so the sizes are approximate.',
     diskH: 'How a model is saved on disk',
-    diskP: 'You need the architecture implementation (code), its settings (e.g. config.json), and parameter values (e.g. model.safetensors). The code may come from an installed library rather than the model folder. Configuration is readable text; a binary file reconstructs arrays of numbers.',
+    diskP: 'Running a model takes three things: the architecture code, its settings (config.json) and the parameter values (model.safetensors). The code usually is not in the model folder – it comes from an installed library. config.json is plain text, and the weight file is numbers stored in binary.',
     configH: 'Architecture: config.json',
     configPMini: 'This JSON describes our simple network’s settings. A program also needs a MiniMLP implementation, as in the example below. Configuration is generated from the current architecture; it contains neither code nor weight values.',
     configPLlama: 'Selected configuration fields for Llama 2 7B, not the complete file. They specify settings for the transformers library’s LlamaForCausalLM implementation; they contain neither its code nor billions of parameter values.',
@@ -1084,7 +1380,7 @@ const T = {
     llm_hidden_size: 'a token representation has 4096 numbers; a token ID is a single integer',
     llm_intermediate_size: 'width of the “processing” layer in each block',
     llm_num_hidden_layers: '32 blocks (layers) stacked one after another',
-    llm_num_attention_heads: '32 attention heads can learn different patterns; distinct semantic roles are not guaranteed',
+    llm_num_attention_heads: '32 “attention heads” in every block – each can track different relationships between words',
     llm_vocab_size: 'vocabulary: 32,000 tokens',
     llm_max_position_embeddings: 'max text (context) length in tokens',
     llm_hidden_act: 'activation function (like our ReLU)',
@@ -1097,7 +1393,7 @@ const T = {
     segLenLlama: '2 × 8 B', segHdrLlama: '≈ {n} · JSON headers', segDataLlama: '≈ {n} · weights (float16)',
     capJsonLlama: 'Header excerpt. Each of the {layers} blocks (model.layers.0–{last}) has the same {per} tensors, {n} tensors in total; data_offsets values are omitted. Example: {name} has shape [{shape}], i.e. {count} numbers × 2 B = {bytes}.',
     sizeLineLlama: 'size: ≈ {n} in 2 files; the bar is not to scale',
-    fileP: 'Safetensors stores tensors: 8 bytes with the header length, a JSON header with names, types and shapes, then raw numbers. The dtype determines bytes per value. Below is the actual file for the current mini network, not a Llama file.',
+    fileP: 'Safetensors stores tensors – the tables of numbers from section 3. The file has three parts: 8 bytes with the header length, a JSON header with each table’s name, type and shape, and then the numbers themselves. Below is the real file of our mini network.',
     exportDtype: 'Current export: float32 (F32), 4 bytes per parameter, regardless of the storage-estimate selector.',
     llamaDetailNotice: 'This explains a Llama 2 7B file; it does not read it. The demo neither downloads nor runs Llama. The inspector below only shows the mini model’s file.',
     miniInspectorExample: 'Open the mini-model inspector as a separate example',
@@ -1126,13 +1422,13 @@ const T = {
     fmtOnnxWhere: 'ONNX Runtime, mobile and browser apps',
     fmtKeras: 'Architecture and weights in one file, in the Keras library’s format.',
     fmtKerasWhere: 'TensorFlow / Keras',
-    loadH: 'Loading: plan + numbers = a working model',
-    loadP: 'A program combines an architecture implementation, configuration, and parameters. The MiniMLP class below is the implementation of our architecture – the same name appears in config.json under “architectures”.',
+    loadH: 'Loading and running: plan + numbers = working model',
+    loadP: 'A program combines three things: the architecture code, its settings and the weights. Step through the four stages and watch what happens to the network. The MiniMLP class in the code below is our architecture’s code – the same name is in the “architectures” field of config.json.',
     ls1H: 'Reads the plan', ls1: 'Opens config.json and learns how many layers and neurons to build.',
     ls2H: 'Builds an empty network', ls2: 'Creates the network according to the plan. Its weights are random for now – the model knows nothing yet.',
     ls3H: 'Pours in the weights', ls3: 'Loads the numbers from model.safetensors and writes them into the right places in the network.',
     ls4H: 'Done', ls4: 'The model takes input data and computes an answer – exactly like the diagram in section 2.',
-    loadHf: 'For supported or registered architectures, Hugging Face transformers can do these steps with AutoModel.from_pretrained("model-folder"). Our custom MiniMLP is not automatically supported: it needs implementation and registration, or loading code like the example above.',
+    loadHf: 'In practice a library does this for you: in Hugging Face transformers, AutoModel.from_pretrained("model-folder") is enough, because the library already contains the code of well-known architectures such as Llama. We invented MiniMLP ourselves, so we had to write its code ourselves too – as above.',
     sumH: 'In short',
     sum1: '<b>Architecture</b> = a computation plan implemented in code; config.json provides its settings.',
     sum2: '<b>Parameters</b> = weights and biases, initialized before training and adjusted on data. They are saved as tensors.',
@@ -1153,6 +1449,7 @@ const state = {
   fileSelection: null,
   fileTab: 'json',
   precision: 'f32',
+  loadStep: 1, ctxTokens: 2048, chatStep: 0,
   selection: { parameter: { layer: 0, kind: 'weight', output: 0, input: 0 } },
   lesson: { mode: 'explore', savedExplorer: null, epoch: 0, learningRate: .1, phase: 'idle', runId: 0, selectedSampleId: null, history: [], initial: null, error: '', notice: '', showTest: false },
   arch: { hidden: [4, 3], weights: [], biases: [], acts: [], sums: [], inputs: [0.8, 0.3] },
@@ -1542,6 +1839,7 @@ function captureFocus() {
   const focused = document.activeElement;
   if (!focused) return null;
   if (focused.dataset?.neuron) return { owner: 'layerSteppers', selector: `[data-neuron="${focused.dataset.neuron}"]` };
+  if (focused.dataset?.pref && focused.closest('#weightGrids')) return { owner: 'weightGrids', selector: `[data-pref="${focused.dataset.pref}"]` };
   if (focused.dataset?.sampleId) return { owner: 'fruitDecisionPlot', selector: `[data-sample-id="${focused.dataset.sampleId}"]` };
   return null;
 }
@@ -1729,7 +2027,7 @@ function renderArch() {
     return Array.from({ length: n }, (_, j) => ({ x: xs[i], y: y0 + j * gap }));
   });
   archSvg.replaceChildren();
-  const edgeG = svgEl('g'), nodeG = svgEl('g'), labelG = svgEl('g');
+  const edgeG = svgEl('g'), nodeG = svgEl('g'), labelG = svgEl('g'), haloG = svgEl('g'), hitG = svgEl('g');
   pos.slice(0, -1).forEach((col, i) => col.forEach((a, j) => pos[i + 1].forEach((bp, k) => {
     const w = state.arch.weights[i][j][k];
     edgeG.append(bindParameter(svgEl('line', {
@@ -1737,6 +2035,9 @@ function renderArch() {
       class: `edge ${w >= 0 ? 'pos' : 'neg'}`, 'stroke-width': (0.6 + Math.abs(w) * 3).toFixed(2), 'data-layer': i,
       'aria-hidden': 'true',
     }), { layer: i, kind: 'weight', output: k, input: j }, file));
+    const coords = { x1: a.x, y1: a.y, x2: bp.x, y2: bp.y, 'aria-hidden': 'true' };
+    if (edgeG.lastChild.dataset.selected === 'true') haloG.append(svgEl('line', { ...coords, class: 'edge-halo' }));
+    hitG.append(svgEl('line', { ...coords, class: 'edge-hit', 'data-pref': `${i},weight,${k},${j}` }));
   })));
   pos.forEach((col, i) => {
     col.forEach((p, j) => {
@@ -1751,7 +2052,8 @@ function renderArch() {
     labelG.append(svgEl('text', { x: xs[i], y: 438, 'text-anchor': 'middle', class: 'svg-label strong' }, name));
     labelG.append(svgEl('text', { x: xs[i], y: 458, 'text-anchor': 'middle', class: 'svg-label' }, `(${ls[i]})`));
   });
-  archSvg.append(edgeG, nodeG, labelG);
+  archSvg.append(haloG, edgeG, hitG, nodeG, labelG);
+  renderTrace(file);
 
   state.arch.inputs.forEach((v, i) => {
     const fruit = state.lesson.mode === 'fruit', input=$(`x${i+1}`);
@@ -1827,7 +2129,7 @@ function renderSize() {
     const qz = quantize(v, maxAbs, prec.id === 'i8' ? 127 : 7);
     line = t('precQuant', { q: fmt(qz.q, 0), s: fmt(qz.scale, 4), v: fmt(qz.v, 6), e: fmt(Math.abs(qz.v - v), 6) });
   }
-  $('precDemo').replaceChildren(el('strong', '', t('precDemoH', { p: prec.label, w: `fc1.weight[${Math.floor(demoIdx / nIn)}][${demoIdx % nIn}]` })), el('code', '', line), el('span', '', t('precNote')));
+  $('precDemo').replaceChildren(el('strong', '', t('precDemoH', { p: prec.label, w: `fc1.weight[${Math.floor(demoIdx / nIn)}][${demoIdx % nIn}]` })), el('code', '', line), ...(prec.id === 'f32' ? [] : [el('span', 'impact', t('precImpact'))]), el('span', '', t('precNote')));
   const card = $('sizeCard');
   card.dataset.precision = prec.id;
   card.dataset.bytes = n * prec.bytes;
@@ -2032,7 +2334,7 @@ function renderLoadCode() {
   const add = (text, cls) => view.append(cls ? el('span', cls, text) : text);
   const kw = (s) => add(s, 'c-kw');
   const str = (s) => add(s, 'c-str');
-  const com = (s) => add(`  # ${s}\n`, 'c-com');
+  const com = (s, step) => { const c = el('span', 'c-com', `  # ${s}`); if (step) c.dataset.step = step; view.append(c, '\n'); };
   kw('import'); add(' json, torch\n');
   kw('from'); add(' torch '); kw('import'); add(' nn\n');
   kw('from'); add(' safetensors.torch '); kw('import'); add(' load_file\n\n');
@@ -2042,12 +2344,12 @@ function renderLoadCode() {
   kw('def'); add(' forward(self, x):\n        layers = list(self.children())\n        ');
   kw('for'); add(' layer '); kw('in'); add(' layers[:-1]:\n            x = torch.relu(layer(x))\n        ');
   kw('return'); add(' torch.sigmoid(layers[-1](x))\n\n');
-  add('config = json.load(open('); str('"config.json"'); add('))'); com(c1);
+  add('config = json.load(open('); str('"config.json"'); add('))'); com(c1, 1);
   add('sizes = [config['); str('"input_size"'); add('], *config['); str('"hidden_sizes"'); add('], config['); str('"output_size"'); add(']]\n');
-  add('model = MiniMLP(sizes)'); com(c2);
-  add('model.load_state_dict(load_file('); str('"model.safetensors"'); add('))'); com(c3);
+  add('model = MiniMLP(sizes)'); com(c2, 2);
+  add('model.load_state_dict(load_file('); str('"model.safetensors"'); add('))'); com(c3, 3);
   add('\n'); kw('with'); add(' torch.no_grad():'); com(c6);
-  add('    print(model(torch.tensor(['); add(x, 'c-num'); add('])))'); com(c4);
+  add('    print(model(torch.tensor(['); add(x, 'c-num'); add('])))'); com(c4, 4);
   add(`# → tensor([${out}])`, 'c-com');
   view.dataset.output = out;
 }
@@ -2061,6 +2363,10 @@ function renderDynamic() {
   renderFile();
   renderModelFileDetail();
   renderLoadCode();
+  renderGrid();
+  renderLoadStage();
+  renderMemory();
+  renderChat();
   renderFruitLesson();
   restoreFocus(focused);
 }
@@ -2329,6 +2635,15 @@ document.addEventListener('click', (e) => {
     setLanguage(lb.dataset.langBtn);
     return;
   }
+  const pf = e.target.closest('[data-pref]');
+  if (pf) {
+    const [l, kind, o, i] = pf.dataset.pref.split(',');
+    selectParameter({ layer: +l, kind, output: +o, input: kind === 'weight' ? +i : null });
+    return;
+  }
+  if (e.target.closest('.trace-go')) { state.fileTab = 'hex'; navigateModelFile({ model: 'mini', name: 'model.safetensors' }); return; }
+  const lsBtn = e.target.closest('[data-load-step]');
+  if (lsBtn) { setLoadStep(+lsBtn.dataset.loadStep); return; }
   const nb = e.target.closest('[data-neuron]');
   if (nb) {
     if (state.lesson.phase === 'running') return;
@@ -2346,7 +2661,9 @@ document.addEventListener('click', (e) => {
   const ft = e.target.closest('[data-file-tab]');
   if (ft) { state.fileTab = ft.dataset.fileTab; renderFile(); return; }
   const pr = e.target.closest('[data-prec]');
-  if (pr) { state.precision = pr.dataset.prec; renderSize(); }
+  if (pr) { state.precision = pr.dataset.prec; renderSize(); renderMemory(); return; }
+  const mp = e.target.closest('[data-mem-prec]');
+  if (mp) { state.precision = mp.dataset.memPrec; renderSize(); renderMemory(); $('memPrecSeg').querySelector(`[data-mem-prec="${mp.dataset.memPrec}"]`)?.focus({ preventScroll: true }); }
 });
 $('layerPlus').addEventListener('click', () => {
   if (state.lesson.phase === 'running') return;
@@ -2400,6 +2717,227 @@ const sectionObserver = new IntersectionObserver((entries) => {
   });
 }, { rootMargin: '-35% 0px -60% 0px' });
 
+
+// ─── Weight tracing, weight tables, loading stepper, memory, chat loop ───
+function colName(layer) { return layer === 0 ? t('lblInput') : layer === layers().length - 1 ? t('lblOutput') : t('lblHidden', { n: layer }); }
+function nodeName(layer, index) { return t('traceNode', { layer: colName(layer), n: index + 1 }); }
+function traceContent(file, withButton) {
+  const ref = state.selection.parameter, info = describeParameter(ref, file);
+  const bytes = Array.from(file.bytes.slice(info.fileOffset, info.fileOffset + 4), hex2).join(' ');
+  const where = ref.kind === 'weight'
+    ? t('traceWeight', { from: nodeName(ref.layer, ref.input), to: nodeName(ref.layer + 1, ref.output) })
+    : t('traceBias', { to: nodeName(ref.layer + 1, ref.output) });
+  const text = el('span', 'trace-text');
+  text.append(`${where} `, t('traceBytes', { bytes, offset: info.fileOffset }));
+  const nodes = [el('span', 'trace-id', `${info.id} = ${fmt(info.value, 4)}`), text];
+  if (withButton) { const b = el('button', 'btn-ghost trace-go', t('traceGo')); b.type = 'button'; nodes.push(b); }
+  return nodes;
+}
+function renderTrace(file = buildSafetensors()) {
+  $('tracePanel').replaceChildren(...traceContent(file, true));
+  $('tracePanel').dataset.paramId = parameterId(state.selection.parameter);
+}
+function renderGrid() {
+  const file = buildSafetensors(), ls = layers();
+  const maxAbs = Math.max(1e-9, ...state.arch.weights.flat(2).map(Math.abs));
+  $('weightGrids').replaceChildren(...ls.slice(0, -1).map((nIn, l) => {
+    const nOut = ls[l + 1], box = el('div', 'wgrid');
+    const title = el('div', 'wgrid-title');
+    title.append(el('code', '', `fc${l + 1}.weight + fc${l + 1}.bias`), el('span', '', `${t('gridSub', { to: colName(l + 1), from: colName(l) })} · ${t('gridShape', { shape: `${nOut}, ${nIn}` })}`));
+    const table = el('table'), head = el('tr');
+    head.append(el('th'));
+    for (let i = 0; i < nIn; i++) head.append(Object.assign(el('th', '', t('gridCol', { n: i + 1 })), { scope: 'col' }));
+    head.append(el('td', 'gap'), Object.assign(el('th', '', t('gridBias')), { scope: 'col' }));
+    table.append(head);
+    for (let o = 0; o < nOut; o++) {
+      const tr = el('tr');
+      tr.append(Object.assign(el('th', '', t('gridRow', { n: o + 1 })), { scope: 'row' }));
+      const cell = (ref, v, cls) => {
+        const b = bindParameter(el('button', `wcell ${cls}`, fmt(v, 2)), ref, file);
+        b.type = 'button';
+        b.dataset.pref = `${ref.layer},${ref.kind},${ref.output},${ref.input ?? ''}`;
+        b.setAttribute('aria-label', t('gridCell', { id: parameterId(ref), v: fmt(v, 4) }));
+        b.setAttribute('aria-pressed', b.dataset.selected);
+        if (ref.kind === 'weight') b.style.background = `color-mix(in srgb, var(${v >= 0 ? '--blue' : '--red'}) ${Math.round(6 + 44 * Math.abs(v) / maxAbs)}%, var(--surface))`;
+        const td = el('td'); td.append(b); return td;
+      };
+      for (let i = 0; i < nIn; i++) tr.append(cell({ layer: l, kind: 'weight', output: o, input: i }, state.arch.weights[l][i][o], 'w'));
+      tr.append(el('td', 'gap'), cell({ layer: l, kind: 'bias', output: o, input: null }, state.arch.biases[l][o], 'bias'));
+      table.append(tr);
+    }
+    const scroll = el('div', 'wgrid-scroll'); scroll.append(table);
+    box.append(title, scroll);
+    return box;
+  }));
+  $('gridTrace').replaceChildren(...traceContent(file, true));
+  $('gridCard').dataset.cells = $('weightGrids').querySelectorAll('.wcell').length;
+}
+
+let loadTimer = null, stageKey = '';
+function stopLoadPlay() { if (loadTimer !== null) { clearInterval(loadTimer); loadTimer = null; } }
+function setLoadStep(n, keepPlaying = false) {
+  if (!keepPlaying) stopLoadPlay();
+  state.loadStep = Math.max(1, Math.min(4, n));
+  renderLoadStage();
+}
+function playLoad() {
+  stopLoadPlay();
+  setLoadStep(1, true);
+  loadTimer = setInterval(() => {
+    if (state.loadStep >= 4) { stopLoadPlay(); return; }
+    setLoadStep(state.loadStep + 1, true);
+  }, 1700);
+}
+function renderLoadStage() {
+  const step = state.loadStep, ls = layers(), svg = $('loadStage');
+  const W = 600, padX = 60, top = 26, bottom = 196;
+  const xs = ls.map((_, i) => padX + (i * (W - 2 * padX)) / (ls.length - 1));
+  const pos = ls.map((n, i) => {
+    const gap = Math.min(40, (bottom - top) / n), y0 = (top + bottom) / 2 - (gap * (n - 1)) / 2;
+    return Array.from({ length: n }, (_, j) => ({ x: xs[i], y: y0 + j * gap }));
+  });
+  const key = JSON.stringify(ls);
+  if (key !== stageKey || !svg.firstChild) {
+    stageKey = key;
+    const edgeG = svgEl('g'), nodeG = svgEl('g');
+    pos.slice(0, -1).forEach((col, i) => col.forEach((a, j) => pos[i + 1].forEach((b, k) => {
+      edgeG.append(svgEl('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, class: 'st-edge', 'data-l': i, 'data-i': j, 'data-o': k }));
+    })));
+    pos.forEach((col, i) => col.forEach((p, j) => {
+      nodeG.append(svgEl('circle', { cx: p.x, cy: p.y, r: Math.min(17, Math.min(40, (bottom - top) / col.length) / 2 - 1).toFixed(1), class: 'st-node', 'data-l': i, 'data-j': j }),
+        svgEl('text', { x: p.x, y: p.y + 3.5, 'text-anchor': 'middle', class: 'st-val', 'data-l': i, 'data-j': j }));
+    }));
+    const tags = svgEl('g');
+    ls.forEach((n, i) => tags.append(svgEl('text', { x: xs[i], y: 228, 'text-anchor': 'middle', class: 'st-tag' }, String(n))));
+    svg.replaceChildren(edgeG, nodeG, tags);
+  }
+  svg.querySelectorAll('.st-edge').forEach((e) => {
+    const l = +e.dataset.l, w = state.arch.weights[l][+e.dataset.i][+e.dataset.o];
+    e.style.opacity = step >= 2 ? 1 : 0;
+    e.style.transitionDelay = step === 3 ? `${l * 0.25}s` : '0s';
+    e.style.stroke = step >= 3 ? `var(${w >= 0 ? '--blue' : '--red'})` : 'var(--line-strong)';
+    e.style.strokeWidth = step >= 3 ? (0.5 + Math.abs(w) * 2.2).toFixed(2) : '1';
+  });
+  svg.querySelectorAll('.st-node').forEach((c) => {
+    c.style.strokeDasharray = step === 1 ? '4 3' : 'none';
+    c.style.fill = step === 4 && +c.dataset.l === ls.length - 1 ? 'var(--yellow)' : '';
+  });
+  svg.querySelectorAll('.st-val').forEach((tx) => {
+    const l = +tx.dataset.l;
+    tx.textContent = fmt(state.arch.acts[l][+tx.dataset.j]);
+    tx.style.opacity = step === 4 ? 1 : 0;
+    tx.style.transitionDelay = step === 4 ? `${l * 0.3}s` : '0s';
+  });
+  const edges = ls.slice(0, -1).reduce((sum, n, i) => sum + n * ls[i + 1], 0), params = countParams(ls);
+  const vars = {
+    h: ls.slice(1, -1).join(', '), cols: ls.join(' · '), n: ls.reduce((a, b) => a + b, 0), e: edges, p: params, b: params * 4,
+    x1: fmt(state.arch.inputs[0]), x2: fmt(state.arch.inputs[1]), out: fmt(modelOutput()),
+  };
+  $('loadStageCaption').textContent = t(`stage${step}`, vars);
+  $('loadStageCard').dataset.step = step;
+  document.querySelectorAll('[data-load-step]').forEach((b) => {
+    const on = +b.dataset.loadStep === step;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on);
+  });
+  document.querySelectorAll('#loadCode .c-com[data-step]').forEach((c) => c.classList.toggle('on', +c.dataset.step === step));
+  $('loadPrev').disabled = step <= 1;
+  $('loadNext').disabled = step >= 4;
+}
+
+const MEM_SCALE = 32e9, MEM_DEVICES = [[8e9, 'memDev8'], [16e9, 'memDev16'], [24e9, 'memDev24']];
+function memoryEstimate() {
+  const prec = PRECISIONS.find((p) => p.id === state.precision);
+  const perToken = llamaConfigValue('num_hidden_layers') * 2 * llamaConfigValue('hidden_size') * 2;
+  const weights = LLAMA_PARAMS * prec.bytes, context = state.ctxTokens * perToken;
+  return { prec, perToken, weights, context, total: weights + context };
+}
+function renderMemory() {
+  const m = memoryEstimate();
+  $('memPrecSeg').replaceChildren(...PRECISIONS.map((p) => {
+    const b = el('button', p.id === state.precision ? 'active' : '', p.label);
+    b.type = 'button'; b.dataset.memPrec = p.id; b.setAttribute('aria-pressed', p.id === state.precision);
+    return b;
+  }));
+  $('ctxTokens').value = state.ctxTokens;
+  $('ctxVal').textContent = t('memCtxVal', { n: fmtInt(state.ctxTokens) });
+  const pct = (v) => `${Math.min(100, (v / MEM_SCALE) * 100).toFixed(2)}%`;
+  const track = el('div', 'mem-track');
+  const w = el('div', 'mem-seg w'), c = el('div', 'mem-seg c');
+  w.style.width = pct(m.weights); c.style.width = pct(m.context);
+  track.append(w, c);
+  const chart = $('memChart');
+  chart.replaceChildren(track, el('span', 'mem-axis', '0 GB'));
+  [...MEM_DEVICES.map(([v]) => v), MEM_SCALE].forEach((v) => {
+    const mark = el('div', `mem-mark${v === MEM_SCALE ? ' end' : ''}`);
+    mark.style.left = pct(v);
+    mark.append(el('span', '', `${v / 1e9} GB`));
+    chart.append(mark);
+  });
+  chart.setAttribute('role', 'img');
+  chart.setAttribute('aria-label', t('memChartLabel', { n: fmtBytes(m.total) }));
+  const legendItem = (color, label, value) => {
+    const li = el('li'), sw = el('i');
+    if (color) { sw.style.background = `var(${color})`; li.append(sw); }
+    li.append(`${label}: `, el('strong', '', value));
+    return li;
+  };
+  $('memLegend').replaceChildren(
+    legendItem('--green-soft', t('memWeights', { p: m.prec.label }), fmtBytes(m.weights)),
+    legendItem('--blue-soft', t('memCtx', { t: fmtInt(state.ctxTokens) }), m.context ? fmtBytes(m.context) : '0 GB'),
+    legendItem('', t('memTotal'), fmtBytes(m.total)));
+  $('memVerdicts').replaceChildren(...MEM_DEVICES.map(([cap, key]) => {
+    const fits = m.total <= cap, li = el('li');
+    li.dataset.fits = fits;
+    li.append(el('strong', '', t(key)), el('span', '', `${fits ? '✓' : '✗'} ${fits ? t('memFits') : t('memNoFit', { n: fmtBytes(m.total - cap) })}`));
+    return li;
+  }));
+  $('memFormula').textContent = t('memFormula', {
+    layers: llamaConfigValue('num_hidden_layers'), h: fmtInt(llamaConfigValue('hidden_size')), per: fmtBytes(m.perToken),
+    t: fmtInt(state.ctxTokens), ctx: m.context ? fmtBytes(m.context) : '0 GB',
+  });
+  Object.assign($('memCard').dataset, { weights: m.weights, context: m.context, total: m.total });
+}
+
+// Illustrative script only: the demo does not run a language model.
+const CHAT_SCRIPT = {
+  pl: { prompt: [['Stolica', 5811], [' Polski', 23189], [' to', 304]],
+    steps: [[[' Warszawa', 86, 9124], [' Kraków', 6, 17650], [' miasto', 3, 4381]],
+            [['.', 71, 29889], [',', 12, 29892], [' –', 5, 785]],
+            [['</s>', 64, 2], [' Jest', 10, 7911], [' To', 7, 1763]]] },
+  en: { prompt: [['The', 450], [' capital', 7483], [' of', 310], [' Poland', 18898], [' is', 338]],
+    steps: [[[' Warsaw', 88, 12954], [' Krak', 4, 26475], [' the', 3, 278]],
+            [['.', 73, 29889], [',', 11, 29892], [' and', 4, 322]],
+            [['</s>', 66, 2], [' It', 9, 739], [' The', 6, 450]]] },
+};
+function renderChat() {
+  const script = CHAT_SCRIPT[state.lang], step = Math.min(state.chatStep, script.steps.length);
+  const tokens = [...script.prompt, ...script.steps.slice(0, step).map((c) => c[0])];
+  const done = step >= script.steps.length;
+  const label = (text) => (text === '</s>' ? `</s> (${t('chatEnd')})` : text.replace(/^ /, '␣'));
+  $('chatTokens').replaceChildren(...tokens.map(([text, , id], i) => {
+    const tok = el('span', `tok${i >= script.prompt.length && i === tokens.length - 1 ? ' new' : ''}`, label(text));
+    tok.append(el('small', '', String(i < script.prompt.length ? script.prompt[i][1] : id)));
+    return tok;
+  }));
+  $('chatCount').textContent = t('chatCount', { n: tokens.length });
+  if (done) $('chatCands').replaceChildren(el('p', '', t('chatDone')));
+  else $('chatCands').replaceChildren(...script.steps[step].map(([text, pct], i) => {
+    const row = el('div', `cand${i === 0 ? ' top' : ''}`), bar = el('div', 'bar'), fill = el('i');
+    fill.style.width = `${pct}%`; bar.append(fill);
+    row.append(el('span', 'name', label(text)), bar, el('span', 'pct', `${pct}%`));
+    return row;
+  }));
+  $('chatNext').disabled = done;
+  Object.assign($('chatCard').dataset, { step, tokens: tokens.length });
+}
+$('loadPrev').addEventListener('click', () => setLoadStep(state.loadStep - 1));
+$('loadNext').addEventListener('click', () => setLoadStep(state.loadStep + 1));
+$('loadPlay').addEventListener('click', playLoad);
+$('ctxTokens').addEventListener('input', (e) => { state.ctxTokens = +e.target.value; renderMemory(); });
+$('chatNext').addEventListener('click', () => { state.chatStep += 1; renderChat(); });
+$('chatReset').addEventListener('click', () => { state.chatStep = 0; renderChat(); });
+
 // ─── Init ───
 randomizeArchWeights();
 renderAll();
@@ -2415,7 +2953,7 @@ Promise.race([
 ]).then(() => document.documentElement.classList.add('app-ready'));
 window.MODEL_DEMO = { state, probe, buildSafetensors, configText, evaluateNetwork, numericalChecks, runChecks, modelFileDestination, navigateModelFile, parameterId, describeParameter, selectParameter,
   forward, renderDynamic, renderAll, randomizeArchWeights, clampSelection, layers, countParams, setInputs, setArchitecture, setLanguage };
-Object.assign(window.MODEL_DEMO, { FRUIT_SAMPLES, createFruitNetwork, computeBatchGradients, trainEpoch, fruitMetrics,
+Object.assign(window.MODEL_DEMO, { memoryEstimate, setLoadStep, FRUIT_SAMPLES, createFruitNetwork, computeBatchGradients, trainEpoch, fruitMetrics,
   enterFruitLesson, startTraining, pauseTraining, stepTraining, resetTraining, exitFruitLesson, selectFruitSample, setLearningRate });
 </script>
 </body>

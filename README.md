@@ -11,6 +11,8 @@ Jeden samodzielny plik `index.html` – bez instalacji i budowania, działa też
 ## Eksperymenty
 
 - Zmieniaj architekturę i wejścia. Nowa architektura losuje parametry od nowa; samo obliczenie odpowiedzi ich nie zmienia. Rozmiary plików w kolejnych sekcjach zmieniają się razem z siecią.
+- Kliknij linię na rysunku albo liczbę w tabeli wag (sekcja 3): zaznaczy się ta sama waga na rysunku, w tabeli i jako 4 bajty w pliku `model.safetensors`.
+- W sekcji 5 przejdź krok po kroku przez wczytanie modelu, sprawdź, czy Llama 2 7B zmieści się w pamięci (wagi + pamięć kontekstu), i zobacz pętlę dopisywania tokenów. Przykład z tokenami jest ilustracyjny – demo nie uruchamia modelu językowego.
 - Skróty: `1`–`5` – sekcje.
 - Opcjonalnie, w zwiniętej lekcji „Jak sieć się uczy?”, uruchom trening na przykładzie owoców, zatrzymaj go, wykonaj jedną epokę albo zresetuj. Wagi, błąd i granica decyzji wynikają z rzeczywistych obliczeń w przeglądarce. Powrót przywraca poprzednią sieć.
 
