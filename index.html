@@ -453,6 +453,8 @@ details.card[open] > summary::after { content: '−'; }
 .size-table tbody tr:nth-child(even) td { background: var(--paper-2); }
 .size-table tbody tr:last-child td { border-bottom: none; }
 .size-table td:first-child { color: var(--ink); font-weight: 600; }
+.size-table .row-note { display: block; font-weight: 400; font-size: 13px; color: var(--ink-2); }
+.size-table tr[data-shipped="true"] td { box-shadow: inset 0 2px 0 var(--green), inset 0 -2px 0 var(--green); }
 .size-table td.num, .size-table td.big { font-variant-numeric: tabular-nums; color: var(--ink); }
 .size-table td.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
 .size-table td.big { font-family: var(--font-display); font-weight: 700; font-size: 18px; text-align: right; white-space: nowrap; }
@@ -618,7 +620,7 @@ details.card[open] > summary::after { content: '−'; }
         <div class="inputs-row" data-input-kind="features">
           <div class="slider"><div class="row"><label for="x1" data-i18n="x1Label"></label><span class="val" id="x1Val"></span></div><input type="range" id="x1" min="0" max="1" step="0.01"></div>
           <div class="slider"><div class="row"><label for="x2" data-i18n="x2Label"></label><span class="val" id="x2Val"></span></div><input type="range" id="x2" min="0" max="1" step="0.01"></div>
-          <span class="hint" data-i18n="inputsHint"></span>
+          <span class="hint" id="inputsHint"></span>
         </div>
       </div>
       <div class="card" id="fruitTrainingPanel" hidden>
@@ -853,7 +855,7 @@ const T = {
     fruitPhaseLabel: 'Stan', fruitPhase_idle: 'Gotowy', fruitPhase_running: 'Trening', fruitPhase_paused: 'Pauza', fruitPhase_error: 'Błąd',
     fruitStrawberry: 'Truskawka', fruitBlueberry: 'Borówka', fruitScores: 'Na który owoc stawia sieć (to nie gwarancja)',
     fruitAltStrawberry: 'Ilustracja truskawki na oryginalnej białej karcie z ramką', fruitAltBlueberry: 'Ilustracja borówki na oryginalnej białej karcie z ramką',
-    fruitIllustration: 'Obrazek jest dla Ciebie – sieć go nie widzi.', fruitFeatures: 'Długość: {length}/10 · okrągłość: {roundness}/10',
+    fruitIllustration: 'Obrazek jest dla Ciebie – sieć go nie widzi.', fruitScaleHint: 'Cechy owocu są w skali 0–10, a sieć dostaje je podzielone przez 10 – dlatego 7,0 na suwaku to 0,70 w kółku.', fruitFeatures: 'Długość: {length}/10 · okrągłość: {roundness}/10',
     fruitFree: 'Własne cechy · etykieta nieznana', fruitLabel: 'Etykieta: {label} · {split}', fruitTrainSplit: 'trening', fruitTestSplit: 'sprawdzian',
     fruitSelect: 'Przykład', fruitUnseen: 'Wypróbuj niewidziane przykłady',
     fruitPauseToEdit: 'Zatrzymaj trening przed zmianą architektury.',
@@ -909,7 +911,7 @@ const T = {
     sizeP: 'Nasze demo zapisuje wagi jako float32 – 4 bajty na liczbę. Niższa precyzja zmniejsza rozmiar zapisu; wpływ na szybkość i dokładność zależy od metody, sprzętu i zadania. float16 zajmuje 2 bajty, int8 1 bajt, a 4 bity pół bajtu na wartość przed doliczeniem metadanych.',
     precisionNotice: 'Ten przełącznik tylko szacuje rozmiar zapisu. Sieć i pobierany plik pozostają w float32.',
     thModel: 'Model', thParams: 'Liczba wag', thSize: 'Rozmiar wag',
-    rowMini: 'Nasz mini-model', rowLlama: 'Llama 2 7B', rowBig: 'Model z 70 mld wag',
+    rowMini: 'Nasz mini-model', rowLlama: 'Llama 2 7B', llamaShipped: 'tak jest publikowana – to pliki z folderu w sekcji 1', llamaShippedAs: 'publikowana w float16: ok. {n}, jak w folderze w sekcji 1', rowBig: 'Model z 70 mld wag',
     approxB: 'ok. {n} mld',
     precDemoH: 'Przykładowa waga naszego modelu ({w}) w precyzji {p}:',
     precExact: 'zapisana dokładnie: {v}',
@@ -968,7 +970,7 @@ const T = {
     formatsP: 'Safetensors przechowuje parametry, a config.json obok opisuje ustawienia architektury. Implementację architektury dostarcza kod. Niektóre formaty zapisują graf obliczeń i wagi razem.',
     fmtSafe: 'Same wagi + krótki nagłówek. Bezpieczny (nie zawiera kodu) i szybki w odczycie.',
     fmtSafeWhere: 'Hugging Face, większość nowych modeli',
-    fmtGguf: 'Wszystko w jednym pliku: architektura, wagi i tokenizer. Wagi zwykle skwantyzowane (np. 4-bit), żeby model zmieścił się na zwykłym komputerze.',
+    fmtGguf: 'Wszystko w jednym pliku: ustawienia architektury, wagi i tokenizer. Kod sieci jest w programie, który plik uruchamia (np. llama.cpp). Wagi zwykle skwantyzowane (np. 4-bit), żeby model zmieścił się na zwykłym komputerze.',
     fmtGgufWhere: 'llama.cpp, Ollama, LM Studio',
     fmtPt: 'Wagi zapisane narzędziem pickle z Pythona. Starszy standard – wczytanie może uruchomić ukryty kod, więc pliki z niezaufanych źródeł są ryzykowne.',
     fmtPtWhere: 'PyTorch, starsze modele na Hugging Face',
@@ -977,7 +979,7 @@ const T = {
     fmtKeras: 'Architektura i wagi w jednym pliku, w formacie biblioteki Keras.',
     fmtKerasWhere: 'TensorFlow / Keras',
     loadH: 'Wczytanie: plan + liczby = działający model',
-    loadP: 'Program łączy implementację architektury, konfigurację i parametry. MiniMLP poniżej jest kodem potrzebnym do wczytania naszego przykładu.',
+    loadP: 'Program łączy implementację architektury, konfigurację i parametry. Klasa MiniMLP poniżej to implementacja naszej architektury – ta sama nazwa stoi w config.json w polu „architectures”.',
     ls1H: 'Czyta plan', ls1: 'Otwiera config.json i dowiaduje się, ile warstw i neuronów zbudować.',
     ls2H: 'Buduje pustą sieć', ls2: 'Tworzy sieć według planu. Wagi są na razie losowe – model jeszcze nic nie umie.',
     ls3H: 'Wlewa wagi', ls3: 'Wczytuje liczby z model.safetensors i wpisuje je w odpowiednie miejsca sieci.',
@@ -989,7 +991,7 @@ const T = {
     sum3: '<b>Działający model neuronowy</b> = implementacja + konfiguracja + parametry. Aktywacje to tymczasowe wyniki dla konkretnego wejścia.',
     hintSections: 'sekcje',
     secLive: 'Sekcja: {name}',
-    pyComments: ['1. plan', '2. pusta sieć (losowe wagi)', '3. wczytujemy zapisane parametry', '4. gotowe – liczymy odpowiedź'],
+    pyComments: ['1. plan', '2. pusta sieć (losowe wagi)', '3. wczytujemy zapisane parametry', '4. gotowe – liczymy odpowiedź', 'implementacja architektury (kod)', 'tylko liczymy, bez uczenia'],
   },
   en: {
     fruitSummary: 'How does a network learn? A fruit example', fruitPause: 'Pause',
@@ -1001,7 +1003,7 @@ const T = {
     fruitPhaseLabel: 'State', fruitPhase_idle: 'Ready', fruitPhase_running: 'Training', fruitPhase_paused: 'Paused', fruitPhase_error: 'Error',
     fruitStrawberry: 'Strawberry', fruitBlueberry: 'Blueberry', fruitScores: 'Which fruit the network leans towards (not a guarantee)',
     fruitAltStrawberry: 'Strawberry illustration on its original bordered white card', fruitAltBlueberry: 'Blueberry illustration on its original bordered white card',
-    fruitIllustration: 'The picture is for you – the network does not see it.', fruitFeatures: 'Length: {length}/10 · roundness: {roundness}/10',
+    fruitIllustration: 'The picture is for you – the network does not see it.', fruitScaleHint: 'Fruit features use a 0–10 scale and the network receives them divided by 10 – so 7.0 on the slider is 0.70 in the circle.', fruitFeatures: 'Length: {length}/10 · roundness: {roundness}/10',
     fruitFree: 'Your features · label unknown', fruitLabel: 'Label: {label} · {split}', fruitTrainSplit: 'training', fruitTestSplit: 'quiz',
     fruitSelect: 'Example', fruitUnseen: 'Try unseen examples',
     fruitPauseToEdit: 'Pause training before changing architecture.',
@@ -1057,7 +1059,7 @@ const T = {
     sizeP: 'Our demo stores weights as float32 – 4 bytes per number. Lower precision reduces storage; speed and accuracy effects depend on method, hardware, and task. float16 uses 2 bytes, int8 1 byte, and 4 bits half a byte per value before adding metadata.',
     precisionNotice: 'This selector estimates storage. The network and downloaded file remain float32.',
     thModel: 'Model', thParams: 'Weights', thSize: 'Weight size',
-    rowMini: 'Our mini model', rowLlama: 'Llama 2 7B', rowBig: 'A 70-billion-weight model',
+    rowMini: 'Our mini model', rowLlama: 'Llama 2 7B', llamaShipped: 'this is how it is published – the files in the folder in section 1', llamaShippedAs: 'published in float16: about {n}, as in the folder in section 1', rowBig: 'A 70-billion-weight model',
     approxB: '≈ {n} bn',
     precDemoH: 'A sample weight of our model ({w}) at {p} precision:',
     precExact: 'stored exactly: {v}',
@@ -1116,7 +1118,7 @@ const T = {
     formatsP: 'Safetensors stores parameters, while config.json alongside it describes architecture settings. Code supplies the architecture implementation. Some formats store the computation graph and weights together.',
     fmtSafe: 'Weights only + a short header. Safe (contains no code) and fast to load.',
     fmtSafeWhere: 'Hugging Face, most new models',
-    fmtGguf: 'Everything in one file: architecture, weights and tokenizer. Weights are usually quantised (e.g. 4-bit) so the model fits on an ordinary computer.',
+    fmtGguf: 'Everything in one file: architecture settings, weights and tokenizer. The network code lives in the program that runs the file (e.g. llama.cpp). Weights are usually quantised (e.g. 4-bit) so the model fits on an ordinary computer.',
     fmtGgufWhere: 'llama.cpp, Ollama, LM Studio',
     fmtPt: 'Weights saved with Python’s pickle tool. An older standard – loading can run hidden code, so files from untrusted sources are risky.',
     fmtPtWhere: 'PyTorch, older models on Hugging Face',
@@ -1125,7 +1127,7 @@ const T = {
     fmtKeras: 'Architecture and weights in one file, in the Keras library’s format.',
     fmtKerasWhere: 'TensorFlow / Keras',
     loadH: 'Loading: plan + numbers = a working model',
-    loadP: 'A program combines an architecture implementation, configuration, and parameters. MiniMLP below is the code needed to load our example.',
+    loadP: 'A program combines an architecture implementation, configuration, and parameters. The MiniMLP class below is the implementation of our architecture – the same name appears in config.json under “architectures”.',
     ls1H: 'Reads the plan', ls1: 'Opens config.json and learns how many layers and neurons to build.',
     ls2H: 'Builds an empty network', ls2: 'Creates the network according to the plan. Its weights are random for now – the model knows nothing yet.',
     ls3H: 'Pours in the weights', ls3: 'Loads the numbers from model.safetensors and writes them into the right places in the network.',
@@ -1137,7 +1139,7 @@ const T = {
     sum3: '<b>A working neural model</b> = implementation + configuration + parameters. Activations are temporary results for a particular input.',
     hintSections: 'sections',
     secLive: 'Section: {name}',
-    pyComments: ['1. the plan', '2. empty network (random weights)', '3. load the stored parameters', '4. done – compute an answer'],
+    pyComments: ['1. the plan', '2. empty network (random weights)', '3. load the stored parameters', '4. done – compute an answer', 'architecture implementation (code)', 'just compute, no training'],
   },
 };
 const NAV_KEYS = ['navFiles', 'navArch', 'navWeights', 'navDisk', 'navLoad'];
@@ -1559,7 +1561,7 @@ function modelOutput() { const a = state.arch.acts; return a[a.length - 1][0]; }
 // ─── File builders ───
 function buildConfig() {
   return {
-    architectures: ['SimpleMLP'],
+    architectures: ['MiniMLP'],
     model_type: 'mlp',
     input_size: N_INPUTS,
     hidden_sizes: state.arch.hidden.slice(),
@@ -1757,6 +1759,7 @@ function renderArch() {
     $(`x${i+1}Val`).textContent=fmt(fruit?v*10:v);
     document.querySelector(`label[for="x${i+1}"]`).textContent=t(fruit?(i?'fruitRoundness':'fruitLength'):`x${i+1}Label`);
   });
+  $('inputsHint').textContent = t('inputsHint') + (state.lesson.mode === 'fruit' ? ' ' + t('fruitScaleHint') : '');
   $('layerCount').textContent = state.arch.hidden.length;
   $('layerMinus').disabled = state.arch.hidden.length <= 1;
   $('layerPlus').disabled = state.arch.hidden.length >= MAX_HIDDEN_LAYERS;
@@ -1798,7 +1801,13 @@ function renderSize() {
   ];
   $('sizeBody').replaceChildren(...rows.map(([name, pTxt, p]) => {
     const tr = el('tr');
-    tr.append(el('td', '', name), el('td', 'num', pTxt), el('td', 'big', fmtBytes(p * prec.bytes)));
+    const nameTd = el('td', '', name);
+    if (p === LLAMA_PARAMS) {
+      const shipped = prec.id === 'f16';
+      tr.dataset.shipped = shipped;
+      nameTd.append(el('span', 'row-note', shipped ? t('llamaShipped') : t('llamaShippedAs', { n: fmtBytes(LLAMA_PARAMS * 2) })));
+    }
+    tr.append(nameTd, el('td', 'num', pTxt), el('td', 'big', fmtBytes(p * prec.bytes)));
     return tr;
   }));
   const st = buildSafetensors();
@@ -2015,7 +2024,7 @@ function renderFormats() {
 }
 
 function renderLoadCode() {
-  const [c1, c2, c3, c4] = t('pyComments');
+  const [c1, c2, c3, c4, c5, c6] = t('pyComments');
   const x = state.arch.inputs.map((v) => v.toFixed(2)).join(', ');
   const out = modelOutput().toFixed(4);
   const view = $('loadCode');
@@ -2027,15 +2036,19 @@ function renderLoadCode() {
   kw('import'); add(' json, torch\n');
   kw('from'); add(' torch '); kw('import'); add(' nn\n');
   kw('from'); add(' safetensors.torch '); kw('import'); add(' load_file\n\n');
+  kw('class'); add(' MiniMLP(nn.Module):'); com(c5);
+  add('    '); kw('def'); add(' __init__(self, sizes):\n        super().__init__()\n        ');
+  kw('for'); add(' i '); kw('in'); add(' range(len(sizes) - 1):\n            setattr(self, f'); str('"fc{i + 1}"'); add(', nn.Linear(sizes[i], sizes[i + 1]))\n\n    ');
+  kw('def'); add(' forward(self, x):\n        layers = list(self.children())\n        ');
+  kw('for'); add(' layer '); kw('in'); add(' layers[:-1]:\n            x = torch.relu(layer(x))\n        ');
+  kw('return'); add(' torch.sigmoid(layers[-1](x))\n\n');
   add('config = json.load(open('); str('"config.json"'); add('))'); com(c1);
-  add('\nsizes = [config['); str('"input_size"'); add('], *config['); str('"hidden_sizes"'); add('], config['); str('"output_size"'); add(']]\n');
-  add('model = nn.ModuleDict({f'); str('"fc{i + 1}"'); add(': nn.Linear(sizes[i], sizes[i + 1])\n                       ');
-  kw('for'); add(' i '); kw('in'); add(' range(len(sizes) - 1)})'); com(c2);
-  add('\nmodel.load_state_dict(load_file('); str('"model.safetensors"'); add('))'); com(c3);
-  add('\n'); kw('def'); add(' run(x):\n    '); kw('for'); add(' i, layer '); kw('in'); add(' enumerate(model.values()):\n        x = layer(x)\n        x = torch.relu(x) ');
-  kw('if'); add(' i < len(model) - 1 '); kw('else'); add(' torch.sigmoid(x)\n    '); kw('return'); add(' x\n\n');
-  add('print(run(torch.tensor(['); add(x, 'c-num'); add('])))'); com(c4);
-  add(`# → tensor([${out}], grad_fn=<SigmoidBackward0>)`, 'c-com');
+  add('sizes = [config['); str('"input_size"'); add('], *config['); str('"hidden_sizes"'); add('], config['); str('"output_size"'); add(']]\n');
+  add('model = MiniMLP(sizes)'); com(c2);
+  add('model.load_state_dict(load_file('); str('"model.safetensors"'); add('))'); com(c3);
+  add('\n'); kw('with'); add(' torch.no_grad():'); com(c6);
+  add('    print(model(torch.tensor(['); add(x, 'c-num'); add('])))'); com(c4);
+  add(`# → tensor([${out}])`, 'c-com');
   view.dataset.output = out;
 }
 
